@@ -2,14 +2,15 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Label } from '$lib/components/ui/label';
-	import * as Accordion from '$lib/components/ui/accordion';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Progress } from '$lib/components/ui/progress';
 	import { Input } from '$lib/components/ui/input';
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Switch } from '$lib/components/ui/switch';
-	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Slider } from '$lib/components/ui/slider';
+	import * as Accordion from '$lib/components/ui/accordion';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import * as RadioGroup from '$lib/components/ui/radio-group';
 
 	import Combobox from '$spark/Combobox.svelte';
 
@@ -34,6 +35,7 @@
 
 	let samplingSteps = 30;
 	let iterations = 4;
+	let cfgScale = 7.5;
 
 	let imageWidth = 512;
 	let imageHeight = 768;
@@ -126,7 +128,7 @@
 	}
 </script>
 
-<div class="grid grid-cols-3 h-full gap-2">
+<div class="grid grid-cols-[25%_35%_auto] h-full gap-2">
 	<!-- Generation Data -->
 	<div>
 		<div class="grid grid-cols-[auto_auto_auto]">
@@ -145,7 +147,7 @@
 		</div>
 		<br />
 
-		<div class="block overflow-y-auto" style="height: calc(100vh - 120px);">
+		<div class="block overflow-y-auto mt-2" style="height: calc(100vh - 180px);">
 			<Accordion.Root multiple={true}>
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger class="text-2xl">Base Settings</Accordion.Trigger>
@@ -162,11 +164,14 @@
 
 						<br />
 
-						<div class="w-full grid grid-cols-[auto_17%_17%] gap-2 mb-4">
+						<div class="w-full grid grid-cols-1 gap-2 mb-4">
 							<div>
 								<p class="mb-1">Checkpoint</p>
 								<Button variant="outline" id="model_selector" class="w-full">Dreamshaper V8</Button>
 							</div>
+						</div>
+
+						<div class="w-full grid grid-cols-3 gap-2 mb-4">
 							<div>
 								<p class="mb-1">Steps</p>
 								<Input bind:value={samplingSteps} num />
@@ -174,6 +179,10 @@
 							<div>
 								<p class="mb-1">Iterations</p>
 								<Input bind:value={iterations} num />
+							</div>
+							<div>
+								<p class="mb-1">CFG Scale</p>
+								<Input bind:value={cfgScale} step={0.5} num />
 							</div>
 						</div>
 
@@ -225,7 +234,7 @@
 									<Slider
 										class="mr-2"
 										style="transform: translateX(16px);"
-										max={1024}
+										max={2048}
 										min={64}
 										bind:value={sldImageWidth}
 										onValueChange={(v) => {
@@ -247,7 +256,7 @@
 									<Slider
 										class="mr-2"
 										style="transform: translateX(16px);"
-										max={1024}
+										max={2048}
 										min={64}
 										bind:value={sldImageHeight}
 										onValueChange={(v) => {
@@ -270,6 +279,11 @@
 				</Accordion.Item>
 
 				<Accordion.Item value="item-2">
+					<Accordion.Trigger class="text-2xl">Highres. Fix</Accordion.Trigger>
+					<Accordion.Content></Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-3">
 					<Accordion.Trigger class="text-2xl">LoRAs</Accordion.Trigger>
 					<Accordion.Content>
 						<Button><IconAdd class="mr-2" /> Add Lora</Button>
@@ -278,21 +292,38 @@
 							<div class="grid grid-cols-[40%_auto] items-center">
 								<p>{lora.name}</p>
 								<div class="grid grid-cols-[40%_auto] grid-rows-1 justify-end">
-									<Input bind:value={lora.weight} num class="mt-2 float-left" />
+									<Input bind:value={lora.weight} step={0.05} num class="mt-2 float-left" />
 									<div>
-										<Button
-											variant="destructive"
-											size="icon"
-											class="float-right ml-1"
-											style="transform: translateY(8px);"
-											on:click={() => removeLora(i)}><IconDelete /></Button
-										>
-										<Button
-											variant="default"
-											size="icon"
-											class="float-right ml-2"
-											style="transform: translateY(8px);"><IconCopy /></Button
-										>
+										<Tooltip.Root>
+											<Tooltip.Trigger asChild let:builder>
+												<Button
+													builders={[builder]}
+													variant="destructive"
+													size="icon"
+													class="float-right ml-1"
+													style="transform: translateY(8px);"
+													on:click={() => removeLora(i)}><IconDelete /></Button
+												>
+											</Tooltip.Trigger>
+											<Tooltip.Content class="bg-destructive">
+												<p>Remove LoRA</p>
+											</Tooltip.Content>
+										</Tooltip.Root>
+
+										<Tooltip.Root>
+											<Tooltip.Trigger asChild let:builder>
+												<Button
+													builders={[builder]}
+													variant="default"
+													size="icon"
+													class="float-right ml-2"
+													style="transform: translateY(8px);"><IconCopy /></Button
+												>
+											</Tooltip.Trigger>
+											<Tooltip.Content>
+												<p>Copy Trigger Words</p>
+											</Tooltip.Content>
+										</Tooltip.Root>
 									</div>
 								</div>
 							</div>
