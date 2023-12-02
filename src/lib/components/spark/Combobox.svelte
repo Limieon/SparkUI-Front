@@ -11,6 +11,8 @@
 
 	let open = false;
 	let value = items[0].value;
+
+	export let selectedValue = '';
 	$: selectedValue = items.find((f) => f.value === value)?.label ?? 'Select a item...';
 	// We want to refocus the trigger button when the user selects
 	// an item from the list so users can continue navigating the

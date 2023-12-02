@@ -21,13 +21,28 @@
 		Replace as IconModelSwitcher,
 		Dices as IconRandom,
 		ArrowDownUp as IconSwap,
-		Plus as IconAdd
+		Plus as IconAdd,
+		Copy as IconCopy
 	} from 'lucide-svelte';
 	import Page from '$src/routes/+page.svelte';
+	import PopoverContent from '$lib/components/ui/popover/popover-content.svelte';
 
 	export let stylePrompts: boolean = false;
 
+	let seed = 0;
+	let randomize = false;
+
 	let samplingSteps = 30;
+	let iterations = 4;
+
+	let imageWidth = 512;
+	let imageHeight = 768;
+
+	let sldImageWidth = [imageWidth];
+	let sldImageHeight = [imageHeight];
+
+	let cbxImageSize = '';
+	$: customImageSize = cbxImageSize === 'Custom';
 
 	const samplers = [
 		{
@@ -105,17 +120,9 @@
 		loras = temp;
 	}
 
-	function swapImageDimensions() {
-		let temp = imageWidth;
-		imageWidth = imageHeight;
-		imageHeight = temp;
-	}
-
-	let imageWidth = 512;
-	let imageHeight = 768;
-
 	function generate() {
-		console.log(loras);
+		console.log('Loras:', loras);
+		console.log('Image Size:', cbxImageSize);
 	}
 </script>
 
@@ -150,12 +157,12 @@
 							<Textarea placeholder="Negative Style Prompt" />
 						{:else}
 							<Textarea placeholder="Positive Prompt" class="mb-2" />
-							<Textarea placeholder="Positive Style Prompt" />
+							<Textarea placeholder="Negative Prompt" />
 						{/if}
 
 						<br />
 
-						<div class="w-full grid grid-cols-[75%_auto] gap-2 mb-4">
+						<div class="w-full grid grid-cols-[auto_17%_17%] gap-2 mb-4">
 							<div>
 								<p class="mb-1">Checkpoint</p>
 								<Button variant="outline" id="model_selector" class="w-full">Dreamshaper V8</Button>
@@ -163,6 +170,10 @@
 							<div>
 								<p class="mb-1">Steps</p>
 								<Input bind:value={samplingSteps} num />
+							</div>
+							<div>
+								<p class="mb-1">Iterations</p>
+								<Input bind:value={iterations} num />
 							</div>
 						</div>
 
@@ -186,22 +197,74 @@
 						<p class="mb-1">Seed</p>
 						<div class="w-full grid grid-cols-[55%_15%_auto] gap-2 mb-4">
 							<div>
-								<Input value={0} num />
+								<Input value={seed} disabled={randomize} num />
 							</div>
 
 							<div>
-								<Button variant="outline" class=""><IconRandom /></Button>
+								<Button
+									variant="outline"
+									on:click={() => {
+										seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+									}}><IconRandom /></Button
+								>
 							</div>
 
 							<div class="flex items-center">
-								<Switch id="seed_random"></Switch>
+								<Switch id="seed_random" bind:checked={randomize} />
 								<Label for="seed_random" class="ml-4">Randomize</Label>
 							</div>
 						</div>
 
 						<div>
 							<p class="mb-1">Image Size</p>
-							<Combobox items={sizes} />
+							<Combobox items={sizes} bind:selectedValue={cbxImageSize} />
+
+							{#if customImageSize}
+								<div class="w-full grid grid-cols-[10%_auto_5%_40%] gap-2 items-center mt-2">
+									<p class="ml-2">Width</p>
+									<Slider
+										class="mr-2"
+										style="transform: translateX(16px);"
+										max={1024}
+										min={64}
+										bind:value={sldImageWidth}
+										onValueChange={(v) => {
+											imageWidth = v[0];
+										}}
+									/>
+									<div></div>
+									<Input
+										bind:value={imageWidth}
+										on:change={(e) => {
+											sldImageWidth = [e.target.value];
+										}}
+										step={64}
+										num
+									/>
+								</div>
+								<div class="w-full grid grid-cols-[10%_auto_5%_40%] gap-2 items-center mt-2">
+									<p class="ml-2">Height</p>
+									<Slider
+										class="mr-2"
+										style="transform: translateX(16px);"
+										max={1024}
+										min={64}
+										bind:value={sldImageHeight}
+										onValueChange={(v) => {
+											imageHeight = v[0];
+										}}
+									/>
+									<div></div>
+									<Input
+										bind:value={imageHeight}
+										on:change={(e) => {
+											sldImageHeight = [e.target.value];
+										}}
+										step={64}
+										num
+									/>
+								</div>
+							{/if}
 						</div>
 					</Accordion.Content>
 				</Accordion.Item>
@@ -216,13 +279,21 @@
 								<p>{lora.name}</p>
 								<div class="grid grid-cols-[40%_auto] grid-rows-1 justify-end">
 									<Input bind:value={lora.weight} num class="mt-2 float-left" />
-									<Button
-										variant="destructive"
-										size="icon"
-										class="float-right ml-2"
-										style="transform: translateY(8px);"
-										on:click={() => removeLora(i)}><IconDelete /></Button
-									>
+									<div>
+										<Button
+											variant="destructive"
+											size="icon"
+											class="float-right ml-1"
+											style="transform: translateY(8px);"
+											on:click={() => removeLora(i)}><IconDelete /></Button
+										>
+										<Button
+											variant="default"
+											size="icon"
+											class="float-right ml-2"
+											style="transform: translateY(8px);"><IconCopy /></Button
+										>
+									</div>
 								</div>
 							</div>
 						{/each}
