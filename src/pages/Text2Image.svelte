@@ -97,6 +97,13 @@
 			weight: 0.75
 		}
 	];
+	function removeLora(i: number) {
+		let temp = [...loras];
+		if (i > -1) {
+			temp.splice(i, 1);
+		}
+		loras = temp;
+	}
 
 	function swapImageDimensions() {
 		let temp = imageWidth;
@@ -203,12 +210,20 @@
 					<Accordion.Trigger class="text-2xl">LoRAs</Accordion.Trigger>
 					<Accordion.Content>
 						<Button><IconAdd class="mr-2" /> Add Lora</Button>
-						<Separator class="mt-2 mb-2" />
 
-						{#each loras as lora}
-							<div class="grid grid-cols-2">
+						{#each loras as lora, i}
+							<div class="grid grid-cols-[40%_auto] items-center">
 								<p>{lora.name}</p>
-								<Input bind:value={lora.weight} num />
+								<div class="grid grid-cols-[40%_auto] grid-rows-1 justify-end">
+									<Input bind:value={lora.weight} num class="mt-2 float-left" />
+									<Button
+										variant="destructive"
+										size="icon"
+										class="float-right ml-2"
+										style="transform: translateY(8px);"
+										on:click={() => removeLora(i)}><IconDelete /></Button
+									>
+								</div>
 							</div>
 						{/each}
 					</Accordion.Content>
