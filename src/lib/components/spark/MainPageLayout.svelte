@@ -1,8 +1,6 @@
 <script lang="ts">
 	import '$src/app.pcss';
 
-	import { Separator } from '$lib/components/ui/separator';
-
 	import { Button } from '$lib/components/ui/button';
 
 	import { ModeWatcher } from 'mode-watcher';
@@ -26,13 +24,18 @@
 	<title>SparkUI ✨</title>
 </svelte:head>
 
-<div class="h-screen w-screen">
+<div class="h-screen w-screen overflow-y-hidden">
 	<div class="p-2 grid grid-rows-[50px_auto] grid-cols-[55px_auto] gap-1 h-full">
 		<!-- Header -->
 		<div class="row-span-1 col-span-2">
 			<h1 class="inline text-4xl font-extrabold tracking-tight">✨ SparkUI⚡</h1>
 
-			<Button on:click={toggleMode} variant="outline" size="icon" class="float-right">
+			<Button
+				on:click={toggleMode}
+				variant="outline"
+				size="icon"
+				class="float-right w-[48px] h-[48px] mb-2"
+			>
 				<IconSun
 					class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
 				/>

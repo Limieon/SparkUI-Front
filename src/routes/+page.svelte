@@ -8,6 +8,11 @@
 	import Settings from '$page/Settings.svelte';
 
 	import { Button } from '$lib/components/ui/button';
+	import { Separator } from '$lib/components/ui/separator';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import * as Accordion from '$lib/components/ui/accordion';
+	import { Label } from '$lib/components/ui/label';
+	import { Checkbox } from '$lib/components/ui/checkbox';
 
 	import {
 		Type as IconType,
@@ -23,7 +28,7 @@
 <PageLayout>
 	<span slot="nav">
 		<Button
-			variant="outline"
+			variant={page === 'txt2img' ? 'default' : 'outline'}
 			size="icon"
 			on:click={() => {
 				page = 'txt2img';
@@ -34,7 +39,7 @@
 			<span class="sr-only">Open Text to Image</span>
 		</Button>
 		<Button
-			variant="outline"
+			variant={page === 'img2img' ? 'default' : 'outline'}
 			size="icon"
 			on:click={() => {
 				page = 'img2img';
@@ -45,7 +50,7 @@
 			<span class="sr-only">Open Image to Image</span>
 		</Button>
 		<Button
-			variant="outline"
+			variant={page === 'models' ? 'default' : 'outline'}
 			size="icon"
 			on:click={() => {
 				page = 'models';
@@ -56,7 +61,7 @@
 			<span class="sr-only">Open Model Manager</span>
 		</Button>
 		<Button
-			variant="outline"
+			variant={page === 'queue' ? 'default' : 'outline'}
 			size="icon"
 			on:click={() => {
 				page = 'queue';
@@ -67,13 +72,15 @@
 			<span class="sr-only">Open Queue</span>
 		</Button>
 
+		<Separator class="w-[48px] mt-2 mb-4" />
+
 		<Button
-			variant="outline"
+			variant={page === 'settings' ? 'default' : 'outline'}
 			size="icon"
 			on:click={() => {
 				page = 'settings';
 			}}
-			class="w-[48px] h-[48px] fixed bottom-4 left-2"
+			class="w-[48px] h-[48px]"
 		>
 			<IconSettings size={32} />
 			<span class="sr-only">Open Settings</span>
