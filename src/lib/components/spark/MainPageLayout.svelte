@@ -30,7 +30,7 @@
 	<div class="p-2 grid grid-rows-[50px_auto] grid-cols-[55px_auto] gap-1 h-full">
 		<!-- Header -->
 		<div class="row-span-1 col-span-2">
-			<h1 class="inline text-4xl font-extrabold tracking-tight">✨ SparkUI ⚡</h1>
+			<h1 class="inline text-4xl font-extrabold tracking-tight">✨ SparkUI⚡</h1>
 
 			<Button on:click={toggleMode} variant="outline" size="icon" class="float-right">
 				<IconSun
@@ -50,7 +50,7 @@
 		</div>
 
 		<!-- Content -->
-		<div class="bg-zinc-800 rounded-xl h-full p-2">
+		<div class="bg-background2 rounded-xl h-full p-2">
 			<slot />
 		</div>
 	</div>
