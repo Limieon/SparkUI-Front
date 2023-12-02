@@ -20,7 +20,8 @@
 		X as IconCancel,
 		Replace as IconModelSwitcher,
 		Dices as IconRandom,
-		ArrowDownUp as IconSwap
+		ArrowDownUp as IconSwap,
+		Plus as IconAdd
 	} from 'lucide-svelte';
 	import Page from '$src/routes/+page.svelte';
 
@@ -84,6 +85,19 @@
 		}
 	];
 
+	let loras = [
+		{
+			name: 'Lora 1',
+			id: 'lora1',
+			weight: 1.25
+		},
+		{
+			name: 'Lora 2',
+			id: 'lora2',
+			weight: 0.75
+		}
+	];
+
 	function swapImageDimensions() {
 		let temp = imageWidth;
 		imageWidth = imageHeight;
@@ -92,13 +106,17 @@
 
 	let imageWidth = 512;
 	let imageHeight = 768;
+
+	function generate() {
+		console.log(loras);
+	}
 </script>
 
 <div class="grid grid-cols-3 h-full gap-2">
 	<!-- Generation Data -->
 	<div>
 		<div class="grid grid-cols-[auto_auto_auto]">
-			<Button class="mr-1">Generate</Button>
+			<Button class="mr-1" on:click={generate}>Generate</Button>
 			<Button variant="outline" size="icon"><IconZap /></Button>
 
 			<div class="float-right">
@@ -137,7 +155,7 @@
 							</div>
 							<div>
 								<p class="mb-1">Steps</p>
-								<Input bind:value={samplingSteps} />
+								<Input bind:value={samplingSteps} num />
 							</div>
 						</div>
 
@@ -161,7 +179,7 @@
 						<p class="mb-1">Seed</p>
 						<div class="w-full grid grid-cols-[55%_15%_auto] gap-2 mb-4">
 							<div>
-								<Input>0</Input>
+								<Input value={0} num />
 							</div>
 
 							<div>
@@ -182,51 +200,17 @@
 				</Accordion.Item>
 
 				<Accordion.Item value="item-2">
-					<Accordion.Trigger class="text-2xl">Output Settings</Accordion.Trigger>
+					<Accordion.Trigger class="text-2xl">LoRAs</Accordion.Trigger>
 					<Accordion.Content>
-						<!--
-						<div class="grid grid-cols-[auto_auto] items-center">
-							<p>Aspect Ratio</p>
-							<div>
-								<Button
-									variant={aspectRatio == 0 ? 'default' : 'outline'}
-									class="w-16"
-									on:click={() => setAspectRatio(0)}>Free</Button
-								>
-								<Button
-									variant={aspectRatio == 1 ? 'default' : 'outline'}
-									class="w-16"
-									on:click={() => setAspectRatio(1)}>2:3</Button
-								>
-								<Button
-									variant={aspectRatio == 2 ? 'default' : 'outline'}
-									class="w-16"
-									on:click={() => setAspectRatio(2)}>16:9</Button
-								>
-								<Button
-									variant={aspectRatio == 3 ? 'default' : 'outline'}
-									class="w-16"
-									on:click={() => setAspectRatio(3)}>1:1</Button
-								>
+						<Button><IconAdd class="mr-2" /> Add Lora</Button>
+						<Separator class="mt-2 mb-2" />
 
-								<Button variant="outline" class="w-16 float-right" on:click={swapImageDimensions}
-									><IconSwap /></Button
-								>
+						{#each loras as lora}
+							<div class="grid grid-cols-2">
+								<p>{lora.name}</p>
+								<Input bind:value={lora.weight} num />
 							</div>
-
-								<div class="grid grid-cols-[auto_auto] grid-rows-1 mt-4 gap-2">
-									<div>
-										<p>Width</p>
-										<Input class="mt-1" bind:value={imageHeight} on:change={updateWidth} />
-									</div>
-									
-									<div>
-										<p>Height</p>
-										<Input class="mt-1" bind:value={imageWidth} on:change={updateHeight} />
-									</div>
-								</div>
-							</div>
-						-->
+						{/each}
 					</Accordion.Content>
 				</Accordion.Item>
 			</Accordion.Root>
