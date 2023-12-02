@@ -147,18 +147,18 @@
 		</div>
 		<br />
 
-		<div class="block overflow-y-auto mt-2" style="height: calc(100vh - 180px);">
+		<div class="block overflow-y-auto overflow-x-hidden mt-2" style="height: calc(100vh - 180px);">
 			<Accordion.Root multiple={true}>
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger class="text-2xl">Base Settings</Accordion.Trigger>
 					<Accordion.Content>
 						{#if stylePrompts}
-							<Textarea placeholder="Positive Prompt" class="mb-2" />
-							<Textarea placeholder="Positive Style Prompt" class="mb-2" />
+							<Textarea placeholder="Prompt" class="mb-2" />
+							<Textarea placeholder="Style Prompt" class="mb-2" />
 							<Textarea placeholder="Negative Prompt" class="mb-2" />
 							<Textarea placeholder="Negative Style Prompt" />
 						{:else}
-							<Textarea placeholder="Positive Prompt" class="mb-2" />
+							<Textarea placeholder="Prompt" class="mb-2" />
 							<Textarea placeholder="Negative Prompt" />
 						{/if}
 
@@ -186,7 +186,7 @@
 							</div>
 						</div>
 
-						<div class="w-full grid grid-cols-[40%_30%_auto] gap-2 mb-4">
+						<div class="w-full grid grid-cols-[40%_35%_auto] gap-2 mb-4">
 							<div>
 								<p class="mb-1">Sampler</p>
 								<Combobox items={samplers} />
@@ -334,7 +334,7 @@
 		</div>
 	</div>
 	<!-- Result -->
-	<div class="bg-lime-800"></div>
+	<div></div>
 	<!-- Image Browser -->
-	<div class="bg-purple-800"></div>
+	<div></div>
 </div>
