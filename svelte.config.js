@@ -14,7 +14,10 @@ const config = {
 		adapter: adapter(),
 
 		alias: {
-			$lib: './src/lib'
+			$lib: './src/lib',
+			$page: './src/pages',
+			$spark: './src/lib/components/spark',
+			$src: './src'
 		}
 	}
 };
