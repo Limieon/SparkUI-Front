@@ -17,6 +17,7 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 
 	import ThemeSwitcher from '$spark/ThemeSwitcher.svelte';
+	import { TooltipButton } from '$spark/button';
 
 	import {
 		Type as IconType,
@@ -34,9 +35,10 @@
 
 <PageLayout>
 	<span slot="nav">
-		<Button
+		<TooltipButton
 			variant={page === 'txt2img' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Text to Image"
 			on:click={() => {
 				page = 'txt2img';
 			}}
@@ -44,10 +46,11 @@
 		>
 			<IconType size={32} />
 			<span class="sr-only">Open Text to Image</span>
-		</Button>
-		<Button
+		</TooltipButton>
+		<TooltipButton
 			variant={page === 'img2img' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Image to Image"
 			on:click={() => {
 				page = 'img2img';
 			}}
@@ -55,10 +58,11 @@
 		>
 			<IconImage size={32} />
 			<span class="sr-only">Open Image to Image</span>
-		</Button>
-		<Button
+		</TooltipButton>
+		<TooltipButton
 			variant={page === 'node' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Node Editor"
 			on:click={() => {
 				page = 'node';
 			}}
@@ -66,10 +70,11 @@
 		>
 			<IconNode size={32} />
 			<span class="sr-only">Open Node Editor</span>
-		</Button>
-		<Button
+		</TooltipButton>
+		<TooltipButton
 			variant={page === 'scripts' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Script Manager"
 			on:click={() => {
 				page = 'scripts';
 			}}
@@ -77,10 +82,11 @@
 		>
 			<IconScripts size={32} />
 			<span class="sr-only">Open Script Manager</span>
-		</Button>
-		<Button
+		</TooltipButton>
+		<TooltipButton
 			variant={page === 'models' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Model Manager"
 			on:click={() => {
 				page = 'models';
 			}}
@@ -88,10 +94,11 @@
 		>
 			<IconBox size={32} />
 			<span class="sr-only">Open Model Manager</span>
-		</Button>
-		<Button
+		</TooltipButton>
+		<TooltipButton
 			variant={page === 'queue' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Generation Queue"
 			on:click={() => {
 				page = 'queue';
 			}}
@@ -99,13 +106,14 @@
 		>
 			<IconList size={32} />
 			<span class="sr-only">Open Queue</span>
-		</Button>
+		</TooltipButton>
 
 		<Separator class="w-[48px] mt-2 mb-4" />
 
-		<Button
+		<TooltipButton
 			variant={page === 'settings' ? 'default' : 'outline'}
 			size="icon"
+			tooltip="Settings"
 			on:click={() => {
 				page = 'settings';
 			}}
@@ -113,7 +121,7 @@
 		>
 			<IconSettings size={32} />
 			<span class="sr-only">Open Settings</span>
-		</Button>
+		</TooltipButton>
 
 		<ThemeSwitcher class="w-[48px] h-[48px] fixed bottom-4 left-2" />
 	</span>

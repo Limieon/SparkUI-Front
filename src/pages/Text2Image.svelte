@@ -150,7 +150,7 @@
 	};
 </script>
 
-<div class="grid grid-cols-[30%_auto_30%] h-full gap-2">
+<div class="grid grid-cols-[25%_auto_30%] h-full gap-2">
 	<!-- Generation Data -->
 	<div>
 		<div class="grid grid-cols-[auto_auto_auto]">
