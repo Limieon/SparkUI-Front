@@ -25,7 +25,7 @@
 
 <!-- The actual selector -->
 <div
-	class="absolute top-32 left-96 bottom-32 right-96 bg-background2 z-20 rounded-xl border transition-all duration-200 {open
+	class="absolute top-32 left-96 bottom-32 right-96 bg-primary z-20 rounded-xl border transition-all duration-200 {open
 		? 'scale-100 opacity-100'
 		: 'scale-0 opacity-0'}"
 >
