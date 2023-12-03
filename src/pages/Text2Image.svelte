@@ -295,7 +295,9 @@
 				</Accordion.Item>
 
 				<Accordion.Item value="item-3">
-					<Accordion.Trigger class="text-2xl">LoRAs</Accordion.Trigger>
+					<Accordion.Trigger class="text-2xl"
+						>LoRAs {loras.length > 0 ? `(${loras.length})` : ''}</Accordion.Trigger
+					>
 					<Accordion.Content>
 						<Button
 							on:click={() => {

@@ -7,6 +7,7 @@
 	import Queue from '$page/Queue.svelte';
 	import Settings from '$page/Settings.svelte';
 	import ScriptManager from '$page/ScriptManager.svelte';
+	import NodeEditor from '$page/NodeEditor.svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
@@ -21,10 +22,12 @@
 		Box as IconBox,
 		Settings as IconSettings,
 		AlignJustify as IconList,
-		FileJson as IconScripts
+		FileJson as IconScripts,
+		Workflow as IconNode
 	} from 'lucide-svelte';
 
-	let page: 'txt2img' | 'img2img' | 'models' | 'settings' | 'queue' | 'scripts' = 'txt2img';
+	let page: 'txt2img' | 'img2img' | 'models' | 'settings' | 'queue' | 'scripts' | 'node' =
+		'txt2img';
 </script>
 
 <PageLayout>
@@ -52,15 +55,15 @@
 			<span class="sr-only">Open Image to Image</span>
 		</Button>
 		<Button
-			variant={page === 'models' ? 'default' : 'outline'}
+			variant={page === 'node' ? 'default' : 'outline'}
 			size="icon"
 			on:click={() => {
-				page = 'models';
+				page = 'node';
 			}}
 			class="w-[48px] h-[48px] mb-2"
 		>
-			<IconBox size={32} />
-			<span class="sr-only">Open Model Manager</span>
+			<IconNode size={32} />
+			<span class="sr-only">Open Node Editor</span>
 		</Button>
 		<Button
 			variant={page === 'scripts' ? 'default' : 'outline'}
@@ -72,6 +75,17 @@
 		>
 			<IconScripts size={32} />
 			<span class="sr-only">Open Script Manager</span>
+		</Button>
+		<Button
+			variant={page === 'models' ? 'default' : 'outline'}
+			size="icon"
+			on:click={() => {
+				page = 'models';
+			}}
+			class="w-[48px] h-[48px] mb-2"
+		>
+			<IconBox size={32} />
+			<span class="sr-only">Open Model Manager</span>
 		</Button>
 		<Button
 			variant={page === 'queue' ? 'default' : 'outline'}
@@ -112,5 +126,7 @@
 		<Settings />
 	{:else if page == 'scripts'}
 		<ScriptManager />
+	{:else if page == 'node'}
+		<NodeEditor />
 	{/if}
 </PageLayout>
