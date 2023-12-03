@@ -49,6 +49,7 @@
 
 	import Page from '$src/routes/+page.svelte';
 	import PopoverContent from '$lib/components/ui/popover/popover-content.svelte';
+	import TooltipButton from '$lib/components/spark/button/TooltipButton.svelte';
 
 	export let stylePrompts: boolean = false;
 
@@ -327,36 +328,20 @@
 								<div class="grid grid-cols-[40%_auto] grid-rows-1 justify-end">
 									<Input bind:value={lora.weight} step={0.05} num class="mt-2 float-left" />
 									<div>
-										<Tooltip.Root>
-											<Tooltip.Trigger asChild let:builder>
-												<Button
-													builders={[builder]}
-													variant="destructive"
-													size="icon"
-													class="float-right ml-1"
-													style="transform: translateY(8px);"
-													on:click={() => removeLora(i)}><IconDelete /></Button
-												>
-											</Tooltip.Trigger>
-											<Tooltip.Content class="bg-destructive">
-												<p>Remove LoRA</p>
-											</Tooltip.Content>
-										</Tooltip.Root>
+										<TooltipButton
+											tooltip="Remove LoRA"
+											class="float-right ml-2 float-right ml-2 translate-y-[8px]"
+											variant="destructive"
+										>
+											<IconDelete />
+										</TooltipButton>
 
-										<Tooltip.Root>
-											<Tooltip.Trigger asChild let:builder>
-												<Button
-													builders={[builder]}
-													variant="default"
-													size="icon"
-													class="float-right ml-2"
-													style="transform: translateY(8px);"><IconCopy /></Button
-												>
-											</Tooltip.Trigger>
-											<Tooltip.Content>
-												<p>Copy Trigger Words</p>
-											</Tooltip.Content>
-										</Tooltip.Root>
+										<TooltipButton
+											tooltip="Copy Trigger Words"
+											class="float-right ml-2 translate-y-[8px]"
+										>
+											<IconCopy />
+										</TooltipButton>
 									</div>
 								</div>
 							</div>
@@ -391,32 +376,50 @@
 	<div class="pl-8 pr-8">
 		<!-- Toolbar Buttons -->
 		<div class="block w-full">
-			<div class="w-fit m-[0_auto] flex items-center bg-indigo-800 p-4 pt-2 pb-2 rounded-xl">
+			<div class="w-fit m-[0_auto] flex items-center bg-primary p-4 pt-2 pb-2 rounded-xl">
 				<div class="mr-4">
 					<!-- More Options -->
-					<Button size="icon" variant="outline" class=""><IconThreeDotsVertical /></Button>
+					<TooltipButton tooltip="More Options..." variant="outline">
+						<IconThreeDotsVertical />
+					</TooltipButton>
 				</div>
 				<div class="mr-4">
 					<!-- Reuse Prompt -->
-					<Button size="icon" variant="outline" class=""><IconReusePrompt /></Button>
+					<TooltipButton tooltip="Reuse Prompt" variant="outline">
+						<IconReusePrompt />
+					</TooltipButton>
 					<!-- Reuse Seed -->
-					<Button size="icon" variant="outline" class=""><IconReuseSeed /></Button>
+					<TooltipButton tooltip="Reuse Seed" variant="outline">
+						<IconReuseSeed />
+					</TooltipButton>
 					<!-- Reuse All -->
-					<Button size="icon" variant="outline" class=""><IconAsteriks /></Button>
+					<TooltipButton tooltip="Reuse all" variant="outline">
+						<IconAsteriks />
+					</TooltipButton>
 				</div>
 				<div class="mr-4">
 					<!-- Upscale Image -->
-					<Button size="icon" variant="outline" class=""><IconUpscale /></Button>
+					<TooltipButton tooltip="Upscale..." variant="outline">
+						<IconUpscale />
+					</TooltipButton>
 					<!-- Download Image -->
-					<Button size="icon" variant="outline" class=""><IconDownload /></Button>
+					<TooltipButton tooltip="Download Image..." variant="outline">
+						<IconDownload />
+					</TooltipButton>
 					<!-- Send to (img2img, nodes, ...) -->
-					<Button size="icon" variant="outline" class=""><IconSend /></Button>
+					<TooltipButton tooltip="Send to..." variant="outline">
+						<IconSend />
+					</TooltipButton>
 				</div>
 				<div class="">
 					<!-- Delete this image -->
-					<Button size="icon" variant="destructive" class=""><IconCancel /></Button>
+					<TooltipButton tooltip="Delete Image" variant="destructive">
+						<IconCancel />
+					</TooltipButton>
 					<!-- Delete entire batch -->
-					<Button size="icon" variant="destructive" class=""><IconDelete /></Button>
+					<TooltipButton tooltip="Delete Batch" variant="destructive">
+						<IconDelete />
+					</TooltipButton>
 				</div>
 			</div>
 		</div>

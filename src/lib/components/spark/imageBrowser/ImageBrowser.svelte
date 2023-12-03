@@ -4,6 +4,8 @@
 
 	import { ArrowUp as IconDirectoryUp } from 'lucide-svelte';
 
+	import { TooltipButton } from '$spark/button';
+
 	export let root: string;
 
 	let currentPath = root.split('/');
@@ -36,12 +38,12 @@
 	<div class="flex w-full justify-between mb-2">
 		<Input value={currentPath.join('/')} on:change={pathUpdated} />
 		<div class="ml-2 block">
-			<Button class="" variant="default" size="icon" on:click={directoryUp}
-				><IconDirectoryUp /></Button
+			<TooltipButton variant="default" size="icon" tooltip="Move up" on:click={directoryUp}
+				><IconDirectoryUp /></TooltipButton
 			>
 		</div>
 	</div>
-	<div class="block overflow-y-scroll" style="height: calc(100vh - 120px);">
+	<div class="block overflow-y-auto" style="height: calc(100vh - 120px);">
 		<div class="grid grid-cols-8 gap-1">
 			{#each images as img, i}
 				<button
