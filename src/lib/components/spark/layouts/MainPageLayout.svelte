@@ -4,8 +4,10 @@
 	import { Button } from '$lib/components/ui/button';
 	import { ModeWatcher } from 'mode-watcher';
 
-	let status: 'green' | 'orange' | 'red' = 'red';
-	let statusText = 'Disconnected';
+	let status: 'green' | 'orange' | 'red' = 'green';
+	let statusText = 'Connected';
+
+	let version = 'v1.0';
 </script>
 
 <ModeWatcher />
@@ -14,14 +16,21 @@
 	<title>SparkUI ✨</title>
 </svelte:head>
 
-<div class="h-screen w-screen overflow-y-hidden">
+<div class="h-screen w-screen overflow-y-hidden cursor-default select-none">
 	<div class="p-2 grid grid-rows-[50px_auto] grid-cols-[55px_auto] gap-1 h-full">
 		<!-- Header -->
 		<div class="row-span-1 col-span-2">
 			<div class="block w-full h-full">
-				<h1 class="text-4xl font-extrabold tracking-tight float-left">✨ SparkUI⚡</h1>
+				<div class="group w-fit">
+					<h1 class="text-4xl font-extrabold tracking-tight float-left">✨ SparkUI⚡</h1>
+					<h1
+						class="text-4xl font-extrabold tracking-tight float-left opacity-0 group-hover:opacity-100 transition-opacity"
+					>
+						- {version}
+					</h1>
+				</div>
 
-				<div class="block w-full h-full group">
+				<div class="block w-fit h-full float-right group">
 					{#if status === 'green'}
 						<div class="bg-success rounded-full w-5 h-5 float-right mt-3 mr-6"></div>
 						<p
