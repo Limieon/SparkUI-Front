@@ -32,7 +32,15 @@
 		Dices as IconRandom,
 		ArrowDownUp as IconSwap,
 		Plus as IconAdd,
-		Copy as IconCopy
+		Copy as IconCopy,
+		Sprout as IconReuseSeed,
+		RotateCcw as IconRegenerate,
+		Type as IconReusePrompt,
+		Asterisk as IconAsteriks,
+		MoreVertical as IconThreeDotsVertical,
+		Expand as IconUpscale,
+		Download as IconDownload,
+		Forward as IconSend
 	} from 'lucide-svelte';
 
 	import Page from '$src/routes/+page.svelte';
@@ -131,9 +139,13 @@
 	let loraSelectorOpen = false;
 
 	let selectedCheckpoint = '';
+
+	let generatedImage = {
+		url: `https://picsum.photos/512/768`
+	};
 </script>
 
-<div class="grid grid-cols-[25%_35%_auto] h-full gap-2">
+<div class="grid grid-cols-[30%_auto_30%] h-full gap-2">
 	<!-- Generation Data -->
 	<div>
 		<div class="grid grid-cols-[auto_auto_auto]">
@@ -372,7 +384,51 @@
 		</div>
 	</div>
 	<!-- Result -->
-	<div></div>
+	<div class="pl-8 pr-8">
+		<!-- Toolbar Buttons -->
+		<div class="block w-full">
+			<div class="w-fit m-[0_auto] flex items-center bg-indigo-800 p-4 pt-2 pb-2 rounded-xl">
+				<div class="mr-4">
+					<!-- More Options -->
+					<Button size="icon" variant="outline" class=""><IconThreeDotsVertical /></Button>
+				</div>
+				<div class="mr-4">
+					<!-- Reuse Prompt -->
+					<Button size="icon" variant="outline" class=""><IconReusePrompt /></Button>
+					<!-- Reuse Seed -->
+					<Button size="icon" variant="outline" class=""><IconReuseSeed /></Button>
+					<!-- Reuse All -->
+					<Button size="icon" variant="outline" class=""><IconAsteriks /></Button>
+				</div>
+				<div class="mr-4">
+					<!-- Upscale Image -->
+					<Button size="icon" variant="outline" class=""><IconUpscale /></Button>
+					<!-- Download Image -->
+					<Button size="icon" variant="outline" class=""><IconDownload /></Button>
+					<!-- Send to (img2img, nodes, ...) -->
+					<Button size="icon" variant="outline" class=""><IconSend /></Button>
+				</div>
+				<div class="">
+					<!-- Delete this image -->
+					<Button size="icon" variant="destructive" class=""><IconCancel /></Button>
+					<!-- Delete entire batch -->
+					<Button size="icon" variant="destructive" class=""><IconDelete /></Button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Image Output -->
+		<div class="w-full h-full flex items-center">
+			<img
+				class="rounded-xl m-[0_auto]"
+				src={generatedImage.url}
+				alt="generated"
+				width="auto"
+				height="auto"
+				draggable={false}
+			/>
+		</div>
+	</div>
 	<!-- Image Browser -->
 	<div></div>
 </div>
