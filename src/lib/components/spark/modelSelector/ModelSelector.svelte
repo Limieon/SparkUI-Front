@@ -129,7 +129,7 @@
 							draggable={false}
 							style="background-image: url('{model.preview}');"
 						>
-							<div class="bg-zinc-700 translate-y-[22.005rem]">
+							<div class="bg-background2 translate-y-[22.005rem]">
 								<p class="static text-xl text-center opacity-100">{model.name}</p>
 							</div>
 						</div>
