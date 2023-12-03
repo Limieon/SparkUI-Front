@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { size } from '@floating-ui/dom';
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Label } from '$lib/components/ui/label';
@@ -14,6 +15,8 @@
 
 	import Combobox from '$spark/Combobox.svelte';
 	import { ModelSelector, LoRASelector } from '$lib/components/spark/selector';
+
+	import { ImageBrowser } from '$spark/imageBrowser';
 
 	/* ---> Sections <--- */
 	import SectionPrompt from './sections/SectionPrompt.svelte';
@@ -40,7 +43,8 @@
 		MoreVertical as IconThreeDotsVertical,
 		Expand as IconUpscale,
 		Download as IconDownload,
-		Forward as IconSend
+		Forward as IconSend,
+		ArrowUp as IconDirectoryUp
 	} from 'lucide-svelte';
 
 	import Page from '$src/routes/+page.svelte';
@@ -140,7 +144,7 @@
 
 	let selectedCheckpoint = '';
 
-	let generatedImage = {
+	let currentImage = {
 		url: `https://picsum.photos/512/768`
 	};
 </script>
@@ -421,7 +425,7 @@
 		<div class="w-full h-full flex items-center">
 			<img
 				class="rounded-xl m-[0_auto]"
-				src={generatedImage.url}
+				src={currentImage.url}
 				alt="generated"
 				width="auto"
 				height="auto"
@@ -430,5 +434,5 @@
 		</div>
 	</div>
 	<!-- Image Browser -->
-	<div></div>
+	<ImageBrowser root="/images/generated/output" bind:selectedImage={currentImage} />
 </div>
