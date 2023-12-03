@@ -13,6 +13,15 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 
 	import Combobox from '$spark/Combobox.svelte';
+	import { ModelSelector } from '$spark/modelSelector';
+
+	/* ---> Sections <--- */
+	import SectionPrompt from './sections/SectionPrompt.svelte';
+	let prompt = '',
+		negativePrompt = '';
+
+	let stylePrompt = '',
+		negativeStylePrompt = '';
 
 	import {
 		Zap as IconZap,
@@ -25,6 +34,7 @@
 		Plus as IconAdd,
 		Copy as IconCopy
 	} from 'lucide-svelte';
+
 	import Page from '$src/routes/+page.svelte';
 	import PopoverContent from '$lib/components/ui/popover/popover-content.svelte';
 
@@ -126,6 +136,9 @@
 		console.log('Loras:', loras);
 		console.log('Image Size:', cbxImageSize);
 	}
+
+	// Internal States
+	let modelSelectorOpen = false;
 </script>
 
 <div class="grid grid-cols-[25%_35%_auto] h-full gap-2">
@@ -152,22 +165,28 @@
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger class="text-2xl">Base Settings</Accordion.Trigger>
 					<Accordion.Content>
-						{#if stylePrompts}
-							<Textarea placeholder="Prompt" class="mb-2" />
-							<Textarea placeholder="Style Prompt" class="mb-2" />
-							<Textarea placeholder="Negative Prompt" class="mb-2" />
-							<Textarea placeholder="Negative Style Prompt" />
-						{:else}
-							<Textarea placeholder="Prompt" class="mb-2" />
-							<Textarea placeholder="Negative Prompt" />
-						{/if}
+						<p class="mb-1">Prompts</p>
+						<SectionPrompt
+							bind:prompt
+							bind:stylePrompt
+							bind:negativePrompt
+							bind:negativeStylePrompt
+							{stylePrompts}
+						/>
 
 						<br />
 
 						<div class="w-full grid grid-cols-1 gap-2 mb-4">
 							<div>
 								<p class="mb-1">Checkpoint</p>
-								<Button variant="outline" id="model_selector" class="w-full">Dreamshaper V8</Button>
+								<Button
+									variant="outline"
+									id="model_selector"
+									class="w-full"
+									on:click={() => {
+										modelSelectorOpen = true;
+									}}>Dreamshaper V8</Button
+								>
 							</div>
 						</div>
 
@@ -331,6 +350,9 @@
 					</Accordion.Content>
 				</Accordion.Item>
 			</Accordion.Root>
+
+			<!-- Fullscreen Popups -->
+			<ModelSelector title="Model Selector" bind:open={modelSelectorOpen} />
 		</div>
 	</div>
 	<!-- Result -->

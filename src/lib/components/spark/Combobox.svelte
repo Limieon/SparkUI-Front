@@ -38,13 +38,13 @@
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 		</Button>
 	</Popover.Trigger>
-	<Popover.Content class="w-[200px] p-0">
-		<Command.Root>
+	<Popover.Content class="w-fit p-0">
+		<Command.Root class="mr-6">
 			{#if searchText}
 				<Command.Input placeholder="Search item..." />
+				<Command.Empty>No item found.</Command.Empty>
 			{/if}
 
-			<Command.Empty>No item found.</Command.Empty>
 			<Command.Group>
 				{#each items as item}
 					<Command.Item
