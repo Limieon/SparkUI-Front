@@ -332,6 +332,7 @@
 											tooltip="Remove LoRA"
 											class="float-right ml-2 float-right ml-2 translate-y-[8px]"
 											variant="destructive"
+											on:click={() => removeLora(i)}
 										>
 											<IconDelete />
 										</TooltipButton>
