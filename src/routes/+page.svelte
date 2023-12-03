@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PageLayout from '$lib/components/spark/MainPageLayout.svelte';
+	import PageLayout from '$lib/components/spark/layouts/MainPageLayout.svelte';
 
 	import Text2Image from '$page/Text2Image.svelte';
 	import Image2Image from '$page/Image2Image.svelte';
@@ -15,6 +15,8 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Label } from '$lib/components/ui/label';
 	import { Checkbox } from '$lib/components/ui/checkbox';
+
+	import ThemeSwitcher from '$spark/ThemeSwitcher.svelte';
 
 	import {
 		Type as IconType,
@@ -112,6 +114,8 @@
 			<IconSettings size={32} />
 			<span class="sr-only">Open Settings</span>
 		</Button>
+
+		<ThemeSwitcher class="w-[48px] h-[48px] fixed bottom-4 left-2" />
 	</span>
 
 	{#if page == 'txt2img'}
