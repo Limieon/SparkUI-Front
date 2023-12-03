@@ -32,6 +32,7 @@
 		}
 	];
 
+	// Arbitrary Data for testing the frontend
 	const models = [
 		{
 			name: 'RealCartoon3D',
@@ -59,6 +60,8 @@
 				'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d6592dc4-969a-4b54-bec8-51e408329d94/width=450/RealCartoonAnimeV7.jpeg'
 		}
 	];
+
+	export let selected: string = models[0].name;
 </script>
 
 {#if open}
@@ -114,7 +117,13 @@
 		>
 			{#each models as model, i}
 				{#if searchPrompt == '' || model.name.toLowerCase().includes(searchPrompt.toLowerCase())}
-					<div class="hover:cursor-pointer h-96">
+					<button
+						class="hover:cursor-pointer h-96 border-none"
+						on:click={() => {
+							selected = model.name;
+							open = false;
+						}}
+					>
 						<div
 							class="block rounded h-full w-full bg-center bg-cover bg-no-repeat"
 							draggable={false}
@@ -124,7 +133,7 @@
 								<p class="static text-xl text-center opacity-100">{model.name}</p>
 							</div>
 						</div>
-					</div>
+					</button>
 				{/if}
 			{/each}
 		</div>

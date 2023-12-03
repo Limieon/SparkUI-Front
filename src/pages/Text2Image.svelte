@@ -139,6 +139,8 @@
 
 	// Internal States
 	let modelSelectorOpen = false;
+
+	let selectedCheckpoint = '';
 </script>
 
 <div class="grid grid-cols-[25%_35%_auto] h-full gap-2">
@@ -185,7 +187,7 @@
 									class="w-full"
 									on:click={() => {
 										modelSelectorOpen = true;
-									}}>Dreamshaper V8</Button
+									}}>{selectedCheckpoint}</Button
 								>
 							</div>
 						</div>
@@ -352,7 +354,11 @@
 			</Accordion.Root>
 
 			<!-- Fullscreen Popups -->
-			<ModelSelector title="Model Selector" bind:open={modelSelectorOpen} />
+			<ModelSelector
+				title="Model Selector"
+				bind:open={modelSelectorOpen}
+				bind:selected={selectedCheckpoint}
+			/>
 		</div>
 	</div>
 	<!-- Result -->
