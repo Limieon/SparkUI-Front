@@ -365,6 +365,7 @@
 					temp.push({ name, weight: 0.75 });
 					loras = temp.sort((a, b) => a.name.localeCompare(b.name));
 				}}
+				ignore={loras.map((e) => e.name)}
 			/>
 		</div>
 	</div>

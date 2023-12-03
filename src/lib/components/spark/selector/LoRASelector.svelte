@@ -48,6 +48,8 @@
 
 	export let selected: string = loras[0].name;
 
+	export let ignore: string[] = [];
+
 	export let onChange: (name: string) => void = () => {};
 </script>
 
@@ -103,7 +105,9 @@
 			style="height: calc(100% - 78px);"
 		>
 			{#each loras as model, i}
-				{#if searchPrompt == '' || model.name.toLowerCase().includes(searchPrompt.toLowerCase())}
+				{#if (searchPrompt == '' || model.name
+						.toLowerCase()
+						.includes(searchPrompt.toLowerCase())) && !ignore.includes(model.name)}
 					<button
 						class="hover:cursor-pointer h-96 border-none"
 						on:click={() => {
