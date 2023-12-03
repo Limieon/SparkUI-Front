@@ -5,7 +5,6 @@
 	import Image2Image from '$page/Image2Image.svelte';
 	import ModelManager from '$page/ModelManager.svelte';
 	import Queue from '$page/Queue.svelte';
-	import Settings from '$page/Settings.svelte';
 	import ScriptManager from '$page/ScriptManager.svelte';
 	import NodeEditor from '$page/NodeEditor.svelte';
 
@@ -19,6 +18,8 @@
 	import ThemeSwitcher from '$spark/ThemeSwitcher.svelte';
 	import { TooltipButton } from '$spark/button';
 
+	import { SettingsMenu } from '$spark/settings';
+
 	import {
 		Type as IconType,
 		Image as IconImage,
@@ -29,8 +30,9 @@
 		Workflow as IconNode
 	} from 'lucide-svelte';
 
-	let page: 'txt2img' | 'img2img' | 'models' | 'settings' | 'queue' | 'scripts' | 'node' =
-		'txt2img';
+	let page: 'txt2img' | 'img2img' | 'models' | 'queue' | 'scripts' | 'node' = 'txt2img';
+
+	let settingsOpen = false;
 </script>
 
 <PageLayout>
@@ -111,11 +113,11 @@
 		<Separator class="w-[48px] mt-2 mb-4" />
 
 		<TooltipButton
-			variant={page === 'settings' ? 'default' : 'outline'}
+			variant="outline"
 			size="icon"
 			tooltip="Settings"
 			on:click={() => {
-				page = 'settings';
+				settingsOpen = true;
 			}}
 			class="w-[48px] h-[48px]"
 		>
@@ -134,11 +136,11 @@
 		<ModelManager />
 	{:else if page == 'queue'}
 		<Queue />
-	{:else if page == 'settings'}
-		<Settings />
 	{:else if page == 'scripts'}
 		<ScriptManager />
 	{:else if page == 'node'}
 		<NodeEditor />
 	{/if}
+
+	<SettingsMenu title="Settings" bind:open={settingsOpen} />
 </PageLayout>
