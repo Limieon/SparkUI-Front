@@ -13,7 +13,7 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 
 	import Combobox from '$spark/Combobox.svelte';
-	import { ModelSelector } from '$spark/modelSelector';
+	import { ModelSelector, LoRASelector } from '$lib/components/spark/selector';
 
 	/* ---> Sections <--- */
 	import SectionPrompt from './sections/SectionPrompt.svelte';
@@ -112,18 +112,7 @@
 		}
 	];
 
-	let loras = [
-		{
-			name: 'Lora 1',
-			id: 'lora1',
-			weight: 1.25
-		},
-		{
-			name: 'Lora 2',
-			id: 'lora2',
-			weight: 0.75
-		}
-	];
+	let loras: { name: string; weight: number }[] = [];
 	function removeLora(i: number) {
 		let temp = [...loras];
 		if (i > -1) {
@@ -139,6 +128,7 @@
 
 	// Internal States
 	let modelSelectorOpen = false;
+	let loraSelectorOpen = false;
 
 	let selectedCheckpoint = '';
 </script>
@@ -307,7 +297,11 @@
 				<Accordion.Item value="item-3">
 					<Accordion.Trigger class="text-2xl">LoRAs</Accordion.Trigger>
 					<Accordion.Content>
-						<Button><IconAdd class="mr-2" /> Add Lora</Button>
+						<Button
+							on:click={() => {
+								loraSelectorOpen = true;
+							}}><IconAdd class="mr-2" /> Add Lora</Button
+						>
 
 						{#each loras as lora, i}
 							<div class="grid grid-cols-[40%_auto] items-center">
@@ -358,6 +352,19 @@
 				title="Model Selector"
 				bind:open={modelSelectorOpen}
 				bind:selected={selectedCheckpoint}
+			/>
+			<LoRASelector
+				title="LoRA Selector"
+				bind:open={loraSelectorOpen}
+				onChange={(name) => {
+					for (var lora of loras) {
+						if (lora.name === name) return;
+					}
+
+					let temp = [...loras];
+					temp.push({ name, weight: 0.75 });
+					loras = temp.sort((a, b) => a.name.localeCompare(b.name));
+				}}
 			/>
 		</div>
 	</div>
