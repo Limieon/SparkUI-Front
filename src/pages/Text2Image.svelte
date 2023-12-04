@@ -3,7 +3,6 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import { Switch } from '$lib/components/ui/switch';
-	import { Slider } from '$lib/components/ui/slider';
 	import * as Accordion from '$lib/components/ui/accordion';
 
 	import Combobox from '$spark/Combobox.svelte';
@@ -21,6 +20,7 @@
 	/* ---> Sections <--- */
 	import SectionPrompt from './sections/SectionPrompt.svelte';
 	import GenerationProgress from './sections/GenerationProgress.svelte';
+	import ImageSize from './sections/ImageSize.svelte';
 
 	let prompt = '',
 		negativePrompt = '';
@@ -65,9 +65,6 @@
 	let imageWidth = 512;
 	let imageHeight = 768;
 
-	let sldImageWidth = [imageWidth];
-	let sldImageHeight = [imageHeight];
-
 	let cbxImageSize = '';
 	$: customImageSize = cbxImageSize === 'Custom';
 
@@ -104,29 +101,6 @@
 		}
 	];
 
-	const sizes = [
-		{
-			label: '512x512',
-			value: '512x512'
-		},
-		{
-			label: '512x768',
-			value: '512x768'
-		},
-		{
-			label: '768x512',
-			value: '768x512'
-		},
-		{
-			label: '768x768',
-			value: '768x768'
-		},
-		{
-			label: 'Custom',
-			value: 'custom'
-		}
-	];
-
 	let loras: { name: string; weight: number }[] = [];
 	function removeLora(i: number) {
 		let temp = [...loras];
@@ -138,7 +112,7 @@
 
 	function generate() {
 		console.log('Loras:', loras);
-		console.log('Image Size:', cbxImageSize);
+		console.log('Image Size:', `${imageWidth} x ${imageHeight}`);
 	}
 
 	// Internal States
@@ -254,57 +228,7 @@
 							</div>
 						</div>
 
-						<div>
-							<p class="mb-1">Image Size</p>
-							<Combobox items={sizes} bind:selectedValue={cbxImageSize} />
-
-							{#if customImageSize}
-								<div class="w-full grid grid-cols-[10%_auto_5%_40%] gap-2 items-center mt-2">
-									<p class="ml-2">Width</p>
-									<Slider
-										class="mr-2"
-										style="transform: translateX(16px);"
-										max={2048}
-										min={64}
-										bind:value={sldImageWidth}
-										onValueChange={(v) => {
-											imageWidth = v[0];
-										}}
-									/>
-									<div></div>
-									<Input
-										bind:value={imageWidth}
-										on:change={(e) => {
-											sldImageWidth = [e.target.value];
-										}}
-										step={64}
-										num
-									/>
-								</div>
-								<div class="w-full grid grid-cols-[10%_auto_5%_40%] gap-2 items-center mt-2">
-									<p class="ml-2">Height</p>
-									<Slider
-										class="mr-2"
-										style="transform: translateX(16px);"
-										max={2048}
-										min={64}
-										bind:value={sldImageHeight}
-										onValueChange={(v) => {
-											imageHeight = v[0];
-										}}
-									/>
-									<div></div>
-									<Input
-										bind:value={imageHeight}
-										on:change={(e) => {
-											sldImageHeight = [e.target.value];
-										}}
-										step={64}
-										num
-									/>
-								</div>
-							{/if}
-						</div>
+						<ImageSize bind:width={imageWidth} bind:height={imageHeight} />
 					</Accordion.Content>
 				</Accordion.Item>
 
