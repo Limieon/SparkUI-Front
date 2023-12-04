@@ -1,38 +1,16 @@
-# create-svelte
+# ✨ SparkUI⚡
+SparkUI is my self-created StableDiffusion WebUI. My goal is to create a powerful WebUI that is also visually nice to look at. The entire UI is made using [Svelte](https://svelte.dev/) / [SvelteKit](https://kit.svelte.dev/).
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+SparkUI is highly inspired by [Automatic1111](https://github.com/AUTOMATIC1111/stable-diffusion-webui), [InvokeAI](https://github.com/invoke-ai/InvokeAI) and [ComfyUI](https://github.com/comfyanonymous/ComfyUI).
 
-## Creating a project
+The project is in high development and also currently only a frontend. No image generation features are currently implemented, as I first want to finish the main parts of the ui.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Goals
+The goal is to make a WebUI that has a appealing and intuitive UI but also has powerfull functionalities. I also want to add a script/plugin system, so others could make their own additions.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Roadmap
+1. Finish the basic parts of the UI (txt2img, settings, models, queue, ...)
+2. Implement the first backend functionalities
+3. Implement ControlNet
+4. Implement basic img2img features
+5. Add a node editor where users can create their own workflows
