@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { Label } from '$lib/components/ui/label';
-	import { Progress } from '$lib/components/ui/progress';
 	import { Input } from '$lib/components/ui/input';
 	import { Switch } from '$lib/components/ui/switch';
 	import { Slider } from '$lib/components/ui/slider';
@@ -21,6 +20,8 @@
 
 	/* ---> Sections <--- */
 	import SectionPrompt from './sections/SectionPrompt.svelte';
+	import GenerationProgress from './sections/GenerationProgress.svelte';
+
 	let prompt = '',
 		negativePrompt = '';
 
@@ -48,9 +49,8 @@
 		ArrowUp as IconDirectoryUp
 	} from 'lucide-svelte';
 
-	import PopoverContent from '$lib/components/ui/popover/popover-content.svelte';
-
 	import { TooltipButton } from '$spark/button';
+
 	import type { Pages } from '$lib/types/Pages';
 
 	export let stylePrompts: boolean = false;
@@ -169,13 +169,9 @@
 			</div>
 		</div>
 
-		<div class="block">
-			<Progress value={33} class="w-full mt-3" />
-			<p class="float-right">25% - ETA: 23s</p>
-		</div>
-		<br />
+		<GenerationProgress class="mt-2" />
 
-		<div class="block overflow-y-auto overflow-x-hidden mt-2" style="height: calc(100vh - 180px);">
+		<div class="block overflow-y-auto overflow-x-hidden" style="height: calc(100vh - 180px);">
 			<Accordion.Root multiple={true}>
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger class="text-2xl">Base Settings</Accordion.Trigger>
