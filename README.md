@@ -13,7 +13,8 @@ The goal is to make a WebUI that has a appealing and intuitive UI but also has p
 2. Implement the first backend functionalities
 3. Implement ControlNet
 4. Implement basic img2img features
-5. Add a node editor where users can create their own workflows
+5. Add a detached image gallery were generated images aswell as their generation info can be visualized
+6. Add a node editor where users can create their own workflows
 
 ## Techstack
 * [Svelte](https://svelte.dev/)
