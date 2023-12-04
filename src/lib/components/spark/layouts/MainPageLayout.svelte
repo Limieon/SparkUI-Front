@@ -32,21 +32,21 @@
 
 				<div class="block w-fit h-full float-right group">
 					{#if status === 'green'}
-						<div class="bg-success rounded-full w-5 h-5 float-right mt-3 mr-6"></div>
+						<div class="bg-success rounded-full w-5 h-5 float-right mt-3 mr-4"></div>
 						<p
 							class="text-success text-2xl mt-1 float-right mr-4 opacity-0 group-hover:opacity-100 transition-opacity delay-150 cursor-default"
 						>
 							{statusText}
 						</p>
 					{:else if status === 'orange'}
-						<div class="bg-amber-600 rounded-full w-5 h-5 float-right mt-3 mr-6"></div>
+						<div class="bg-amber-600 rounded-full w-5 h-5 float-right mt-3 mr-4"></div>
 						<p
 							class="text-amber-600 text-2xl mt-1 float-right mr-4 opacity-0 group-hover:opacity-100 transition-opacity delay-150 cursor-default"
 						>
 							{statusText}
 						</p>
 					{:else}
-						<div class="bg-red-700 rounded-full w-5 h-5 float-right mt-3 mr-6"></div>
+						<div class="bg-red-700 rounded-full w-5 h-5 float-right mt-3 mr-4"></div>
 						<p
 							class="text-red-700 text-2xl mt-1 float-right mr-4 opacity-0 group-hover:opacity-100 transition-opacity delay-150 cursor-default"
 						>

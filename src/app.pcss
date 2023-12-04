@@ -82,3 +82,25 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	border-radius: 1rem;
+	
+	background: hsl(var(--primary));
+
+	&:hover {
+		background: hsl(var(--accent));
+	}
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	width: 6px;
+}

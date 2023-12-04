@@ -12,12 +12,16 @@
 
 <div>
 	{#if stylePrompts}
-		<Textarea placeholder="Prompt" bind:value={prompt} class="mb-2" />
-		<Textarea placeholder="Style Prompt" bind:value={stylePrompt} class="mb-2" />
-		<Textarea placeholder="Negative Prompt" bind:value={negativePrompt} class="mb-2" />
-		<Textarea placeholder="Negative Style Prompt" bind:value={negativeStylePrompt} />
+		<Textarea placeholder="Prompt" bind:value={prompt} class="mb-2 font-mono" />
+		<Textarea placeholder="Style Prompt" bind:value={stylePrompt} class="mb-2 font-mono" />
+		<Textarea placeholder="Negative Prompt" bind:value={negativePrompt} class="mb-2 font-mono" />
+		<Textarea
+			placeholder="Negative Style Prompt"
+			bind:value={negativeStylePrompt}
+			class="font-mono"
+		/>
 	{:else}
-		<Textarea placeholder="Prompt" bind:value={prompt} class="mb-2" />
-		<Textarea placeholder="Negative Prompt" bind:value={negativePrompt} />
+		<Textarea placeholder="Prompt" bind:value={prompt} class="mb-2 font-mono" />
+		<Textarea placeholder="Negative Prompt" bind:value={negativePrompt} class="mb-2 font-mono" />
 	{/if}
 </div>
