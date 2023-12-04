@@ -34,6 +34,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@svelteuidev/composables": "^0.15.3",
+		"@svelteuidev/core": "^0.15.3",
 		"bits-ui": "^0.9.9",
 		"clsx": "^2.0.0",
 		"cmdk-sv": "^0.0.12",

@@ -41,9 +41,9 @@
 		ArrowUp as IconDirectoryUp
 	} from 'lucide-svelte';
 
-	import Page from '$src/routes/+page.svelte';
 	import PopoverContent from '$lib/components/ui/popover/popover-content.svelte';
-	import TooltipButton from '$lib/components/spark/button/TooltipButton.svelte';
+
+	import { TooltipButton } from '$spark/button';
 
 	export let stylePrompts: boolean = false;
 

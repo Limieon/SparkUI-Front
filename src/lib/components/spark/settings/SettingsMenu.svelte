@@ -4,8 +4,9 @@
 	import { X as IconClose } from 'lucide-svelte';
 
 	import Combobox from '$spark/Combobox.svelte';
+	import { hotkey } from '@svelteuidev/composables';
 
-	export let open: boolean = true;
+	export let open: boolean = false;
 	export let title: string;
 </script>
 
@@ -20,6 +21,30 @@
 	></div>
 {/if}
 
+<!-- The Hotkey Listener -->
+<div
+	use:hotkey={[
+		[
+			'mod+comma',
+			() => {
+				open = !open;
+			}
+		]
+	]}
+></div>
+
+{#if open}
+	<div
+		use:hotkey={[
+			[
+				'escape',
+				() => {
+					open = false;
+				}
+			]
+		]}
+	></div>
+{/if}
 <!-- The actual selector -->
 <div
 	class="absolute top-32 left-96 bottom-32 right-96 bg-primary z-20 rounded-xl border transition-all duration-200 {open

@@ -14,6 +14,7 @@
 	import { TooltipButton } from '$spark/button';
 
 	import { SettingsMenu } from '$spark/settings';
+	import { CommandPalette } from '$spark/commandPalette';
 
 	import {
 		Type as IconType,
@@ -25,7 +26,9 @@
 		Workflow as IconNode
 	} from 'lucide-svelte';
 
-	let page: 'txt2img' | 'img2img' | 'models' | 'queue' | 'scripts' | 'node' = 'txt2img';
+	import type { Pages } from '$lib/types/Pages';
+
+	let page: Pages = 'txt2img';
 
 	let settingsOpen = false;
 </script>
@@ -137,5 +140,7 @@
 		<NodeEditor />
 	{/if}
 
-	<SettingsMenu title="Settings" bind:open={settingsOpen} />
+	<SettingsMenu bind:open={settingsOpen} title="Settings" />
 </PageLayout>
+
+<CommandPalette bind:settingsOpen bind:currentPage={page} />
