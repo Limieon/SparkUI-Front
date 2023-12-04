@@ -2,6 +2,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 
+	import Image from './Image.svelte';
+
 	import { ArrowUp as IconDirectoryUp } from 'lucide-svelte';
 
 	import { TooltipButton } from '$spark/button';
@@ -46,18 +48,12 @@
 	<div class="block overflow-y-auto" style="height: calc(100vh - 120px);">
 		<div class="grid grid-cols-8 gap-1">
 			{#each images as img, i}
-				<button
-					class="w-full h-full"
+				<Image
+					url={img.url}
 					on:click={() => {
 						selectedImage = img;
 					}}
-					><img
-						class="block rounded bg-cover bg-center w-full aspect-square"
-						src={img.url}
-						style="background-image: url('{img.url}');"
-						alt=""
-					/>
-				</button>
+				/>
 			{/each}
 		</div>
 	</div>

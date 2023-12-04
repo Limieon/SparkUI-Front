@@ -1,3 +1,4 @@
 import ImageBrowser from './ImageBrowser.svelte';
+import Image from './Image.svelte';
 
-export { ImageBrowser };
+export { ImageBrowser, Image };
