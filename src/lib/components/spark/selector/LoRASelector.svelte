@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
-	import { Separator } from '$lib/components/ui/separator';
 	import { Input } from '$lib/components/ui/input';
 
 	import { X as IconClose } from 'lucide-svelte';

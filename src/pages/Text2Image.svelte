@@ -1,17 +1,11 @@
 <script lang="ts">
-	import { size } from '@floating-ui/dom';
 	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import { Label } from '$lib/components/ui/label';
-	import { Separator } from '$lib/components/ui/separator';
 	import { Progress } from '$lib/components/ui/progress';
 	import { Input } from '$lib/components/ui/input';
-	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Switch } from '$lib/components/ui/switch';
 	import { Slider } from '$lib/components/ui/slider';
 	import * as Accordion from '$lib/components/ui/accordion';
-	import * as Tooltip from '$lib/components/ui/tooltip';
-	import * as RadioGroup from '$lib/components/ui/radio-group';
 
 	import Combobox from '$spark/Combobox.svelte';
 	import { ModelSelector, LoRASelector } from '$lib/components/spark/selector';

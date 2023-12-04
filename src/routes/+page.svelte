@@ -8,12 +8,7 @@
 	import ScriptManager from '$page/ScriptManager.svelte';
 	import NodeEditor from '$page/NodeEditor.svelte';
 
-	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import * as Accordion from '$lib/components/ui/accordion';
-	import { Label } from '$lib/components/ui/label';
-	import { Checkbox } from '$lib/components/ui/checkbox';
 
 	import ThemeSwitcher from '$spark/ThemeSwitcher.svelte';
 	import { TooltipButton } from '$spark/button';
@@ -115,7 +110,7 @@
 		<TooltipButton
 			variant="outline"
 			size="icon"
-			tooltip="Settings"
+			tooltip="Settings..."
 			on:click={() => {
 				settingsOpen = true;
 			}}
