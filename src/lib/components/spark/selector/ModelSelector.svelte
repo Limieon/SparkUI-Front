@@ -116,7 +116,7 @@
 			{#each models as model, i}
 				{#if searchPrompt == '' || model.name.toLowerCase().includes(searchPrompt.toLowerCase())}
 					<button
-						class="hover:cursor-pointer h-96 border-none"
+						class="group hover:cursor-pointer h-96 border-none"
 						on:click={() => {
 							selected = model.name;
 							open = false;
@@ -127,8 +127,10 @@
 							draggable={false}
 							style="background-image: url('{model.preview}');"
 						>
-							<div class="bg-background2 translate-y-[22.005rem]">
-								<p class="static text-xl text-center opacity-100">{model.name}</p>
+							<div
+								class="bg-background2 transition-all translate-y-[25.005rem] opacity-0 group-hover:translate-y-[22.005rem] group-hover:opacity-100"
+							>
+								<p class="static text-xl text-center">{model.name}</p>
 							</div>
 						</div>
 					</button>
