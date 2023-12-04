@@ -3,7 +3,7 @@
 	import type { Pages } from '$lib/types/Pages';
 	import { hotkey } from '@svelteuidev/composables';
 
-	let open = false;
+	export let open = false;
 
 	export let settingsOpen = false;
 	export let currentPage: Pages;
@@ -75,6 +75,8 @@
 				}}>Queue</Command.Item
 			>
 		</Command.Group>
+
+		<slot />
 
 		<Command.Group heading="Settings">
 			<Command.Item

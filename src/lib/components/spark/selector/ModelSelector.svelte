@@ -4,6 +4,8 @@
 
 	import { X as IconClose } from 'lucide-svelte';
 
+	import { hotkey } from '@svelteuidev/composables';
+
 	import Combobox from '$spark/Combobox.svelte';
 
 	export let open: boolean = true;
@@ -70,6 +72,17 @@
 		on:click={() => {
 			open = false;
 		}}
+	></div>
+
+	<div
+		use:hotkey={[
+			[
+				'escape',
+				() => {
+					open = false;
+				}
+			]
+		]}
 	></div>
 {/if}
 

@@ -10,7 +10,14 @@
 	import Combobox from '$spark/Combobox.svelte';
 	import { ModelSelector, LoRASelector } from '$lib/components/spark/selector';
 
+	import { CommandPalette } from '$spark/commandPalette';
 	import { ImageBrowser } from '$spark/imageBrowser';
+
+	import {
+		Item as CmdItem,
+		Group as CmdGroup,
+		CommandDialog as CmdDialog
+	} from '$lib/components/ui/command';
 
 	/* ---> Sections <--- */
 	import SectionPrompt from './sections/SectionPrompt.svelte';
@@ -44,6 +51,7 @@
 	import PopoverContent from '$lib/components/ui/popover/popover-content.svelte';
 
 	import { TooltipButton } from '$spark/button';
+	import type { Pages } from '$lib/types/Pages';
 
 	export let stylePrompts: boolean = false;
 
@@ -136,12 +144,16 @@
 	// Internal States
 	let modelSelectorOpen = false;
 	let loraSelectorOpen = false;
+	let paletteOpen = false;
 
 	let selectedCheckpoint = '';
 
 	let currentImage = {
 		url: `https://picsum.photos/512/768`
 	};
+
+	export let settingsOpen = false;
+	export let currentPage: Pages = 'txt2img';
 </script>
 
 <div class="grid grid-cols-[30%_auto_25%] h-full gap-2">
@@ -434,3 +446,20 @@
 	<!-- Image Browser -->
 	<ImageBrowser root="/images/generated/output" bind:selectedImage={currentImage} />
 </div>
+
+<CommandPalette bind:settingsOpen bind:currentPage bind:open={paletteOpen}>
+	<CmdGroup heading="Text to Image">
+		<CmdItem
+			onSelect={() => {
+				modelSelectorOpen = true;
+				paletteOpen = false;
+			}}>Select Checkpoint...</CmdItem
+		>
+		<CmdItem
+			onSelect={() => {
+				loraSelectorOpen = true;
+				paletteOpen = false;
+			}}>Add LoRA...</CmdItem
+		>
+	</CmdGroup>
+</CommandPalette>

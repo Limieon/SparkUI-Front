@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { SvelteComponent, onMount } from 'svelte';
+
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 
 	import { X as IconClose } from 'lucide-svelte';
+
+	import { hotkey } from '@svelteuidev/composables';
 
 	import Combobox from '$spark/Combobox.svelte';
 
@@ -60,6 +64,17 @@
 		on:click={() => {
 			open = false;
 		}}
+	></div>
+
+	<div
+		use:hotkey={[
+			[
+				'escape',
+				() => {
+					open = false;
+				}
+			]
+		]}
 	></div>
 {/if}
 

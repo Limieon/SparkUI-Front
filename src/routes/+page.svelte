@@ -127,7 +127,7 @@
 	</span>
 
 	{#if page == 'txt2img'}
-		<Text2Image />
+		<Text2Image bind:currentPage={page} bind:settingsOpen />
 	{:else if page == 'img2img'}
 		<Image2Image />
 	{:else if page == 'models'}
@@ -142,5 +142,3 @@
 
 	<SettingsMenu bind:open={settingsOpen} title="Settings" />
 </PageLayout>
-
-<CommandPalette bind:settingsOpen bind:currentPage={page} />
