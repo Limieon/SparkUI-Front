@@ -13,9 +13,15 @@
 	export let width: number;
 	export let height: number;
 
+	let MAX_WIDTH = 2048;
+	let MAX_HEIGHT = 2048;
+	let MIN_WIDTH = 64;
+	let MIN_HEIGHT = 64;
+
 	let sldImageWidth = [width];
 	let sldImageHeight = [height];
 
+	let swapped = false;
 	const aspectRatios = [undefined, [1, 1], [3 / 2, 2 / 3], [16 / 9, 9 / 16]];
 
 	function updateAspectRatio(id: number) {
@@ -32,18 +38,20 @@
 		let ar = aspectRatios[selectedAR];
 		if (ar == undefined) return;
 
-		height = ~~(width * ar[0]);
+		height = Math.min(Math.max(~~(width * ar[swapped ? 0 : 1]), MIN_HEIGHT), MAX_HEIGHT);
 		updateSliders();
 	}
 	function onHeightUpdated() {
 		let ar = aspectRatios[selectedAR];
 		if (ar == undefined) return;
 
-		width = ~~(height * ar[1]);
+		width = Math.min(Math.max(~~(height * ar[swapped ? 1 : 0]), MIN_WIDTH), MAX_WIDTH);
 		updateSliders();
 	}
 
 	function swapDimensions() {
+		swapped = !swapped;
+
 		let temp = width;
 		width = height;
 		height = temp;
@@ -75,17 +83,19 @@
 				on:click={() => {
 					updateAspectRatio(2);
 				}}
-				tooltip="3/2 Aspect Ratio"
+				tooltip="{swapped ? '9/16' : '16/9'} Aspect Ratio"
 				class="w-12"
-				variant={selectedAR == 2 ? 'default' : 'outline'}>3/2</TooltipButton
+				variant={selectedAR == 2 ? 'default' : 'outline'}
+				>{`${swapped ? '2/3' : '3/2'}`}</TooltipButton
 			>
 			<TooltipButton
 				on:click={() => {
 					updateAspectRatio(3);
 				}}
-				tooltip="16/9 Aspect Ratio"
+				tooltip="{swapped ? '9/16' : '16/9'} Aspect Ratio"
 				class="w-12"
-				variant={selectedAR == 3 ? 'default' : 'outline'}>16/9</TooltipButton
+				variant={selectedAR == 3 ? 'default' : 'outline'}
+				>{`${swapped ? '9/16' : '16/9'}`}</TooltipButton
 			>
 			<TooltipButton
 				on:click={swapDimensions}
@@ -101,8 +111,8 @@
 		<Slider
 			class="mr-2"
 			style="transform: translateX(16px);"
-			max={2048}
-			min={64}
+			max={MAX_WIDTH}
+			min={MIN_WIDTH}
 			bind:value={sldImageWidth}
 			onValueChange={(v) => {
 				width = v[0];
@@ -125,8 +135,8 @@
 		<Slider
 			class="mr-2"
 			style="transform: translateX(16px);"
-			max={2048}
-			min={64}
+			max={MAX_HEIGHT}
+			min={MIN_HEIGHT}
 			bind:value={sldImageHeight}
 			onValueChange={(v) => {
 				height = v[0];
