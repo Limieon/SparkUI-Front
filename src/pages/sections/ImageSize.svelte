@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { imageSizeData as data } from '$lib/stores';
+
 	import { Slider } from '$lib/components/ui/slider';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
@@ -7,8 +9,6 @@
 	import { TooltipButton } from '$spark/button';
 
 	import { ArrowDownUp as IconSwap } from 'lucide-svelte';
-
-	let selectedAR = 0;
 
 	export let width: number;
 	export let height: number;
@@ -21,7 +21,6 @@
 	let sldImageWidth = [width];
 	let sldImageHeight = [height];
 
-	let swapped = false;
 	const aspectRatios = [undefined, [1, 1], [3 / 2, 2 / 3], [16 / 9, 9 / 16]];
 
 	const predefinedSizes: (number[] | undefined)[] = [
@@ -32,8 +31,16 @@
 		[768, 768]
 	];
 
+	for (let i = 1; i < predefinedSizes.length; ++i) {
+		let size = predefinedSizes[i];
+		if (size == undefined) continue;
+		if (size[0] == width && size[1] == height) {
+			$data.selectedSize = i;
+		}
+	}
+
 	function updateAspectRatio(id: number) {
-		selectedAR = id;
+		$data.selectedAr = id;
 		onWidthUpdated();
 	}
 
@@ -43,22 +50,22 @@
 	}
 
 	function onWidthUpdated() {
-		let ar = aspectRatios[selectedAR];
+		let ar = aspectRatios[$data.selectedAr];
 		if (ar == undefined) return;
 
-		height = Math.min(Math.max(~~(width * ar[swapped ? 0 : 1]), MIN_HEIGHT), MAX_HEIGHT);
+		height = Math.min(Math.max(~~(width * ar[$data.swapped ? 0 : 1]), MIN_HEIGHT), MAX_HEIGHT);
 		updateSliders();
 	}
 	function onHeightUpdated() {
-		let ar = aspectRatios[selectedAR];
+		let ar = aspectRatios[$data.selectedAr];
 		if (ar == undefined) return;
 
-		width = Math.min(Math.max(~~(height * ar[swapped ? 1 : 0]), MIN_WIDTH), MAX_WIDTH);
+		width = Math.min(Math.max(~~(height * ar[$data.swapped ? 1 : 0]), MIN_WIDTH), MAX_WIDTH);
 		updateSliders();
 	}
 
 	function swapDimensions() {
-		swapped = !swapped;
+		$data.swapped = !$data.swapped;
 
 		let temp = width;
 		width = height;
@@ -66,9 +73,8 @@
 		updateSliders();
 	}
 
-	let predefinedSize = 1;
 	function usePredefinedSize(id: number) {
-		predefinedSize = id;
+		$data.selectedSize = id;
 
 		if (predefinedSizes[id] == undefined) return;
 		width = predefinedSizes[id][0];
@@ -88,7 +94,7 @@
 						}}
 						tooltip="Custom Image Size"
 						class="w-20"
-						variant={predefinedSize == 0 ? 'default' : 'outline'}>Custom</TooltipButton
+						variant={$data.selectedSize == 0 ? 'default' : 'outline'}>Custom</TooltipButton
 					>
 				{:else}
 					<TooltipButton
@@ -97,7 +103,7 @@
 						}}
 						tooltip="{size[0]} x {size[1]} Image Size"
 						class="w-20"
-						variant={predefinedSize == i ? 'default' : 'outline'}
+						variant={$data.selectedSize == i ? 'default' : 'outline'}
 						>{size[0]} x {size[1]}</TooltipButton
 					>
 				{/if}
@@ -105,7 +111,7 @@
 		</div>
 	</div>
 
-	{#if predefinedSize == 0}
+	{#if $data.selectedSize == 0}
 		<div class="grid grid-cols-[auto_auto] items-center mt-2">
 			<p class="float-left">Aspect Ratio</p>
 			<div class="margin-[0_auto]">
@@ -115,7 +121,7 @@
 					}}
 					tooltip="Free Aspect Ratio"
 					class="w-12"
-					variant={selectedAR == 0 ? 'default' : 'outline'}>Free</TooltipButton
+					variant={$data.selectedAr == 0 ? 'default' : 'outline'}>Free</TooltipButton
 				>
 				<TooltipButton
 					on:click={() => {
@@ -123,25 +129,25 @@
 					}}
 					tooltip="1/1 Aspect Ratio"
 					class="w-12"
-					variant={selectedAR == 1 ? 'default' : 'outline'}>1/1</TooltipButton
+					variant={$data.selectedAr == 1 ? 'default' : 'outline'}>1/1</TooltipButton
 				>
 				<TooltipButton
 					on:click={() => {
 						updateAspectRatio(2);
 					}}
-					tooltip="{swapped ? '9/16' : '16/9'} Aspect Ratio"
+					tooltip="{$data.swapped ? '9/16' : '16/9'} Aspect Ratio"
 					class="w-12"
-					variant={selectedAR == 2 ? 'default' : 'outline'}
-					>{`${swapped ? '2/3' : '3/2'}`}</TooltipButton
+					variant={$data.selectedAr == 2 ? 'default' : 'outline'}
+					>{`${$data.swapped ? '2/3' : '3/2'}`}</TooltipButton
 				>
 				<TooltipButton
 					on:click={() => {
 						updateAspectRatio(3);
 					}}
-					tooltip="{swapped ? '9/16' : '16/9'} Aspect Ratio"
+					tooltip="{$data.swapped ? '9/16' : '16/9'} Aspect Ratio"
 					class="w-12"
-					variant={selectedAR == 3 ? 'default' : 'outline'}
-					>{`${swapped ? '9/16' : '16/9'}`}</TooltipButton
+					variant={$data.selectedAr == 3 ? 'default' : 'outline'}
+					>{`${$data.swapped ? '9/16' : '16/9'}`}</TooltipButton
 				>
 				<TooltipButton
 					on:click={swapDimensions}

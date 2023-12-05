@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { txt2imageData as genData, txt2imageData } from '$lib/stores';
+	import { browser } from '$app/environment';
+
 	import { Button } from '$lib/components/ui/button';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
@@ -21,12 +25,6 @@
 	import SectionPrompt from './sections/SectionPrompt.svelte';
 	import GenerationProgress from './sections/GenerationProgress.svelte';
 	import ImageSize from './sections/ImageSize.svelte';
-
-	let prompt = '',
-		negativePrompt = '';
-
-	let stylePrompt = '',
-		negativeStylePrompt = '';
 
 	import {
 		Zap as IconZap,
@@ -103,11 +101,11 @@
 
 	let loras: { name: string; weight: number }[] = [];
 	function removeLora(i: number) {
-		let temp = [...loras];
+		let temp = [...$genData.loras];
 		if (i > -1) {
 			temp.splice(i, 1);
 		}
-		loras = temp;
+		$genData.loras = temp;
 	}
 
 	function generate() {
@@ -152,10 +150,10 @@
 					<Accordion.Content>
 						<p class="mb-1">Prompts</p>
 						<SectionPrompt
-							bind:prompt
-							bind:stylePrompt
-							bind:negativePrompt
-							bind:negativeStylePrompt
+							bind:prompt={$genData.prompt}
+							bind:stylePrompt={$genData.stylePrompt}
+							bind:negativePrompt={$genData.negativePrompt}
+							bind:negativeStylePrompt={$genData.negativeStylePrompt}
 							{stylePrompts}
 						/>
 
@@ -170,7 +168,7 @@
 									class="w-full"
 									on:click={() => {
 										modelSelectorOpen = true;
-									}}>{selectedCheckpoint}</Button
+									}}>{$genData.checkpoint}</Button
 								>
 							</div>
 						</div>
@@ -178,15 +176,15 @@
 						<div class="w-full grid grid-cols-3 gap-2 mb-4">
 							<div>
 								<p class="mb-1">Steps</p>
-								<Input bind:value={samplingSteps} num />
+								<Input bind:value={$genData.steps} num />
 							</div>
 							<div>
 								<p class="mb-1">Iterations</p>
-								<Input bind:value={iterations} num />
+								<Input bind:value={$genData.iterations} num />
 							</div>
 							<div>
 								<p class="mb-1">CFG Scale</p>
-								<Input bind:value={cfgScale} step={0.5} num />
+								<Input bind:value={$genData.cfgScale} step={0.5} num />
 							</div>
 						</div>
 
@@ -210,7 +208,7 @@
 						<p class="mb-1">Seed</p>
 						<div class="w-full grid grid-cols-[55%_15%_auto] gap-2 mb-4">
 							<div>
-								<Input value={seed} disabled={randomize} num />
+								<Input value={$genData.seed} disabled={randomize} num />
 							</div>
 
 							<div>
@@ -234,14 +232,14 @@
 					<Accordion.Trigger class="text-2xl w-full">
 						<p class="w-fit">
 							Image Size (<span class="font-mono"
-								><span class="text-primary w-fit">{imageWidth}</span>x<span
-									class="text-primary w-fit">{imageHeight}</span
+								><span class="text-primary w-fit">{$genData.outputWidth}</span>x<span
+									class="text-primary w-fit">{$genData.outputHeight}</span
 								></span
 							>)
 						</p>
 					</Accordion.Trigger>
 					<Accordion.Content>
-						<ImageSize bind:width={imageWidth} bind:height={imageHeight} />
+						<ImageSize bind:width={$genData.outputWidth} bind:height={$genData.outputHeight} />
 					</Accordion.Content>
 				</Accordion.Item>
 
@@ -251,10 +249,10 @@
 				</Accordion.Item>
 
 				<Accordion.Item value="item-4">
-					{#if loras.length > 0}
+					{#if $genData.loras.length > 0}
 						<Accordion.Trigger class="text-2xl"
 							><p>
-								LoRAs (<span class="text-primary font-mono">{loras.length}</span>)
+								LoRAs (<span class="text-primary font-mono">{$genData.loras.length}</span>)
 							</p></Accordion.Trigger
 						>
 					{:else}
@@ -268,7 +266,7 @@
 							}}><IconAdd class="mr-2" /> Add Lora</Button
 						>
 
-						{#each loras as lora, i}
+						{#each $genData.loras as lora, i}
 							<div class="grid grid-cols-[40%_auto] items-center">
 								<p>{lora.name}</p>
 								<div class="grid grid-cols-[40%_auto] grid-rows-1 justify-end">
@@ -301,7 +299,7 @@
 			<ModelSelector
 				title="Model Selector"
 				bind:open={modelSelectorOpen}
-				bind:selected={selectedCheckpoint}
+				bind:selected={$genData.checkpoint}
 			/>
 			<LoRASelector
 				title="LoRA Selector"
@@ -311,11 +309,11 @@
 						if (lora.name === name) return;
 					}
 
-					let temp = [...loras];
+					let temp = [...$genData.loras];
 					temp.push({ name, weight: 0.75 });
-					loras = temp.sort((a, b) => a.name.localeCompare(b.name));
+					$genData.loras = temp.sort((a, b) => a.name.localeCompare(b.name));
 				}}
-				ignore={loras.map((e) => e.name)}
+				ignore={$genData.loras.map((e) => e.name)}
 			/>
 		</div>
 	</div>
