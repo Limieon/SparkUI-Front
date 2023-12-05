@@ -233,9 +233,10 @@
 				<Accordion.Item value="item-2">
 					<Accordion.Trigger class="text-2xl w-full">
 						<p class="w-fit">
-							Image Size (<span
-								><span class="text-primary w-fit">{imageWidth}</span> x
-								<span class="text-primary w-fit">{imageHeight}</span></span
+							Image Size (<span class="font-mono"
+								><span class="text-primary w-fit">{imageWidth}</span>x<span
+									class="text-primary w-fit">{imageHeight}</span
+								></span
 							>)
 						</p>
 					</Accordion.Trigger>
@@ -253,7 +254,7 @@
 					{#if loras.length > 0}
 						<Accordion.Trigger class="text-2xl"
 							><p>
-								LoRAs (<span class="text-primary">{loras.length}</span>)
+								LoRAs (<span class="text-primary font-mono">{loras.length}</span>)
 							</p></Accordion.Trigger
 						>
 					{:else}
