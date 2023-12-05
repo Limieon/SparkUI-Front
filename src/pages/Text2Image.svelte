@@ -227,20 +227,39 @@
 								<Label for="seed_random" class="ml-4">Randomize</Label>
 							</div>
 						</div>
-
-						<ImageSize bind:width={imageWidth} bind:height={imageHeight} />
 					</Accordion.Content>
 				</Accordion.Item>
 
 				<Accordion.Item value="item-2">
+					<Accordion.Trigger class="text-2xl w-full">
+						<p class="w-fit">
+							Image Size (<span
+								><span class="text-primary w-fit">{imageWidth}</span> x
+								<span class="text-primary w-fit">{imageHeight}</span></span
+							>)
+						</p>
+					</Accordion.Trigger>
+					<Accordion.Content>
+						<ImageSize bind:width={imageWidth} bind:height={imageHeight} />
+					</Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-3">
 					<Accordion.Trigger class="text-2xl">Highres. Fix</Accordion.Trigger>
 					<Accordion.Content></Accordion.Content>
 				</Accordion.Item>
 
-				<Accordion.Item value="item-3">
-					<Accordion.Trigger class="text-2xl"
-						>LoRAs {loras.length > 0 ? `(${loras.length})` : ''}</Accordion.Trigger
-					>
+				<Accordion.Item value="item-4">
+					{#if loras.length > 0}
+						<Accordion.Trigger class="text-2xl"
+							><p>
+								LoRAs (<span class="text-primary">{loras.length}</span>)
+							</p></Accordion.Trigger
+						>
+					{:else}
+						<Accordion.Trigger class="text-2xl">LoRAs</Accordion.Trigger>
+					{/if}
+
 					<Accordion.Content>
 						<Button
 							on:click={() => {
