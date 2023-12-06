@@ -73,7 +73,7 @@
 					.toLowerCase()
 					.includes(searchPrompt.toLowerCase())) && !ignore.includes(model.name)}
 				<button
-					class="group hover:cursor-pointer border-none aspect-square h-full"
+					class="group hover:cursor-pointer border-none aspect-square"
 					on:click={() => {
 						selected = model.name;
 						open = false;
