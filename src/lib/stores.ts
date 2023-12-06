@@ -18,6 +18,12 @@ interface Text2ImageData {
 	loras: {name: string, weight: number}[]
 }
 
+interface SettingsData {
+	queueSorting: number
+	queueHibernated: boolean
+	queuePaused: boolean
+}
+
 export const txt2imageData = writable<Text2ImageData>({
 	prompt: '',
 	negativePrompt: '',
@@ -34,6 +40,12 @@ export const txt2imageData = writable<Text2ImageData>({
 	outputWidth: 512,
 	outputHeight: 768,
 	loras: []
+})
+
+export const settingsData = writable<SettingsData>({
+	queueSorting: 0,
+	queueHibernated: false,
+	queuePaused: false
 })
 
 export const imageSizeData = writable({

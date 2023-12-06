@@ -7,6 +7,9 @@
 	import { TooltipButton, ButtonGroup, SingleSelectionButtonGroup } from '$spark/button';
 
 	import Combobox from '$spark/Combobox.svelte';
+	import { Message } from '$spark/popup';
+
+	import { settingsData as data } from '$lib/stores';
 
 	import {
 		Pause as IconPause,
@@ -31,47 +34,63 @@
 		}
 	];
 
-	export let queuePaused = false;
-	export let queueHibernated = false;
-
-	export let queueSorting = 0;
+	let open_clearQueue = false;
 </script>
 
 <h2 class="text-xl mb-1">Queue Sorting:</h2>
-<SingleSelectionButtonGroup bind:selected={queueSorting} items={queuePriorities} />
+<SingleSelectionButtonGroup bind:selected={$data.queueSorting} items={queuePriorities} />
 
-<h2 class="text-xl mt-3 mb-1">Queue Operations:</h2>
+<h2 class="text-xl mt-3 mb-1">
+	Queue Operations:
+	{#if $data.queueHibernated}
+		(<span class="text-amber-400">Queue is hibernated!</span>)
+	{:else if $data.queuePaused}
+		(<span class="text-amber-400">Queue is paused!</span>)
+	{/if}
+</h2>
+
 <div class="w-fit">
 	<TooltipButton
-		disabled={!queuePaused}
+		disabled={!$data.queuePaused || $data.queueHibernated}
 		tooltip="Continue"
 		size="icon"
 		on:click={() => {
-			queuePaused = false;
+			$data.queuePaused = false;
 		}}><IconPlay /></TooltipButton
 	>
 	<TooltipButton
-		disabled={queuePaused}
+		disabled={$data.queuePaused || $data.queueHibernated}
 		tooltip="Pause"
 		size="icon"
 		on:click={() => {
-			queuePaused = true;
+			$data.queuePaused = true;
 		}}><IconPause /></TooltipButton
 	>
 
 	<TooltipButton
 		class="ml-2"
-		tooltip={queueHibernated ? 'Retore queue from hibernation' : 'Hibernate queue'}
+		tooltip={$data.queueHibernated ? 'Retore queue from hibernation' : 'Hibernate queue'}
 		size="icon"
 		on:click={() => {
-			queueHibernated = !queueHibernated;
+			$data.queueHibernated = !$data.queueHibernated;
 		}}
 	>
-		{#if queueHibernated}
+		{#if $data.queueHibernated}
 			<IconRestore />
 		{:else}
 			<IconHibernate />
 		{/if}
 	</TooltipButton>
-	<TooltipButton tooltip="Pause" size="icon" variant="destructive"><IconClear /></TooltipButton>
+	<TooltipButton
+		tooltip="Clear Queue"
+		size="icon"
+		variant="destructive"
+		on:click={() => {
+			open_clearQueue = true;
+		}}><IconClear /></TooltipButton
+	>
 </div>
+
+<Message title="Clear Queue" bind:open={open_clearQueue}
+	><p>Do you really want to clear the queue?</p></Message
+>
