@@ -4,9 +4,12 @@
 
 	import { hotkey } from '@svelteuidev/composables';
 
+	let className = 'top-32 left-48 bottom-32 right-48 bg-primary';
+
 	export let title: string;
 	export let open: boolean = false;
 	export let useHotkey: boolean = true;
+	export { className as class };
 </script>
 
 {#if open}
@@ -34,7 +37,7 @@
 {/if}
 
 <div
-	class="absolute top-32 left-48 bottom-32 right-48 bg-primary z-20 rounded-xl border transition-all duration-200 {open
+	class="absolute z-20 rounded-xl border transition-all duration-200 {className} {open
 		? 'scale-100 opacity-100'
 		: 'scale-0 opacity-0'}"
 >

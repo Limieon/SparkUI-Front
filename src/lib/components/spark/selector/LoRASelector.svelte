@@ -73,7 +73,7 @@
 					.toLowerCase()
 					.includes(searchPrompt.toLowerCase())) && !ignore.includes(model.name)}
 				<button
-					class="group hover:cursor-pointer border-none w-full aspect-square"
+					class="group hover:cursor-pointer border-none aspect-square h-full"
 					on:click={() => {
 						selected = model.name;
 						open = false;
@@ -85,9 +85,9 @@
 						draggable={false}
 						style="background-image: url('{model.preview}');"
 					>
-						<div class="group transition-opacity h-full translate-y-full">
+						<div class="group transition-opacity">
 							<div
-								class="bg-background2 transition-all opacity-0 -translate-y-0 group-hover:opacity-100 group-hover:-translate-y-8"
+								class="bg-background2 transition-all opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0"
 							>
 								<p class="static text-center">{model.name}</p>
 							</div>
