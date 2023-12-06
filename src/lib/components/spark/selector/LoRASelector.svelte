@@ -1,18 +1,10 @@
 <script lang="ts">
-	import { SvelteComponent, onMount } from 'svelte';
-
-	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 
-	import { X as IconClose } from 'lucide-svelte';
-
-	import { hotkey } from '@svelteuidev/composables';
-
 	import Combobox from '$spark/Combobox.svelte';
+	import { Popup } from '$spark/popup';
 
 	export let open: boolean = true;
-	export let title: string;
 
 	let searchPrompt: string = '';
 
@@ -56,96 +48,53 @@
 	export let onChange: (name: string) => void = () => {};
 </script>
 
-{#if open}
-	<!-- Blur the background -->
-	<div
-		class="absolute top-0 bottom-0 left-0 right-0 backdrop-blur z-10"
-		role="none"
-		on:click={() => {
-			open = false;
-		}}
-	></div>
-
-	<div
-		use:hotkey={[
-			[
-				'escape',
-				() => {
-					open = false;
-				}
-			]
-		]}
-	></div>
-{/if}
-
 <!-- The actual selector -->
-<div
-	class="absolute top-32 left-48 bottom-32 right-48 bg-primary z-20 rounded-xl border transition-all duration-200 {open
-		? 'scale-100 opacity-100'
-		: 'scale-0 opacity-0'}"
->
-	<!-- Header -->
-	<div role="none" class="inline-block w-full pl-4 p-2">
-		<h2 class="text-4xl font-bold float-left">{title}</h2>
-
-		<Button
-			size="icon"
-			variant="ghost"
-			class="float-right h-10 w-10"
-			on:click={() => {
-				open = false;
-			}}><IconClose /></Button
-		>
-	</div>
-
-	<!-- Main Content -->
-	<div class="bg-background p-4 rounded-b-xl" style="height: calc(100% - 62px);">
-		<!-- Filters (other filters may come) -->
-		<div class="grid grid-cols-[70%_auto] h-16 gap-2">
-			<div>
-				<p class="mb-1">Search</p>
-				<Input placeholder="Search..." bind:value={searchPrompt} />
-			</div>
-
-			<div>
-				<p class="mb-1">Base Model</p>
-				<Combobox items={sdBaseTypes} />
-			</div>
+<Popup title="LoRA Selector" bind:open>
+	<!-- Filters (other filters may come) -->
+	<div class="grid grid-cols-[70%_auto] h-16 gap-2">
+		<div>
+			<p class="mb-1">Search</p>
+			<Input placeholder="Search..." bind:value={searchPrompt} />
 		</div>
 
-		<!-- Model Grid -->
-		<div
-			class="grid grid-cols-6 gap-2 m-2 h-full overflow-y-auto overflow-x-hidden"
-			style="height: calc(100% - 78px);"
-		>
-			{#each loras as model, i}
-				{#if (searchPrompt == '' || model.name
-						.toLowerCase()
-						.includes(searchPrompt.toLowerCase())) && !ignore.includes(model.name)}
-					<button
-						class="group hover:cursor-pointer border-none w-full aspect-square"
-						on:click={() => {
-							selected = model.name;
-							open = false;
-							onChange(model.name);
-						}}
+		<div>
+			<p class="mb-1">Base Model</p>
+			<Combobox items={sdBaseTypes} />
+		</div>
+	</div>
+
+	<!-- Model Grid -->
+	<div
+		class="grid grid-cols-6 gap-2 m-2 h-full overflow-y-auto overflow-x-hidden"
+		style="height: calc(100% - 78px);"
+	>
+		{#each loras as model, i}
+			{#if (searchPrompt == '' || model.name
+					.toLowerCase()
+					.includes(searchPrompt.toLowerCase())) && !ignore.includes(model.name)}
+				<button
+					class="group hover:cursor-pointer border-none w-full aspect-square"
+					on:click={() => {
+						selected = model.name;
+						open = false;
+						onChange(model.name);
+					}}
+				>
+					<div
+						class="block rounded h-full w-full bg-center bg-cover bg-no-repeat"
+						draggable={false}
+						style="background-image: url('{model.preview}');"
 					>
-						<div
-							class="block rounded h-full w-full bg-center bg-cover bg-no-repeat"
-							draggable={false}
-							style="background-image: url('{model.preview}');"
-						>
-							<div class="group transition-opacity h-full translate-y-full">
-								<div
-									class="bg-background2 transition-all opacity-0 -translate-y-0 group-hover:opacity-100 group-hover:-translate-y-8"
-								>
-									<p class="static text-center">{model.name}</p>
-								</div>
+						<div class="group transition-opacity h-full translate-y-full">
+							<div
+								class="bg-background2 transition-all opacity-0 -translate-y-0 group-hover:opacity-100 group-hover:-translate-y-8"
+							>
+								<p class="static text-center">{model.name}</p>
 							</div>
 						</div>
-					</button>
-				{/if}
-			{/each}
-		</div>
+					</div>
+				</button>
+			{/if}
+		{/each}
 	</div>
-</div>
+</Popup>
