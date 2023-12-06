@@ -296,13 +296,8 @@
 			</Accordion.Root>
 
 			<!-- Fullscreen Popups -->
-			<ModelSelector
-				title="Model Selector"
-				bind:open={modelSelectorOpen}
-				bind:selected={$genData.checkpoint}
-			/>
+			<ModelSelector bind:open={modelSelectorOpen} bind:selected={$genData.checkpoint} />
 			<LoRASelector
-				title="LoRA Selector"
 				bind:open={loraSelectorOpen}
 				onChange={(name) => {
 					for (var lora of loras) {

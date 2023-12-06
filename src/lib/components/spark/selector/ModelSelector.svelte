@@ -6,7 +6,6 @@
 	import { Popup } from '$spark/popup';
 
 	export let open: boolean = true;
-	export let title: string;
 
 	let searchPrompt: string = '';
 

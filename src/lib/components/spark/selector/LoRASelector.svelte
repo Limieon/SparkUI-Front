@@ -4,7 +4,7 @@
 	import Combobox from '$spark/Combobox.svelte';
 	import { Popup } from '$spark/popup';
 
-	export let open: boolean = true;
+	export let open: boolean = false;
 
 	let searchPrompt: string = '';
 
