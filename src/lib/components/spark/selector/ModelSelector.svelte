@@ -95,7 +95,7 @@
 						style="background-image: url('{model.preview}');"
 					>
 						<div
-							class="bg-background2 transition-all translate-y-[25.005rem] opacity-0 group-hover:translate-y-[22.005rem] group-hover:opacity-100"
+							class=" bg-background2 transition-all opacity-0 translate-y-0 group-hover:translate-y-8 group-hover:opacity-100"
 						>
 							<p class="static text-xl text-center">{model.name}</p>
 						</div>

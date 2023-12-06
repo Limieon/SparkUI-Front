@@ -87,7 +87,7 @@
 					>
 						<div class="group transition-opacity">
 							<div
-								class="bg-background2 transition-all opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0"
+								class="bg-background2 transition-all opacity-0 translate-y-0 group-hover:opacity-100 group-hover:translate-y-8"
 							>
 								<p class="static text-center">{model.name}</p>
 							</div>
