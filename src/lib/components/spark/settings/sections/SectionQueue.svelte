@@ -46,6 +46,8 @@
 		if ($data.queueHibernated) $data.queuePaused = true;
 	}
 
+	function clearQueue() {}
+
 	let open_clearQueue = false;
 </script>
 
@@ -97,6 +99,10 @@
 	>
 </div>
 
-<Message title="Clear Queue" bind:open={open_clearQueue}
-	><p>Do you really want to clear the queue?</p></Message
+<Message
+	title="Clear Queue"
+	bind:open={open_clearQueue}
+	onConfirm={() => {
+		clearQueue();
+	}}><p>Do you really want to clear the queue?</p></Message
 >
