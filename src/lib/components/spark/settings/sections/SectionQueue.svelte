@@ -6,10 +6,7 @@
 
 	import { TooltipButton, ButtonGroup, SingleSelectionButtonGroup } from '$spark/button';
 
-	import Combobox from '$spark/Combobox.svelte';
-	import { Message } from '$spark/popup';
-
-	import { settingsData as data, popup } from '$lib/stores';
+	import { settingsData as data, MessageBox } from '$lib/stores';
 
 	import {
 		Pause as IconPause,
@@ -35,7 +32,7 @@
 	];
 
 	function openClearQueueMessage() {
-		$popup.open({
+		$MessageBox.open({
 			title: 'Clear Queue',
 			message: 'Do you really want to clear the queue?',
 			onConfirm: clearQueue

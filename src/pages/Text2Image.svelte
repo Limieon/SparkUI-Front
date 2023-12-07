@@ -215,7 +215,7 @@
 								<Button
 									variant="outline"
 									on:click={() => {
-										seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+										$genData.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 									}}><IconRandom /></Button
 								>
 							</div>

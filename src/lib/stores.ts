@@ -73,7 +73,7 @@ export const currentPopup = writable<PopupData>({
 	onClose: undefined
 })
 
-export const popup = writable({
+export const MessageBox = writable({
 	open: (data: {
 		title: string;
 		message: string;

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Message } from '$spark/popup';
+	import { MessageBox } from '$spark/popup';
 </script>
 
 <slot />
 
-<Message />
+<MessageBox />

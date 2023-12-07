@@ -1,4 +1,4 @@
 import Popup from './Popup.svelte'
-import Message from './Message.svelte'
+import MessageBox from './MessageBox.svelte'
 
-export { Popup, Message }
+export { Popup, MessageBox }
