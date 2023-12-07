@@ -4,8 +4,6 @@
 
 	import { X as IconClose } from 'lucide-svelte';
 
-	import { hotkey } from '@svelteuidev/composables';
-
 	export let title: string;
 	export let open: boolean = false;
 

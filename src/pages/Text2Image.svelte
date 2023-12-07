@@ -53,18 +53,12 @@
 
 	export let stylePrompts: boolean = false;
 
-	let seed = 0;
 	let randomize = false;
-
-	let samplingSteps = 30;
-	let iterations = 4;
-	let cfgScale = 7.5;
 
 	let imageWidth = 512;
 	let imageHeight = 768;
 
 	let cbxImageSize = '';
-	$: customImageSize = cbxImageSize === 'Custom';
 
 	const samplers = [
 		{
@@ -117,8 +111,6 @@
 	let modelSelectorOpen = false;
 	let loraSelectorOpen = false;
 	let paletteOpen = false;
-
-	let selectedCheckpoint = '';
 
 	let currentImage = {
 		url: `https://picsum.photos/512/768`
