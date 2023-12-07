@@ -146,7 +146,15 @@
 		<div class="block overflow-y-auto overflow-x-hidden" style="height: calc(100vh - 180px);">
 			<Accordion.Root multiple={true}>
 				<Accordion.Item value="item-1">
-					<Accordion.Trigger class="text-2xl">Base Settings</Accordion.Trigger>
+					<Accordion.Trigger class="text-2xl"
+						><p>
+							Base Settings (<span class="text-primary font-mono"
+								>{$genData.steps}<span class="text-foreground">x</span>{`${
+									$genData.iterations < 10 ? ' ' : ''
+								}`}{$genData.iterations}</span
+							>)
+						</p></Accordion.Trigger
+					>
 					<Accordion.Content>
 						<p class="mb-1">Prompts</p>
 						<SectionPrompt
