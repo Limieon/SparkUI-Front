@@ -126,12 +126,29 @@
 	<!-- Generation Data -->
 	<div>
 		<div class="grid grid-cols-[auto_auto_auto]">
-			<Button class="mr-1" on:click={generate}>Generate</Button>
-			<Button variant="outline" size="icon"><IconZap /></Button>
+			<TooltipButton tooltip="Add images to queue" class="w-full" on:click={generate}
+				>Generate</TooltipButton
+			>
+			<TooltipButton
+				tooltip="Add images to front of queue"
+				variant="outline"
+				size="icon"
+				class="ml-1"><IconZap /></TooltipButton
+			>
 
 			<div class="float-right">
-				<Button class="float-right ml-1" variant="destructive" size="icon"><IconDelete /></Button>
-				<Button class="float-right ml-1" variant="destructive" size="icon"><IconCancel /></Button>
+				<TooltipButton
+					tooltip="Clear Queue"
+					class="float-right ml-1"
+					variant="destructive"
+					size="icon"><IconDelete /></TooltipButton
+				>
+				<TooltipButton
+					tooltip="Cancel current image"
+					class="float-right ml-1"
+					variant="destructive"
+					size="icon"><IconCancel /></TooltipButton
+				>
 			</div>
 		</div>
 
@@ -223,20 +240,8 @@
 								<Label for="seed_random" class="ml-4">Randomize</Label>
 							</div>
 						</div>
-					</Accordion.Content>
-				</Accordion.Item>
 
-				<Accordion.Item value="item-2">
-					<Accordion.Trigger class="text-2xl w-full">
-						<p class="w-fit">
-							Image Size (<span class="font-mono"
-								><span class="text-primary w-fit">{$genData.outputWidth}</span>x<span
-									class="text-primary w-fit">{$genData.outputHeight}</span
-								></span
-							>)
-						</p>
-					</Accordion.Trigger>
-					<Accordion.Content>
+						<p class="mb-1 text-xl">Image Dimensions</p>
 						<ImageSize bind:width={$genData.outputWidth} bind:height={$genData.outputHeight} />
 					</Accordion.Content>
 				</Accordion.Item>
