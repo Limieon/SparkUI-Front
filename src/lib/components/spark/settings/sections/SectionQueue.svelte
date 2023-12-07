@@ -34,6 +34,18 @@
 		}
 	];
 
+	function start() {
+		$data.queuePaused = false;
+	}
+	function pause() {
+		$data.queuePaused = true;
+	}
+	function toggleHibernation() {
+		$data.queueHibernated = !$data.queueHibernated;
+
+		if ($data.queueHibernated) $data.queuePaused = true;
+	}
+
 	let open_clearQueue = false;
 </script>
 
@@ -54,26 +66,20 @@
 		disabled={!$data.queuePaused || $data.queueHibernated}
 		tooltip="Continue"
 		size="icon"
-		on:click={() => {
-			$data.queuePaused = false;
-		}}><IconPlay /></TooltipButton
+		on:click={start}><IconPlay /></TooltipButton
 	>
 	<TooltipButton
 		disabled={$data.queuePaused || $data.queueHibernated}
 		tooltip="Pause"
 		size="icon"
-		on:click={() => {
-			$data.queuePaused = true;
-		}}><IconPause /></TooltipButton
+		on:click={pause}><IconPause /></TooltipButton
 	>
 
 	<TooltipButton
 		class="ml-2"
 		tooltip={$data.queueHibernated ? 'Retore queue from hibernation' : 'Hibernate queue'}
 		size="icon"
-		on:click={() => {
-			$data.queueHibernated = !$data.queueHibernated;
-		}}
+		on:click={toggleHibernation}
 	>
 		{#if $data.queueHibernated}
 			<IconRestore />
