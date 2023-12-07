@@ -4,6 +4,8 @@
 
 	import { hotkey } from '@svelteuidev/composables';
 
+	import { currentPopup } from '$lib/stores';
+
 	let className = 'top-32 left-48 bottom-32 right-48 bg-primary';
 
 	export let title: string;
@@ -28,6 +30,7 @@
 				[
 					'escape',
 					() => {
+						if ($currentPopup.open) return;
 						open = false;
 					}
 				]

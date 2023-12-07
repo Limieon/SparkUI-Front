@@ -9,7 +9,7 @@
 	import Combobox from '$spark/Combobox.svelte';
 	import { Message } from '$spark/popup';
 
-	import { settingsData as data } from '$lib/stores';
+	import { settingsData as data, popup } from '$lib/stores';
 
 	import {
 		Pause as IconPause,
@@ -34,6 +34,14 @@
 		}
 	];
 
+	function openClearQueueMessage() {
+		$popup.open({
+			title: 'Clear Queue',
+			message: 'Do you really want to clear the queue?',
+			onConfirm: clearQueue
+		});
+	}
+
 	function start() {
 		$data.queuePaused = false;
 	}
@@ -47,8 +55,6 @@
 	}
 
 	function clearQueue() {}
-
-	let open_clearQueue = false;
 </script>
 
 <h2 class="text-xl mb-1">Queue Sorting:</h2>
@@ -93,16 +99,6 @@
 		tooltip="Clear Queue"
 		size="icon"
 		variant="destructive"
-		on:click={() => {
-			open_clearQueue = true;
-		}}><IconClear /></TooltipButton
+		on:click={openClearQueueMessage}><IconClear /></TooltipButton
 	>
 </div>
-
-<Message
-	title="Clear Queue"
-	bind:open={open_clearQueue}
-	onConfirm={() => {
-		clearQueue();
-	}}><p>Do you really want to clear the queue?</p></Message
->
