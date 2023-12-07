@@ -118,6 +118,8 @@
 
 	export let settingsOpen = false;
 	export let currentPage: Pages = 'txt2img';
+
+	$: imageCount = $genData.iterations;
 </script>
 
 <div class="grid grid-cols-[30%_auto_25%] h-full gap-2">
@@ -140,11 +142,7 @@
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger class="text-2xl"
 						><p>
-							Base Settings (<span class="text-primary font-mono"
-								>{$genData.steps}<span class="text-foreground">x</span>{`${
-									$genData.iterations < 10 ? ' ' : ''
-								}`}{$genData.iterations}</span
-							>)
+							Base Settings (<span class="text-primary font-mono">{imageCount}</span>)
 						</p></Accordion.Trigger
 					>
 					<Accordion.Content>
