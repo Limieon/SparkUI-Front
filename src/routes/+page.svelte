@@ -31,6 +31,8 @@
 	let page: Pages = 'txt2img';
 
 	let settingsOpen = false;
+
+	export let data;
 </script>
 
 <PageLayout>
@@ -127,7 +129,7 @@
 	</span>
 
 	{#if page == 'txt2img'}
-		<Text2Image bind:currentPage={page} bind:settingsOpen />
+		<Text2Image {data} bind:currentPage={page} bind:settingsOpen />
 	{:else if page == 'img2img'}
 		<Image2Image />
 	{:else if page == 'models'}
@@ -140,5 +142,5 @@
 		<NodeEditor />
 	{/if}
 
-	<SettingsMenu bind:open={settingsOpen} title="Settings" />
+	<SettingsMenu bind:open={settingsOpen} />
 </PageLayout>

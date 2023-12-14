@@ -29,33 +29,7 @@
 	];
 
 	// Arbitrary Data for testing the frontend
-	const models = [
-		{
-			name: 'RealCartoon3D',
-			preview:
-				'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5fe07a49-bd79-4e6f-b3ba-b6b1c521ec68/width=450/RealCartoon3DV11.jpeg'
-		},
-		{
-			name: 'DreamShaperV8',
-			preview:
-				'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd9b038c-bd15-43ab-86ab-66e145ad7ff2/width=450/26072158-132340247-8k%20portrait%20of%20beautiful%20cyborg%20with%20brown%20hair,%20intricate,%20elegant,%20highly%20detailed,%20majestic,%20digital%20photography,%20art%20by%20artg_ed.jpeg'
-		},
-		{
-			name: 'AlbedoBase XL',
-			preview:
-				'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/68df5736-dd1f-4df4-8e7d-5fbd7adf8730/width=450/0.jpeg'
-		},
-		{
-			name: 'AingDiffusion - V12',
-			preview:
-				'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/669c8aef-b211-42c4-b603-5c6d7a26e959/width=450/05337-3445846027.jpeg'
-		},
-		{
-			name: 'RealCartoon-Anime - V7',
-			preview:
-				'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d6592dc4-969a-4b54-bec8-51e408329d94/width=450/RealCartoonAnimeV7.jpeg'
-		}
-	];
+	export let models;
 
 	export let selected: string = models[0].name;
 </script>
@@ -91,7 +65,7 @@
 					<div
 						class="block rounded h-full w-full bg-center bg-cover bg-no-repeat"
 						draggable={false}
-						style="background-image: url('{model.preview}');"
+						style="background-image: url('{model.preview_url}');"
 					>
 						<div
 							class=" bg-background2 transition-all opacity-0 translate-y-0 group-hover:translate-y-8 group-hover:opacity-100"
