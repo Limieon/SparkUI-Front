@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
+	import type { CheckpointData } from '$lib/types/PageData';
 
 	import Combobox from '$spark/Combobox.svelte';
 	import { Popup } from '$spark/popup';
@@ -29,7 +30,7 @@
 	];
 
 	// Arbitrary Data for testing the frontend
-	export let models;
+	export let models: CheckpointData[];
 
 	export let selected: string = models[0].name;
 </script>

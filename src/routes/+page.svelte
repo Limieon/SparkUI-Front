@@ -27,12 +27,13 @@
 	} from 'lucide-svelte';
 
 	import type { Pages } from '$lib/types/Pages';
+	import type { PageData } from './$types';
 
 	let page: Pages = 'txt2img';
 
 	let settingsOpen = false;
 
-	export let data;
+	export let data: PageData;
 </script>
 
 <PageLayout>

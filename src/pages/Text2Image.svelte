@@ -50,6 +50,7 @@
 	import { TooltipButton } from '$spark/button';
 
 	import type { Pages } from '$lib/types/Pages';
+	import type { PageData } from '../routes/$types';
 
 	export let stylePrompts: boolean = false;
 
@@ -119,7 +120,7 @@
 	export let settingsOpen = false;
 	export let currentPage: Pages = 'txt2img';
 
-	export let data;
+	export let data: PageData;
 
 	$: imageCount = $genData.iterations;
 </script>
