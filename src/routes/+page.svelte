@@ -134,7 +134,7 @@
 	{:else if page == 'img2img'}
 		<Image2Image />
 	{:else if page == 'models'}
-		<ModelManager />
+		<ModelManager {data} />
 	{:else if page == 'queue'}
 		<Queue />
 	{:else if page == 'scripts'}

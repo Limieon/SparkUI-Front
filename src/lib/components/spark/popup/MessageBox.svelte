@@ -44,13 +44,13 @@
 {/if}
 
 <div
-	class="absolute z-50 rounded-xl border transition-all duration-200 bg-primary w-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 {$data.open
+	class="absolute z-50 rounded-xl border transition-all duration-200 bg-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit {$data.open
 		? 'scale-100 opacity-100'
 		: 'scale-0 opacity-0'}"
 >
 	<!-- Header -->
 	<div role="none" class="inline-block w-full pl-4 p-2">
-		<h2 class="text-4xl font-bold float-left">{$data.title}</h2>
+		<h2 class="text-4xl font-bold float-left mr-4">{$data.title}</h2>
 
 		<Button size="icon" variant="ghost" class="float-right h-10 w-10" on:click={close}
 			><IconClose /></Button
@@ -60,7 +60,9 @@
 	<!-- Main Content -->
 	<div class="bg-background rounded-b-xl" style="height: calc(100% - 62px);">
 		<div class="p-4">
-			<p>{$data.message}</p>
+			{#each $data.message as line}
+				<p>{line}</p>
+			{/each}
 		</div>
 
 		<Separator class="w-full" />

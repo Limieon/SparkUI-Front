@@ -305,7 +305,7 @@
 			<ModelSelector
 				bind:open={modelSelectorOpen}
 				bind:selected={$genData.checkpoint}
-				models={data.models}
+				models={data.checkpoints}
 			/>
 			<LoRASelector
 				bind:open={loraSelectorOpen}

@@ -58,7 +58,7 @@ export const imageSizeData = writable({
 interface PopupData {
 	open: boolean
 	title: string
-	message: string
+	message: string[]
 	onConfirm: (() => void) | undefined
 	onCancel: (() => void) | undefined
 	onClose: (() => void) | undefined
@@ -67,7 +67,7 @@ interface PopupData {
 export const currentPopup = writable<PopupData>({
 	open: false,
 	title: '',
-	message: '',
+	message: [''],
 	onConfirm: undefined,
 	onCancel: undefined,
 	onClose: undefined
@@ -76,7 +76,7 @@ export const currentPopup = writable<PopupData>({
 export const MessageBox = writable({
 	open: (data: {
 		title: string;
-		message: string;
+		message: string | string[];
 		onConfirm?: () => void;
 		onClose?: () => void;
 		onCancel?: () => void;
@@ -84,7 +84,7 @@ export const MessageBox = writable({
 		currentPopup.set({
 			open: true,
 			title: data.title,
-			message: data.message,
+			message: typeof data.message === 'object' ? data.message : [data.message],
 			onConfirm: data.onConfirm,
 			onClose: data.onClose,
 			onCancel: data.onCancel

@@ -4,7 +4,7 @@ export type CheckpointData = {
 	name: string
 	description: string
 	preview_url: string
-	checkpoing_page: string
+	checkpoint_page: string
 	variations: {
 		handle: string
 		inpainting: boolean
@@ -13,5 +13,5 @@ export type CheckpointData = {
 }
 
 export type PageData = {
-	checkpoints: CheckpointData
+	checkpoints: CheckpointData[]
 }
