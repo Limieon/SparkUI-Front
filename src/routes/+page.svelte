@@ -29,7 +29,7 @@
 	import type { Pages } from '$lib/types/Pages';
 	import type { PageData } from './$types';
 
-	let page: Pages = 'txt2img';
+	let page: Pages = 'models';
 
 	let settingsOpen = false;
 
