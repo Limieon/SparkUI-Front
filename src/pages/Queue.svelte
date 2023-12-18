@@ -43,7 +43,7 @@
 	];
 </script>
 
-<div class="grid grid-cols-5 w-full grid-flow-row gap-2">
+<div class="grid grid-cols-5 gap-2 hover:bg-background p-2 rounded-xl">
 	<p class="text-right">#</p>
 	<p>Status</p>
 	<p>Time</p>
@@ -51,11 +51,15 @@
 	<p>Batch ID</p>
 </div>
 
-<div
+<!--
+
+	<div
 	class="grid grid-cols-1 w-full grid-flow-row gap-2 overflow-y-scroll"
 	style="max-height: calc(100vh - 108px);"
->
-	{#each queueData as data, i}
-		<ImageQueueItem {data} {i} />
-	{/each}
+	>
+
 </div>
+-->
+{#each queueData as data, i}
+	<ImageQueueItem {data} {i} />
+{/each}
