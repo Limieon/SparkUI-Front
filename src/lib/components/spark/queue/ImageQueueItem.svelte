@@ -27,10 +27,12 @@
 
 {#if open}
 	<div class="bg-background rounded-xl p-4">
-		<pre class="bg-background font-mono select-text cursor-text h-96 overflow-auto">{@html hljs
-				.highlight(JSON.stringify(data, null, 4), {
+		<pre
+			class="bg-background font-mono select-text cursor-text h-fit max-h-96 overflow-auto">{@html hljs.highlight(
+				JSON.stringify(data, null, 4),
+				{
 					language: 'json'
-				})
-				.value.repeat(100)}</pre>
+				}
+			).value}</pre>
 	</div>
 {/if}
