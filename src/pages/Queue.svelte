@@ -43,7 +43,7 @@
 	];
 </script>
 
-<div class="grid grid-cols-5 gap-2 hover:bg-background p-2 rounded-xl">
+<div class="grid grid-cols-5 gap-2 p-2 rounded-xl">
 	<p class="text-right">#</p>
 	<p>Status</p>
 	<p>Time</p>
@@ -60,6 +60,8 @@
 
 </div>
 -->
-{#each queueData as data, i}
-	<ImageQueueItem {data} {i} />
-{/each}
+<div class="w-full overflow-y-scroll" style="height: calc(100vh - 120px);">
+	{#each queueData as data, i}
+		<ImageQueueItem {data} {i} />
+	{/each}
+</div>
