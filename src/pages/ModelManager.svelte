@@ -55,7 +55,7 @@
 </script>
 
 <div class="w-full h-full">
-	<div class="grid grid-rows-1 grid-cols-2 grid-flow-col gap-2 w-1/4">
+	<div class="grid grid-rows-1 grid-cols-2 grid-flow-col gap-2 w-full">
 		<Button
 			class=""
 			variant="default"

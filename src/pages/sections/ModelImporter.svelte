@@ -102,7 +102,7 @@
 	{/if}
 	{#if modelData != undefined && modelData.modelVersions != undefined}
 		<div
-			class="grid grid-cols-9 gap-2 m-2 h-full overflow-y-auto overflow-x-hidden"
+			class="grid grid-cols-6 gap-2 m-2 h-full overflow-y-auto overflow-x-hidden"
 			style="height: calc(100% - 128px);"
 		>
 			{#each modelData.modelVersions as m, i}
