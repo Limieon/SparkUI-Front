@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	
+
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
-	import type { Checkpoint  } from '$lib/types/Checkpoint';
+	import type { Checkpoint } from '$lib/types/Checkpoint';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
@@ -15,8 +15,6 @@
 
 	import ModelImporter from './sections/ModelImporter.svelte';
 
-	let deletePopups: boolean[] = [];
-
 	let installModel_open = false;
 	let installModel_type = 0;
 	let installModel_base = 0;
@@ -25,7 +23,9 @@
 
 	let page = 0;
 
-	onMount(async () => {
+	async function fetchModels() {
+		models = [];
+
 		const checkpoints = await (
 			await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints`)
 		).json();
@@ -46,11 +46,12 @@
 		}
 
 		models = [...models]; // Update models
-	});
+	}
 
-	let models: Checkpoint[] = []; 
+	onMount(fetchModels);
+
+	let models: Checkpoint[] = [];
 	let models_handles: { [key: string]: number } = {};
-	export let selected: Checkpoint | null = null;
 </script>
 
 <div class="w-full h-full">
@@ -91,7 +92,7 @@
 	</div>
 
 	{#if page === 0}
-		<div class="pt-2 w-full h-full">
+		<div class="mt-2 w-full h-full overflow-y-scroll" style="max-height: calc(100vh - 191px);">
 			<!-- Installed Models -->
 			{#each models as c, i}
 				<CCheckpoint
@@ -100,10 +101,12 @@
 					modelPage=""
 					preview={c.preview_url}
 					sdVersion="sd1.5"
+					handle={c.handle}
+					onDelete={fetchModels}
 				></CCheckpoint>
 			{/each}
 		</div>
-	{:else if page === 1}{/if}
+	{/if}
 </div>
 
 <Popup title="Install new Model" bind:open={installModel_open}>

@@ -33,7 +33,7 @@
 		}
 	];
 
-	onMount(async () => {
+	async function fetchCheckpoints() {
 		const checkpoints = await (
 			await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints`)
 		).json();
@@ -52,8 +52,9 @@
 			}
 		}
 
-		models = [...models]; // Update models
-	});
+		models = [...models];
+	}
+	onMount(fetchCheckpoints);
 
 	let models: Checkpoint[] = [];
 	export let selected: string = '';

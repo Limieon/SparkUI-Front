@@ -79,7 +79,7 @@
 
 		$MessageBox.open({
 			title: 'Downloading...',
-			message: `You're models are now being downloaded! Depending on the size and models this can take several minutes, depending on your internet connection!`,
+			message: `Your models are now being downloaded! Depending on the size and models this can take several minutes, depending on your internet connection!`,
 			onConfirm: installModels
 		});
 		$MessageBox.close();

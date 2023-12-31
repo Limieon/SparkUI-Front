@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
+
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { Badge } from '$lib/components/ui/badge';
@@ -13,6 +15,8 @@
 	export let preview: string;
 	export let modelPage: string;
 	export let sdVersion: SDVersionIDs;
+	export let handle: string;
+	export let onDelete: () => void;
 
 	let sdVersionProps = SDVersions[sdVersion as string];
 </script>
@@ -31,7 +35,7 @@
 			{/if}
 		</div>
 
-		<h1 class="text-2xl w-min">{name}</h1>
+		<h1 class="text-2xl w-max">{name}</h1>
 	</div>
 
 	<Separator class="mt-1 mb-1" />
@@ -49,8 +53,11 @@
 						`You really wanna delete '${name}'?`,
 						'This also removes the associated checkpoint file!'
 					],
-					onConfirm: () => {
-						console.log(`Deleting ${name}...`);
+					onConfirm: async () => {
+						await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints/${handle}`, {
+							method: 'DELETE'
+						});
+						if (onDelete) onDelete();
 					}
 				});
 			}}><IconDelete /></Button
