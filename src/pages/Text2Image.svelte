@@ -120,8 +120,6 @@
 	export let settingsOpen = false;
 	export let currentPage: Pages = 'txt2img';
 
-	export let data: PageData;
-
 	$: imageCount = $genData.iterations;
 </script>
 
@@ -302,11 +300,7 @@
 			</Accordion.Root>
 
 			<!-- Fullscreen Popups -->
-			<ModelSelector
-				bind:open={modelSelectorOpen}
-				bind:selected={$genData.checkpoint}
-				models={data.models}
-			/>
+			<ModelSelector bind:open={modelSelectorOpen} bind:selected={$genData.checkpoint} />
 			<LoRASelector
 				bind:open={loraSelectorOpen}
 				onChange={(name) => {

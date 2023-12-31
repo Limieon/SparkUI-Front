@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
+
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import type { CheckpointData } from '$lib/types/PageData';
+	import type { Checkpoint } from '$lib/types/Checkpoint';
 
 	import Combobox from '$spark/Combobox.svelte';
 	import { Popup } from '$spark/popup';
@@ -29,10 +33,30 @@
 		}
 	];
 
-	// Arbitrary Data for testing the frontend
-	export let models: CheckpointData[];
+	onMount(async () => {
+		const checkpoints = await (
+			await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints`)
+		).json();
 
-	export let selected: string = models[0].name;
+		for (var c of checkpoints) {
+			const variations = await (
+				await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints/${c}`)
+			).json();
+
+			for (var v of variations.variations) {
+				models.push({
+					handle: v.handle,
+					name: v.name,
+					preview_url: v.preview_url
+				});
+			}
+		}
+
+		models = [...models]; // Update models
+	});
+
+	let models: Checkpoint[] = [];
+	export let selected: string = '';
 </script>
 
 <Popup title="Checkpoint Selector" bind:open>
