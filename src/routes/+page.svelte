@@ -32,8 +32,6 @@
 	let page: Pages = 'models';
 
 	let settingsOpen = false;
-
-	export let data: PageData;
 </script>
 
 <PageLayout>
@@ -130,11 +128,11 @@
 	</span>
 
 	{#if page == 'txt2img'}
-		<Text2Image {data} bind:currentPage={page} bind:settingsOpen />
+		<Text2Image bind:currentPage={page} bind:settingsOpen />
 	{:else if page == 'img2img'}
 		<Image2Image />
 	{:else if page == 'models'}
-		<ModelManager {data} />
+		<ModelManager />
 	{:else if page == 'queue'}
 		<Queue />
 	{:else if page == 'scripts'}

@@ -1,22 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
-	import type { CheckpointData, PageData } from '$lib/types/PageData';
+	import type { Checkpoint  } from '$lib/types/Checkpoint';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 
-	import { Checkpoint, CheckpointCard } from '$spark/modelManager';
+	import { Checkpoint as CCheckpoint, CheckpointCard } from '$spark/modelManager';
 	import { Popup } from '$spark/popup';
 
 	import { Plus as IconAdd } from 'lucide-svelte';
 
 	import ModelImporter from './sections/ModelImporter.svelte';
-
-	export let data: PageData;
-
-	let checkpoints: CheckpointData[] = data.checkpoints;
-	console.log(checkpoints);
 
 	let deletePopups: boolean[] = [];
 
@@ -27,6 +24,33 @@
 	let importModel_open = false;
 
 	let page = 0;
+
+	onMount(async () => {
+		const checkpoints = await (
+			await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints`)
+		).json();
+
+		for (var c of checkpoints) {
+			const variations = await (
+				await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints/${c}`)
+			).json();
+
+			for (var v of variations.variations) {
+				models_handles[v.handle] = models.length;
+				models.push({
+					handle: v.handle,
+					name: v.name,
+					preview_url: v.preview_url
+				});
+			}
+		}
+
+		models = [...models]; // Update models
+	});
+
+	let models: Checkpoint[] = []; 
+	let models_handles: { [key: string]: number } = {};
+	export let selected: Checkpoint | null = null;
 </script>
 
 <div class="w-full h-full">
@@ -69,14 +93,14 @@
 	{#if page === 0}
 		<div class="pt-2 w-full h-full">
 			<!-- Installed Models -->
-			{#each checkpoints as c, i}
-				<Checkpoint
+			{#each models as c, i}
+				<CCheckpoint
 					name={c.name}
-					description={c.description}
-					modelPage={c.checkpoint_page}
+					description=""
+					modelPage=""
 					preview={c.preview_url}
 					sdVersion="sd1.5"
-				></Checkpoint>
+				></CCheckpoint>
 			{/each}
 		</div>
 	{:else if page === 1}{/if}

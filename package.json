@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev --host 0.0.0.0",
+		"dev": "vite dev --host 0.0.0.0 --port 1910",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -14,6 +14,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.27.4",
+		"@types/node": "^20.10.6",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.14",
@@ -43,6 +44,7 @@
 		"dotenv": "^16.3.1",
 		"lucide-svelte": "^0.294.0",
 		"mode-watcher": "^0.1.2",
+		"process": "^0.11.10",
 		"radix-icons-svelte": "^1.2.1",
 		"tailwind-merge": "^2.0.0",
 		"tailwind-variants": "^0.1.18"

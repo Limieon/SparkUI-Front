@@ -1,16 +1,19 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
+
 	import { Input } from '$lib/components/ui/input';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Button } from '$lib/components/ui/button';
 
 	import { CheckpointCard } from '$spark/modelImporter';
-	import { onMount } from 'svelte';
 
 	import { Download as IconInstall, Scan as IconSelectAll } from 'lucide-svelte';
-	import { mode } from 'mode-watcher';
 
 	let status = '';
 	let modelUrl = '';
+	let modelID = 0;
 
 	import { MessageBox } from '$lib/stores';
 
@@ -30,12 +33,11 @@
 			return;
 		}
 
-		const modelID = r[1];
+		modelID = Number.parseInt(r[1]);
 		const res = await fetch(`https://civitai.com/api/v1/models/${modelID}`);
 		const data = await res.json();
 
 		modelData = data;
-		console.log(modelData);
 		status = '';
 	}
 
@@ -59,10 +61,28 @@
 		}
 	}
 
-	function installModels() {
-		const models = Object.keys(selectedModels).filter((key) => selectedModels[key] === true);
+	async function installModels() {
+		const models: number[] = [];
+		for (var handle of Object.keys(selectedModels).filter((key) => selectedModels[key] === true)) {
+			models.push(Number.parseInt(handle));
+		}
 
 		console.log(`Installing ${models}`);
+		await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/civitai/import/${modelID}`, {
+			method: 'POST',
+			body: JSON.stringify(models),
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		});
+
+		$MessageBox.open({
+			title: 'Downloading...',
+			message: `You're models are now being downloaded! Depending on the size and models this can take several minutes, depending on your internet connection!`,
+			onConfirm: installModels
+		});
+		$MessageBox.close();
 
 		open = false;
 	}
