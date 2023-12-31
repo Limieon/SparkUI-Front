@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	import PageLayout from '$lib/components/spark/layouts/MainPageLayout.svelte';
 
 	import Text2Image from '$page/Text2Image.svelte';
@@ -29,12 +31,55 @@
 	import type { Pages } from '$lib/types/Pages';
 	import type { PageData } from './$types';
 
-	let page: Pages = 'models';
+	onMount(() => {
+		connectWebSocket();
+	});
+
+	const connectWebSocket = () => {
+		socket = new WebSocket('ws://127.0.0.1:1911');
+		status = 'connecting';
+
+		// WebSocket event listeners
+		socket.addEventListener('open', (e) => {
+			console.log('WebSocket connection opened:', e);
+
+			status = 'connected';
+		});
+
+		socket.addEventListener('message', (e) => {
+			console.log('WebSocket message received:', e.data);
+		});
+
+		socket.addEventListener('close', (e) => {
+			console.log('WebSocket connection closed:', e);
+
+			status = 'disconnected';
+		});
+
+		socket.addEventListener('error', (e) => {
+			console.error('WebSocket error:', e);
+		});
+	};
+
+	const sendMessage = () => {
+		const message = 'Hello, WebSocket!';
+		if (socket && socket.readyState === WebSocket.OPEN) {
+			socket.send(message);
+			console.log('Sent message:', message);
+		} else {
+			console.warn('WebSocket connection not open.');
+		}
+	};
+	let socket: WebSocket;
+
+	let status: 'connected' | 'connecting' | 'disconnected';
+
+	let page: Pages = 'txt2img';
 
 	let settingsOpen = false;
 </script>
 
-<PageLayout>
+<PageLayout bind:status>
 	<span slot="nav">
 		<TooltipButton
 			variant={page === 'txt2img' ? 'default' : 'outline'}

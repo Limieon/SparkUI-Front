@@ -4,8 +4,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { ModeWatcher } from 'mode-watcher';
 
-	let status: 'green' | 'orange' | 'red' = 'green';
-	let statusText = 'Connected';
+	export let status: 'connected' | 'connecting' | 'disconnected';
 
 	let version = 'v1.0';
 </script>
@@ -31,26 +30,26 @@
 				</div>
 
 				<div class="block w-fit h-full float-right group">
-					{#if status === 'green'}
+					{#if status === 'connected'}
 						<div class="bg-success rounded-full w-5 h-5 float-right mt-3 mr-4"></div>
 						<p
 							class="text-success text-2xl mt-1 float-right mr-4 opacity-0 group-hover:opacity-100 transition-opacity delay-150 cursor-default"
 						>
-							{statusText}
+							Connected
 						</p>
-					{:else if status === 'orange'}
+					{:else if status === 'connecting'}
 						<div class="bg-amber-600 rounded-full w-5 h-5 float-right mt-3 mr-4"></div>
 						<p
 							class="text-amber-600 text-2xl mt-1 float-right mr-4 opacity-0 group-hover:opacity-100 transition-opacity delay-150 cursor-default"
 						>
-							{statusText}
+							Connecting...
 						</p>
 					{:else}
 						<div class="bg-red-700 rounded-full w-5 h-5 float-right mt-3 mr-4"></div>
 						<p
 							class="text-red-700 text-2xl mt-1 float-right mr-4 opacity-0 group-hover:opacity-100 transition-opacity delay-150 cursor-default"
 						>
-							{statusText}
+							Disconnected
 						</p>
 					{/if}
 				</div>
