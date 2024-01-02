@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
+
 	import { txt2imageData as genData, txt2imageData } from '$lib/stores';
 	import { browser } from '$app/environment';
 
@@ -93,18 +96,13 @@
 		}
 	];
 
-	let loras: { name: string; weight: number }[] = [];
+	let loras: { handle: string; weight: number }[] = [];
 	function removeLora(i: number) {
 		let temp = [...$genData.loras];
 		if (i > -1) {
 			temp.splice(i, 1);
 		}
 		$genData.loras = temp;
-	}
-
-	function generate() {
-		console.log('Loras:', loras);
-		console.log('Image Size:', `${imageWidth} x ${imageHeight}`);
 	}
 
 	// Internal States
@@ -120,6 +118,20 @@
 	export let currentPage: Pages = 'txt2img';
 
 	$: imageCount = $genData.iterations;
+
+	async function generate() {
+		console.log('Generating image...');
+		console.log($genData);
+
+		await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/txt2img`, {
+			method: 'POST',
+			body: JSON.stringify($genData),
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		});
+	}
 </script>
 
 <div class="grid grid-cols-[30%_auto_25%] h-full gap-2">
@@ -271,7 +283,7 @@
 
 						{#each $genData.loras as lora, i}
 							<div class="grid grid-cols-[40%_auto] items-center">
-								<p>{lora.name}</p>
+								<p>{lora.handle}</p>
 								<div class="grid grid-cols-[40%_auto] grid-rows-1 justify-end">
 									<Input bind:value={lora.weight} step={0.05} num class="mt-2 float-left" />
 									<div>
@@ -302,16 +314,16 @@
 			<ModelSelector bind:open={modelSelectorOpen} bind:selected={$genData.checkpoint} />
 			<LoRASelector
 				bind:open={loraSelectorOpen}
-				onChange={(name) => {
+				onChange={(handle) => {
 					for (var lora of loras) {
-						if (lora.name === name) return;
+						if (lora.handle === handle) return;
 					}
 
 					let temp = [...$genData.loras];
-					temp.push({ name, weight: 0.75 });
-					$genData.loras = temp.sort((a, b) => a.name.localeCompare(b.name));
+					temp.push({ handle, weight: 0.75 });
+					$genData.loras = temp.sort((a, b) => a.handle.localeCompare(b.handle));
 				}}
-				ignore={$genData.loras.map((e) => e.name)}
+				ignore={$genData.loras.map((e) => e.handle)}
 			/>
 		</div>
 	</div>

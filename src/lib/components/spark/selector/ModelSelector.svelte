@@ -84,7 +84,7 @@
 				<button
 					class="group hover:cursor-pointer h-96 border-none"
 					on:click={() => {
-						selected = model.name;
+						selected = model.handle;
 						open = false;
 					}}
 				>

@@ -15,7 +15,7 @@ interface Text2ImageData {
 	seed: number;
 	outputWidth: number;
 	outputHeight: number;
-	loras: { name: string; weight: number }[];
+	loras: { handle: string; weight: number }[];
 }
 
 interface SettingsData {
