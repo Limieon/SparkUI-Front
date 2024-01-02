@@ -21,8 +21,13 @@
 	let sdVersionProps = SDVersions[sdVersion as string];
 </script>
 
-<div class="bg-background p-2 mb-2 rounded-lg">
-	<div class="block">
+<div class="block bg-background rounded-xl mb-2 h-24 w-full">
+	<div
+		class="float-left rounded-xl w-24 h-24 bg-cover mr-2"
+		style="background-image: url({preview}); "
+	></div>
+
+	<div class="float-right mr-2 mt-2">
 		<div class="float-right">
 			{#if sdVersionProps.color === 'rose'}
 				<Badge class="bg-rose-600 hover:bg-rose-800">{sdVersionProps.name}</Badge>
@@ -34,33 +39,33 @@
 				<Badge class="bg-fuchsia-600 hover:bg-fuchsia-800">{sdVersionProps.name}</Badge>
 			{/if}
 		</div>
-
-		<h1 class="text-2xl w-max">{name}</h1>
 	</div>
 
-	<Separator class="mt-1 mb-1" />
+	<div class="ml-24">
+		<h1 class="text-2xl w-full mb-2">{name}</h1>
 
-	<p>{description}</p>
-	<div class="mt-2">
-		<Button
-			class="w-10 h-10"
-			size="icon"
-			variant="destructive"
-			on:click={() => {
-				$MessageBox.open({
-					title: `Delete ${name}?`,
-					message: [
-						`You really wanna delete '${name}'?`,
-						'This also removes the associated checkpoint file!'
-					],
-					onConfirm: async () => {
-						await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints/${handle}`, {
-							method: 'DELETE'
-						});
-						if (onDelete) onDelete();
-					}
-				});
-			}}><IconDelete /></Button
-		>
+		<Separator class="mt-1 mb-1" />
+		<div class="block mt-2">
+			<Button
+				class="w-10 h-10"
+				size="icon"
+				variant="destructive"
+				on:click={() => {
+					$MessageBox.open({
+						title: `Delete ${name}?`,
+						message: [
+							`You really wanna delete '${name}'?`,
+							'This also removes the associated checkpoint file!'
+						],
+						onConfirm: async () => {
+							await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints/${handle}`, {
+								method: 'DELETE'
+							});
+							if (onDelete) onDelete();
+						}
+					});
+				}}><IconDelete /></Button
+			>
+		</div>
 	</div>
 </div>
