@@ -15,6 +15,8 @@
 
 	import ModelImporter from './sections/ModelImporter.svelte';
 
+	import ModelQueue from '$spark/modelManager/ModelQueue.svelte';
+
 	let installModel_open = false;
 	let installModel_type = 0;
 	let installModel_base = 0;
@@ -106,6 +108,8 @@
 				></CCheckpoint>
 			{/each}
 		</div>
+	{:else if page === 1}
+		<ModelQueue />
 	{/if}
 </div>
 

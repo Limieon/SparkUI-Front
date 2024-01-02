@@ -31,6 +31,8 @@
 	import type { Pages } from '$lib/types/Pages';
 	import type { PageData } from './$types';
 
+	import { Socket_CivitAIImporterUpdate } from '$lib/stores';
+
 	onMount(() => {
 		connectWebSocket();
 	});
@@ -39,7 +41,6 @@
 		socket = new WebSocket('ws://127.0.0.1:1911');
 		status = 'connecting';
 
-		// WebSocket event listeners
 		socket.addEventListener('open', (e) => {
 			console.log('WebSocket connection opened:', e);
 
@@ -48,6 +49,15 @@
 
 		socket.addEventListener('message', (e) => {
 			console.log('WebSocket message received:', e.data);
+			const rawData = JSON.parse(e.data);
+
+			const { id, data } = rawData;
+
+			switch (id) {
+				case 'civitai_importer_update': {
+					Socket_CivitAIImporterUpdate.set(data);
+				}
+			}
 		});
 
 		socket.addEventListener('close', (e) => {
@@ -74,7 +84,7 @@
 
 	let status: 'connected' | 'connecting' | 'disconnected';
 
-	let page: Pages = 'txt2img';
+	let page: Pages = 'models';
 
 	let settingsOpen = false;
 </script>

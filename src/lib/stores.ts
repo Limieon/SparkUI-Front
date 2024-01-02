@@ -95,3 +95,18 @@ export const MessageBox = writable({
 		currentPopup.update(_ => { _.open = false; return _ })
 	}
 });
+
+interface Socket_civitai_importer_update {
+	name: string
+	handle: string
+	preview_url: string
+	current: number
+	size: number
+	queue: {
+		name: string
+		preview_url: string
+		handle: string
+	}[]
+}
+
+export const Socket_CivitAIImporterUpdate = writable<Socket_civitai_importer_update | undefined>(undefined)

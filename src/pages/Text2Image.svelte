@@ -50,7 +50,6 @@
 	import { TooltipButton } from '$spark/button';
 
 	import type { Pages } from '$lib/types/Pages';
-	import type { PageData } from '../routes/$types';
 
 	export let stylePrompts: boolean = false;
 
@@ -79,7 +78,7 @@
 		},
 		{
 			label: 'fp32',
-			value: 'fp32	'
+			value: 'fp32'
 		}
 	];
 
@@ -155,7 +154,7 @@
 
 		<GenerationProgress class="mt-2" />
 
-		<div class="block overflow-y-auto overflow-x-hidden" style="height: calc(100vh - 180px);">
+		<div class="block overflow-y-auto overflow-x-hidden" style="height: calc(100vh - 200px);">
 			<Accordion.Root multiple={true}>
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger class="text-2xl"
