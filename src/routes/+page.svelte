@@ -31,14 +31,15 @@
 	import type { Pages } from '$lib/types/Pages';
 	import type { PageData } from './$types';
 
-	import { Socket_CivitAIImporterUpdate } from '$lib/stores';
+	import { Socket_CivitAIImporterUpdate, currentImage } from '$lib/stores';
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
 	onMount(() => {
 		connectWebSocket();
 	});
 
 	const connectWebSocket = () => {
-		socket = new WebSocket('ws://127.0.0.1:1911');
+		socket = new WebSocket(`ws://${SPARKUI_BACK_HOST}`);
 		status = 'connecting';
 
 		socket.addEventListener('open', (e) => {
@@ -56,6 +57,15 @@
 			switch (id) {
 				case 'civitai_importer_update': {
 					Socket_CivitAIImporterUpdate.set(data);
+					break;
+				}
+				case 'on_image_generated': {
+					currentImage.set(`http://${SPARKUI_BACK_HOST}/v1/image/${data.id}/full`);
+					break;
+				}
+				default: {
+					console.log(`Unimplemented message id! ${id}!`);
+					console.log(data);
 				}
 			}
 		});

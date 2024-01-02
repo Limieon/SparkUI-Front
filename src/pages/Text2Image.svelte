@@ -3,7 +3,7 @@
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
-	import { txt2imageData as genData, txt2imageData } from '$lib/stores';
+	import { txt2imageData as genData, txt2imageData, currentImage } from '$lib/stores';
 	import { browser } from '$app/environment';
 
 	import { Button } from '$lib/components/ui/button';
@@ -109,10 +109,6 @@
 	let modelSelectorOpen = false;
 	let loraSelectorOpen = false;
 	let paletteOpen = false;
-
-	let currentImage = {
-		url: `https://picsum.photos/512/768`
-	};
 
 	export let settingsOpen = false;
 	export let currentPage: Pages = 'txt2img';
@@ -235,7 +231,7 @@
 						<p class="mb-1">Seed</p>
 						<div class="w-full grid grid-cols-[55%_15%_auto] gap-2 mb-4">
 							<div>
-								<Input value={$genData.seed} disabled={randomize} num />
+								<Input bind:value={$genData.seed} disabled={randomize} num />
 							</div>
 
 							<div>
@@ -381,18 +377,20 @@
 
 		<!-- Image Output -->
 		<div class="w-full h-full flex items-center">
-			<img
-				class="rounded-xl m-[0_auto]"
-				src={currentImage.url}
-				alt="generated"
-				width="auto"
-				height="auto"
-				draggable={false}
-			/>
+			{#if $currentImage != undefined}
+				<img
+					class="rounded-xl m-[0_auto]"
+					src={$currentImage}
+					alt="generated"
+					width="auto"
+					height="auto"
+					draggable={false}
+				/>
+			{/if}
 		</div>
 	</div>
 	<!-- Image Browser -->
-	<ImageBrowser root="/images/generated/output" bind:selectedImage={currentImage} />
+	<ImageBrowser root="/images/generated/output" />
 </div>
 
 <CommandPalette bind:settingsOpen bind:currentPage bind:open={paletteOpen}>

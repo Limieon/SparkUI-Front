@@ -109,4 +109,6 @@ interface Socket_civitai_importer_update {
 	}[]
 }
 
+export const currentImage = writable<string | undefined>(undefined)
+
 export const Socket_CivitAIImporterUpdate = writable<Socket_civitai_importer_update | undefined>(undefined)
