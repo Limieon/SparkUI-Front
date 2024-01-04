@@ -31,7 +31,7 @@
 	import type { Pages } from '$lib/types/Pages';
 	import type { PageData } from './$types';
 
-	import { Socket_CivitAIImporterUpdate, currentImage } from '$lib/stores';
+	import { Socket_CivitAIImporterUpdate, currentImageID } from '$lib/stores';
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
 	onMount(() => {
@@ -61,7 +61,7 @@
 					break;
 				}
 				case 'on_image_generated': {
-					currentImage.set(`http://${SPARKUI_BACK_HOST}/v1/image/${data.id}/full.png`);
+					currentImageID.set(data.id);
 					break;
 				}
 				default: {

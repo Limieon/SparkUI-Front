@@ -60,3 +60,11 @@ export const flyAndScale = (
         easing: cubicOut
     };
 };
+
+export function getRndInteger(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+export function random32BitInt() {
+    return getRndInteger(-Math.pow(2, 31), Math.pow(2, 31) - 1)
+}

@@ -3,7 +3,7 @@
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
-	import { txt2imageData as genData, txt2imageData, currentImage } from '$lib/stores';
+	import { txt2imageData as genData, txt2imageData, currentImageID } from '$lib/stores';
 	import { browser } from '$app/environment';
 
 	import { Button } from '$lib/components/ui/button';
@@ -53,6 +53,8 @@
 	import { TooltipButton } from '$spark/button';
 
 	import type { Pages } from '$lib/types/Pages';
+	import { data } from 'autoprefixer';
+	import { random32BitInt } from '$lib/utils';
 
 	export let stylePrompts: boolean = false;
 
@@ -115,8 +117,45 @@
 
 	$: imageCount = $genData.iterations;
 
+	async function tb_reusePrompt() {
+		const id = $currentImageID;
+		const data = await (await fetch(`http://${SPARKUI_BACK_HOST}/v1/image/${id}/prompt`)).json();
+
+		$genData.prompt = data.positive ? data.positive : '';
+		$genData.stylePrompt = data.positiveStyle ? data.positiveStyle : '';
+		$genData.negativePrompt = data.negative ? data.negative : '';
+		$genData.negativeStylePrompt = data.negativeStyle ? data.negativeStyle : '';
+	}
+	async function tb_reuseSeed() {
+		const id = $currentImageID;
+
+		const seed = Number.parseInt(
+			await (await fetch(`http://${SPARKUI_BACK_HOST}/v1/image/${id}/seed`)).text()
+		);
+
+		$genData.seed = seed;
+	}
+	async function tb_reuseAll() {
+		const id = $currentImageID;
+		const data = await (await fetch(`http://${SPARKUI_BACK_HOST}/v1/image/${id}/gen_data`)).json();
+
+		$genData.seed = data.seed ? data.seed : 0;
+
+		$genData.prompt = data.prompt ? data.prompt : '';
+		$genData.stylePrompt = data.stylePrompt ? data.stylePrompt : '';
+		$genData.negativePrompt = data.negativePrompt ? data.negativePrompt : '';
+		$genData.negativeStylePrompt = data.negativeStylePrompt ? data.negativeStylePrompt : '';
+
+		$genData.steps = data.steps;
+		$genData.cfgScale = data.cfgScale;
+		$genData.outputWidth = data.outputWidth;
+		$genData.outputHeight = data.outputHeight;
+
+		$genData.checkpoint = data.checkpoint;
+	}
+
 	async function generate() {
-		if (randomize) $genData.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+		if (randomize) $genData.seed = random32BitInt();
 
 		console.log('Generating image...');
 		console.log($genData);
@@ -240,7 +279,7 @@
 								<Button
 									variant="outline"
 									on:click={() => {
-										$genData.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+										$genData.seed = random32BitInt();
 									}}><IconRandom /></Button
 								>
 							</div>
@@ -338,15 +377,15 @@
 				</div>
 				<div class="mr-4">
 					<!-- Reuse Prompt -->
-					<TooltipButton tooltip="Reuse Prompt" variant="outline">
+					<TooltipButton tooltip="Reuse Prompt" variant="outline" on:click={tb_reusePrompt}>
 						<IconReusePrompt />
 					</TooltipButton>
 					<!-- Reuse Seed -->
-					<TooltipButton tooltip="Reuse Seed" variant="outline">
+					<TooltipButton tooltip="Reuse Seed" variant="outline" on:click={tb_reuseSeed}>
 						<IconReuseSeed />
 					</TooltipButton>
 					<!-- Reuse All -->
-					<TooltipButton tooltip="Reuse all" variant="outline">
+					<TooltipButton tooltip="Reuse all" variant="outline" on:click={tb_reuseAll}>
 						<IconAsteriks />
 					</TooltipButton>
 				</div>
@@ -379,10 +418,10 @@
 
 		<!-- Image Output -->
 		<div class="w-full h-full flex items-center">
-			{#if $currentImage != undefined}
+			{#if $currentImageID != undefined}
 				<img
 					class="rounded-xl m-[0_auto]"
-					src={$currentImage}
+					src="http://{SPARKUI_BACK_HOST}/v1/image/{$currentImageID}/full.png"
 					alt="generated"
 					width="auto"
 					height="auto"
