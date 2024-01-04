@@ -116,6 +116,8 @@
 	$: imageCount = $genData.iterations;
 
 	async function generate() {
+		if (randomize) $genData.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+
 		console.log('Generating image...');
 		console.log($genData);
 

@@ -3,9 +3,13 @@
 
 	import Image from './Image.svelte';
 
-	import { ArrowUp as IconDirectoryUp } from 'lucide-svelte';
+	import { ArrowUp as IconDirectoryUp, ImageMinus } from 'lucide-svelte';
 
 	import { TooltipButton } from '$spark/button';
+	import { onMount } from 'svelte';
+	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
+
+	import { currentImage } from '$lib/stores';
 
 	export let root: string;
 
@@ -18,21 +22,25 @@
 		currentPath = e.target.value.split('/');
 	}
 
-	let images = [
-		{
-			url: 'https://picsum.photos/512/512'
-		},
-		{
-			url: 'https://picsum.photos/768/512'
-		},
-		{
-			url: 'https://picsum.photos/512/768'
-		},
-		{
-			url: 'https://picsum.photos/768/768'
+	onMount(loadImages);
+
+	const IMAGES_PER_LOAD = 50;
+	async function loadImages() {
+		const res = await fetch(
+			`http://${SPARKUI_BACK_HOST}/v1/image?offset=${images.length}&limit=${IMAGES_PER_LOAD}`
+		);
+		console.log(res);
+		const data = await res.json();
+
+		for (let i of data.images) {
+			images.push(`http://${SPARKUI_BACK_HOST}${i.url_full}`);
 		}
-	];
-	export let selectedImage = images[0];
+
+		images = [...images];
+		console.log(images);
+	}
+
+	let images: string[] = [];
 </script>
 
 <div class="w-full h-full">
@@ -48,9 +56,9 @@
 		<div class="grid grid-cols-8 gap-1">
 			{#each images as img, i}
 				<Image
-					url={img.url}
+					url={img}
 					on:click={() => {
-						selectedImage = img;
+						$currentImage = img;
 					}}
 				/>
 			{/each}

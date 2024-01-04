@@ -50,6 +50,7 @@
 
 		socket.addEventListener('message', (e) => {
 			console.log('WebSocket message received:', e.data);
+
 			const rawData = JSON.parse(e.data);
 
 			const { id, data } = rawData;
@@ -60,7 +61,7 @@
 					break;
 				}
 				case 'on_image_generated': {
-					currentImage.set(`http://${SPARKUI_BACK_HOST}/v1/image/${data.id}/full`);
+					currentImage.set(`http://${SPARKUI_BACK_HOST}/v1/image/${data.id}/full.png`);
 					break;
 				}
 				default: {
