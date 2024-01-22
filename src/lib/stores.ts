@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { type Node } from '@xyflow/svelte'
 
 interface Text2ImageData {
 	prompt: string;
@@ -110,3 +111,11 @@ interface Socket_civitai_importer_update {
 }
 
 export const Socket_CivitAIImporterUpdate = writable<Socket_civitai_importer_update | undefined>(undefined)
+
+interface NodePos {
+	x: number
+	y: number
+}
+export const nodePos = writable<{ [key: string]: NodePos }>({})
+export const nodes = writable<Node[]>([])
+export const edges = writable<any[]>([])
