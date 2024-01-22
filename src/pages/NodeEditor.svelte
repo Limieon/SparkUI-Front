@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { nodes, edges, nodePos } from '$lib/stores';
+	import { workflow } from '$lib/stores';
 
 	import { Node } from '$spark/nodes';
 
@@ -23,84 +23,44 @@
 		node: Node
 	};
 
-	$nodes = [];
+	const nodes = writable<any[]>([]); // {id: '1-2', type: 'default', source: '1, target: '2'}
+	const edges = writable<any[]>([]);
+
+	/*{
+		id: '1',
+		type: 'node',
+		data: {
+			label: 'Sampler',
+			connections: {
+				inputs: [
+					{
+						type: 'vae'
+					},
+					{
+						type: 'int',
+						name: 'Seed'
+					}
+				],
+				outputs: [
+					{
+						type: 'latent_image'
+					}
+				]
+			}
+		},
+		position: NODE_ORIGIN
+	}*/
 
 	$: {
-		for (let node of $nodes) {
-			if (node.position.x == NODE_ORIGIN.x && node.position.y == NODE_ORIGIN.y) break;
-			$nodePos[node.id] = node.position;
-		}
-		console.log($nodePos);
+		$workflow.nodes = [...$nodes];
+		$workflow.edges = [...$edges];
 	}
 
 	const NODE_ORIGIN = { x: 0, y: 0 };
 	onMount(() => {
-		$nodes = [
-			{
-				id: '1',
-				type: 'node',
-				data: {
-					label: 'Sampler',
-					connections: {
-						inputs: [
-							{
-								type: 'vae'
-							},
-							{
-								type: 'int',
-								name: 'Seed'
-							}
-						],
-						outputs: [
-							{
-								type: 'latent_image'
-							}
-						]
-					}
-				},
-				position: NODE_ORIGIN
-			},
-			{
-				id: '2',
-				type: 'node',
-				data: {
-					label: 'Image Decoder',
-					connections: {
-						inputs: [
-							{
-								type: 'latent_image'
-							}
-						],
-						outputs: [
-							{
-								type: 'image'
-							}
-						]
-					}
-				},
-				position: NODE_ORIGIN
-			}
-		];
-
-		for (let nodeID of Object.keys($nodePos)) {
-			for (let nodeIndex = 0; nodeIndex < $nodes.length; ++nodeIndex) {
-				if ($nodes[nodeIndex].id === nodeID) {
-					$nodes[nodeIndex].position = $nodePos[nodeID];
-					break;
-				}
-			}
-		}
+		$nodes = [...$nodes];
+		$edges = [...$edges];
 	});
-
-	// same for edges
-	$edges = [
-		{
-			id: '1-2',
-			type: 'default',
-			source: '1',
-			target: '2'
-		}
-	];
 
 	const snapGrid: [number, number] = [5, 5];
 </script>
