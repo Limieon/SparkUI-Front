@@ -6,6 +6,7 @@
 	:root {
 		--background: 240 6% 90%; /* Zinc-200 */
 		--background-2: 240 5% 84%; /* Zinc-300 */
+		--minimap-background: 240 5% 84%; /* Zinc-300 */
 		--foreground: 240 10% 4%;
 
 		--muted: 215 16% 47%;
@@ -42,6 +43,7 @@
 	.dark {
 		--background: 240 10% 4%; /* Zinc-950 */
 		--background-2: 240 6% 10%; /* Zing-900 */
+		--minimap-background: 240 5% 26%; /* Zinc-700 */
 		--foreground: 210 40% 98%;
 
 		--muted: 215 16% 47%;
@@ -103,4 +105,12 @@
 /* Track */
 ::-webkit-scrollbar-track {
 	width: 6px;
+}
+
+.svelte-flow__panel {
+	border-radius: 8px;
+	& > svg {
+		border-radius: 8px;
+		background: hsl(var(--minimap-background))
+	}
 }

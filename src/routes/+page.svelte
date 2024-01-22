@@ -84,7 +84,7 @@
 
 	let status: 'connected' | 'connecting' | 'disconnected';
 
-	let page: Pages = 'models';
+	let page: Pages = 'node';
 
 	let settingsOpen = false;
 </script>
