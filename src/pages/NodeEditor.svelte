@@ -4,6 +4,8 @@
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
+	import Socket from '$spark/Socket.svelte';
+
 	import { DefaultNode, type NodeMeta } from '$spark/nodes';
 
 	import { writable } from 'svelte/store';
@@ -48,6 +50,8 @@
 	$: {
 		$workflow.nodes = [...$nodes];
 		$workflow.edges = [...$edges];
+
+		console.log({ nodes: $workflow.nodes, edges: $workflow.edges });
 	}
 
 	function addNode(nodeID: number) {
@@ -94,21 +98,43 @@
 			return false;
 		}
 	};
+
+	function handleProgress(data: { node: number; current: number; max: number }) {
+		console.log(data);
+
+		$nodes.forEach((n) => {
+			if (n.id == data.node) {
+				n.data.current.set(true);
+				n.data.progressCurrent.set(data.current);
+				n.data.progressMax.set(data.max);
+				$nodes = $nodes;
+			}
+		});
+	}
+	function handleActivation(data: { node: number }) {
+		$nodes.forEach((n) => {
+			if (n.id == data.node) {
+				n.data.current.set(true);
+				$nodes = $nodes;
+			}
+		});
+	}
+	function handleDeactivation(data: { node: number }) {
+		$nodes.forEach((n) => {
+			if (n.id == data.node) {
+				n.data.current.set(false);
+				$nodes = $nodes;
+			}
+		});
+	}
 </script>
 
 <div>
 	<div>
 		<button
-			on:click={() => {
-				$nodes.forEach((n) => {
-					if (n.id == '1') {
-						n.data.current.set(true);
-						n.data.progressMax.set(50);
-						n.data.progressCurrent.set(32);
-						$nodes = $nodes;
-
-						console.log($nodes);
-					}
+			on:click={async () => {
+				await fetch(`http://${SPARKUI_BACK_HOST}/v1/queue/prompt`, {
+					method: 'POST'
 				});
 			}}>Lol</button
 		>
@@ -163,3 +189,7 @@
 		/>
 	</SvelteFlow>
 </div>
+
+<Socket on:node_progress={(e) => handleProgress(e.detail)} />
+<Socket on:node_activate={(e) => handleActivation(e.detail)} />
+<Socket on:node_deactivate={(e) => handleDeactivation(e.detail)} />
