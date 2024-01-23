@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type NodeConnection, getTypeColor, getTypeName } from './Node';
+	import { type NodeConnection, getTypeColor, getTypeName } from './index';
 
 	import { Handle, Position, type NodeProps } from '@xyflow/svelte';
 	import type { Writable } from 'svelte/store';
