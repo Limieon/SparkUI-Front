@@ -83,10 +83,20 @@
 			const tgt = $workflow.nodes[(connection.target as unknown as number) - 1];
 			const src = $workflow.nodes[(connection.source as unknown as number) - 1];
 
-			const from = src.data.connections.outputs[(connection.sourceHandle as unknown as number) - 1];
 			const to = tgt.data.connections.inputs[(connection.targetHandle as unknown as number) - 1];
+			const from =
+				src.data.connections.outputs[
+					(connection.sourceHandle as unknown as number) - src.data.connections.inputs.length - 1
+				];
 
-			console.log({ from, to });
+			console.log({
+				from,
+				to,
+				src,
+				tgt,
+				connection,
+				idx: (connection.sourceHandle as unknown as number) - src.data.connections.inputs.length - 1
+			});
 
 			return from.type === to.type;
 		} catch (e) {
