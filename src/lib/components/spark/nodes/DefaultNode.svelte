@@ -22,7 +22,9 @@
 </script>
 
 <div class="colorpicker bg-background rounded-xl w-fit">
-	<h2 class="text-lg font-bold bg-primary text-center rounded-t-xl pl-4 pr-4">{label}</h2>
+	<h2 class="text-lg font-bold bg-primary text-center rounded-t-xl pl-4 pr-4 dragHandle">
+		{label}
+	</h2>
 
 	<div class="pl-2 pr-2 pb-2">
 		<div class="grid grid-cols-2">
@@ -46,7 +48,7 @@
 					</div>
 				{/each}
 			</div>
-			<div class="grid grid-cols-1 grid-flow-row mt-[2px]">
+			<div class="grid grid-cols-1 grid-flow-row mt-[4px]">
 				{#each outputs as d, i}
 					<div class="flex items-center float-right h-min">
 						<Tooltip.Root>

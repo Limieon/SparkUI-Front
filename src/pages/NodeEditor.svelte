@@ -14,7 +14,8 @@
 		Background,
 		BackgroundVariant,
 		MiniMap,
-		NodeToolbar
+		NodeToolbar,
+		type IsValidConnection
 	} from '@xyflow/svelte';
 
 	// 👇 this is important! You need to import the styles for Svelte Flow to work
@@ -64,13 +65,34 @@
 				},
 				fields: node.fields
 			},
-			position: NODE_ORIGIN
+			position: NODE_ORIGIN,
+			dragHandle: '.dragHandle'
 		});
 
 		$nodes = [...temp];
 	}
 
 	const snapGrid: [number, number] = [5, 5];
+
+	const isValidConnection: IsValidConnection = (connection) => {
+		try {
+			if (!$workflow.nodes) return true;
+
+			console.log($workflow.nodes);
+
+			const tgt = $workflow.nodes[(connection.target as unknown as number) - 1];
+			const src = $workflow.nodes[(connection.source as unknown as number) - 1];
+
+			const from = src.data.connections.outputs[(connection.sourceHandle as unknown as number) - 1];
+			const to = tgt.data.connections.inputs[(connection.targetHandle as unknown as number) - 1];
+
+			console.log({ from, to });
+
+			return from.type === to.type;
+		} catch (e) {
+			return false;
+		}
+	};
 </script>
 
 <div>
@@ -82,6 +104,7 @@
 				{edges}
 				{snapGrid}
 				{nodeTypes}
+				{isValidConnection}
 				fitView
 				on:nodeclick={(event) => console.log('on node click', event.detail.node)}
 			>
