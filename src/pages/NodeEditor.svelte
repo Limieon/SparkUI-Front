@@ -59,11 +59,13 @@
 			type: 'api_node',
 			data: {
 				label: node.label,
-				connections: {
-					inputs: node.inputs,
-					outputs: node.outputs
-				},
-				fields: node.fields
+				inputs: node.inputs,
+				outputs: node.outputs,
+				fields: node.fields,
+				current: writable<boolean>(false),
+				useProgress: node.use_progress,
+				progressCurrent: writable<number>(0),
+				progressMax: writable<number>(1)
 			},
 			position: NODE_ORIGIN,
 			dragHandle: '.dragHandle'
@@ -76,27 +78,16 @@
 
 	const isValidConnection: IsValidConnection = (connection) => {
 		try {
-			if (!$workflow.nodes) return true;
+			if (!$nodes) return true;
 
-			console.log($workflow.nodes);
+			const tgt = $nodes[(connection.target as unknown as number) - 1];
+			const src = $nodes[(connection.source as unknown as number) - 1];
 
-			const tgt = $workflow.nodes[(connection.target as unknown as number) - 1];
-			const src = $workflow.nodes[(connection.source as unknown as number) - 1];
-
-			const to = tgt.data.connections.inputs[(connection.targetHandle as unknown as number) - 1];
+			const to = tgt.data.inputs[(connection.targetHandle as unknown as number) - 1];
 			const from =
-				src.data.connections.outputs[
-					(connection.sourceHandle as unknown as number) - src.data.connections.inputs.length - 1
+				src.data.outputs[
+					(connection.sourceHandle as unknown as number) - src.data.inputs.length - 1
 				];
-
-			console.log({
-				from,
-				to,
-				src,
-				tgt,
-				connection,
-				idx: (connection.sourceHandle as unknown as number) - src.data.connections.inputs.length - 1
-			});
 
 			return from.type === to.type;
 		} catch (e) {
@@ -106,26 +97,21 @@
 </script>
 
 <div>
-	<div style:height="calc(100vh - 80px)">
-		<SvelteFlowProvider>
-			<SvelteFlow
-				class=""
-				{nodes}
-				{edges}
-				{snapGrid}
-				{nodeTypes}
-				{isValidConnection}
-				fitView
-				on:nodeclick={(event) => console.log('on node click', event.detail.node)}
-			>
-				<MiniMap nodeColor="hsl(var(--primary))" position="top-right" />
-				<Background
-					patternColor="hsl(var(--foreground))"
-					bgColor="hsl(var(--background-2))"
-					variant={BackgroundVariant.Cross}
-				/>
-			</SvelteFlow>
-		</SvelteFlowProvider>
+	<div>
+		<button
+			on:click={() => {
+				$nodes.forEach((n) => {
+					if (n.id == '1') {
+						n.data.current.set(true);
+						n.data.progressMax.set(50);
+						n.data.progressCurrent.set(32);
+						$nodes = $nodes;
+
+						console.log($nodes);
+					}
+				});
+			}}>Lol</button
+		>
 	</div>
 
 	<div
@@ -156,4 +142,24 @@
 			</Command.Group>
 		</Command.List>
 	</Command.Dialog>
+</div>
+
+<div style:height="calc(100vh - 100px)">
+	<SvelteFlow
+		class=""
+		{nodes}
+		{edges}
+		{snapGrid}
+		{nodeTypes}
+		{isValidConnection}
+		fitView
+		on:nodeclick={(event) => console.log('on node click', event.detail.node)}
+	>
+		<MiniMap nodeColor="hsl(var(--primary))" position="top-right" />
+		<Background
+			patternColor="hsl(var(--foreground))"
+			bgColor="hsl(var(--background-2))"
+			variant={BackgroundVariant.Cross}
+		/>
+	</SvelteFlow>
 </div>

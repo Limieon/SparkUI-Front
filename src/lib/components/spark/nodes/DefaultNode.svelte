@@ -6,23 +6,22 @@
 
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import { Progress } from '$lib/components/ui/progress';
 
 	type $$Props = NodeProps;
 
-	export let data: {
-		label: string;
-		connections: { inputs: NodeConnection[]; outputs: NodeConnection[] };
-		fields: NodeField[];
-	};
+	export let data: $$Props['data'];
 
-	const label: string = data.label;
-	const inputs: NodeConnection[] = data.connections.inputs;
-	const outputs: NodeConnection[] = data.connections.outputs;
-	const fields: NodeField[] = data.fields;
+	const { label, current, fields, inputs, outputs, useProgress, progressCurrent, progressMax } =
+		data;
 </script>
 
-<div class="colorpicker bg-background rounded-xl w-fit">
-	<h2 class="text-lg font-bold bg-primary text-center rounded-t-xl pl-4 pr-4 dragHandle">
+<div class="bg-background rounded-xl w-fit border-solid">
+	<h2
+		class="text-lg font-bold {$current
+			? 'bg-green-700'
+			: 'bg-primary'} text-center rounded-t-xl pl-4 pr-4 dragHandle"
+	>
 		{label}
 	</h2>
 
@@ -100,5 +99,15 @@
 				</div>
 			{/each}
 		</div>
+
+		{#if useProgress}
+			<div class="pl-1 pr-1">
+				<Progress
+					value={($progressCurrent / $progressMax) * 100}
+					class="w-full mt-1"
+					innerClass="bg-primary"
+				/>
+			</div>
+		{/if}
 	</div>
 </div>
