@@ -12,6 +12,7 @@ export interface NodeField {
 }
 
 export interface NodeMeta {
+    id: string
     label: string
     use_progress: boolean
     inputs: NodeConnection

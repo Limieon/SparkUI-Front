@@ -1,19 +1,40 @@
 <script lang="ts">
 	import { type NodeConnection, getTypeColor, getTypeName, type NodeField } from './index';
 
+	import { workflow } from '$lib/stores';
+
 	import { Handle, Position, type NodeProps } from '@xyflow/svelte';
 	import type { Writable } from 'svelte/store';
 
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Progress } from '$lib/components/ui/progress';
+	import { Input } from '$lib/components/ui/input';
 
 	type $$Props = NodeProps;
 
 	export let data: $$Props['data'];
 
-	const { label, current, fields, inputs, outputs, useProgress, progressCurrent, progressMax } =
-		data;
+	const {
+		nodeID,
+		label,
+		current,
+		fields,
+		inputs,
+		outputs,
+		useProgress,
+		progressCurrent,
+		progressMax,
+		values
+	} = data;
+
+	let boundValues: { [key: string]: any } = {};
+
+	for (let i = 0; i < fields.length; ++i) {
+		boundValues[`${i}`] = fields[i].default;
+		$workflow.parameters[`${nodeID}-${i}`] = boundValues[`${i}`];
+		$workflow.parameters = $workflow.parameters;
+	}
 </script>
 
 <div class="bg-background rounded-xl w-fit border-solid">
@@ -72,30 +93,25 @@
 			{#each fields as d, i}
 				<div class="flex items-center">
 					{#if d.type === 'text_area'}
-						{#if d.connection}
-							<Textarea
-								class="w-96 h-32"
-								placeholder={d.connection.name ? d.connection.name : getTypeName(d.connection.type)}
-								>{d.default}</Textarea
-							>
-							<Tooltip.Root>
-								<Tooltip.Trigger
-									><Handle
-										id={i + 1 + inputs.length + outputs.length + ''}
-										type="target"
-										position={Position.Left}
-										style="top: calc(68px + (1.4rem * {i})); transform: translateX(-4px); background-color: {getTypeColor(
-											d.connection.type
-										)}; width: 0.5rem; height: 0.5rem"
-									/>
-								</Tooltip.Trigger>
-								<Tooltip.Content class="bg-secondary">{d.connection.type}</Tooltip.Content>
-							</Tooltip.Root>
-						{:else}
-							<Textarea class="w-96 h-32 font-mono">{d.default}</Textarea>
-						{/if}
+						<Textarea
+							class="w-96 h-32 font-mono"
+							bind:value={boundValues[`${i}`]}
+							on:change={(e) => {
+								console.log('On Change!');
+								$workflow.parameters[`${nodeID}-${i}`] = boundValues[`${i}`];
+								$workflow.parameters = $workflow.parameters;
+							}}
+						/>
+					{:else if d.type === 'number'}
+						<Input
+							bind:value={boundValues[`${i}`]}
+							on:change={() => {
+								$workflow.parameters[`${nodeID}-${i}`] = boundValues[`${i}`];
+								$workflow.parameters = $workflow.parameters;
+							}}
+							num
+						/>
 					{/if}
-					{#if d.type === 'text_box'}{/if}
 				</div>
 			{/each}
 		</div>

@@ -117,8 +117,9 @@ interface NodePos {
 	y: number
 }
 interface Workflow {
-	nodes?: any[]
-	edges?: any[]
+	nodes: any[]
+	edges: any[],
+	parameters: { [key: string]: any }
 }
 
-export const workflow = writable<Workflow>({ nodes: [], edges: [] })
+export const workflow = writable<Workflow>({ nodes: [], edges: [], parameters: {} })
