@@ -4,7 +4,7 @@
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
-	import { Node, type NodeMeta } from '$spark/nodes';
+	import { DefaultNode, type NodeMeta } from '$spark/nodes';
 
 	import { writable } from 'svelte/store';
 	import {
@@ -27,7 +27,7 @@
 	export let selectorOpen = false;
 
 	const nodeTypes = {
-		node: Node
+		api_node: DefaultNode
 	};
 
 	const nodes = writable<any[]>($workflow.nodes);
@@ -55,13 +55,14 @@
 
 		temp.push({
 			id: `${temp.length + 1}`,
-			type: 'node',
+			type: 'api_node',
 			data: {
 				label: node.label,
 				connections: {
 					inputs: node.inputs,
 					outputs: node.outputs
-				}
+				},
+				fields: node.fields
 			},
 			position: NODE_ORIGIN
 		});

@@ -1,27 +1,39 @@
-import Node from './Node.svelte'
+import DefaultNode from './DefaultNode.svelte'
 
 export interface NodeConnection {
     type: string
     name?: string
 }
 
+export interface NodeField {
+    type: string
+    default: any
+    connection?: NodeConnection
+}
+
 export interface NodeMeta {
     label: string
     inputs: NodeConnection
     outputs: NodeConnection
+    fields: NodeField
 }
 
 const TYPE_COLORS: { [key: string]: string } = {
     vae: 'red',
     int: 'blue',
     latent_image: 'cyan',
-    image: 'yellow'
+    conditioning: 'orange',
+    string: 'yellow',
+    clip: 'green'
 }
 const TYPE_NAMES: { [key: string]: string } = {
     vae: 'VAE',
     int: 'Integer',
     latent_image: 'Latent Image',
-    image: 'Image'
+    image: 'Image',
+    conditioning: 'Conditioning',
+    string: 'String',
+    clip: 'CLIP'
 }
 
 export function getTypeColor(type: string) {
@@ -32,5 +44,5 @@ export function getTypeName(type: string) {
 }
 
 
-export { Node }
+export { DefaultNode }
 
