@@ -1,23 +1,25 @@
 import DefaultNode from './DefaultNode.svelte'
 
+export interface NodeOutput {
+    type: string
+    name: string
+}
+export interface NodeInput extends NodeOutput {
+    input_properties: { [key: string]: any }
+}
+
 export interface NodeConnection {
     type: string
     name?: string
 }
 
-export interface NodeField {
-    type: string
-    default: any
-    connection?: NodeConnection
-}
-
 export interface NodeMeta {
     id: string
     label: string
+    description: string
     use_progress: boolean
-    inputs: NodeConnection
-    outputs: NodeConnection
-    fields: NodeField
+    inputs: NodeInput[]
+    outputs: NodeOutput[]
 }
 
 const TYPE_COLORS: { [key: string]: string } = {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { workflow } from '$lib/stores';
+	import { workflow_old, workflow, node_data, type WorkflowNode } from '$lib/stores';
+	import { v4 as uuidv4 } from 'uuid';
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
@@ -33,9 +34,9 @@
 		api_node: DefaultNode
 	};
 
-	const nodes = writable<any[]>($workflow.nodes);
-	const edges = writable<any[]>($workflow.edges);
-	let availableNodes: NodeMeta[] = [];
+	let nodes = writable<any[]>([]);
+	let edges = writable<any[]>([]);
+	let availableNodes: { [key: string]: NodeMeta } = {};
 
 	const NODE_ORIGIN = { x: 0, y: 0 };
 	onMount(async () => {
@@ -43,40 +44,37 @@
 		const json = await data.json();
 		availableNodes = json.nodes;
 
-		$nodes = [...$workflow.nodes];
-		$edges = [...$workflow.edges];
+		loadFromStore();
+
+		nodes.subscribe(() => {
+			saveIntoStore($nodes, $edges);
+		});
+		edges.subscribe(() => {
+			saveIntoStore($nodes, $edges);
+		});
 	});
 
-	$: {
-		$workflow.nodes = [...$nodes];
-		$workflow.edges = [...$edges];
-
-		console.log({ nodes: $workflow.nodes, edges: $workflow.edges });
-	}
-
-	$: {
-		console.log($workflow.parameters);
-	}
-
-	function addNode(nodeID: number) {
+	function addNode(nodeType: string) {
 		const temp = [...$nodes];
-		const node = availableNodes[nodeID];
+		const node = availableNodes[nodeType];
 
+		const valStore = writable({});
+
+		const id = uuidv4();
 		temp.push({
-			id: `${temp.length + 1}`,
+			id: id,
 			type: 'api_node',
 			data: {
-				nodeID: `${temp.length + 1}`,
+				nodeID: id,
 				id: node.id,
 				label: node.label,
 				inputs: node.inputs,
 				outputs: node.outputs,
-				fields: node.fields,
 				current: writable<boolean>(false),
 				useProgress: node.use_progress,
 				progressCurrent: writable<number>(0),
 				progressMax: writable<number>(1),
-				values: writable({})
+				values: valStore
 			},
 			position: NODE_ORIGIN,
 			dragHandle: '.dragHandle'
@@ -85,14 +83,100 @@
 		$nodes = [...temp];
 	}
 
-	const snapGrid: [number, number] = [5, 5];
+	function saveIntoStore(nodes: any[], edges: any[]) {
+		let temp: { [key: string]: WorkflowNode } = {};
+
+		console.log('Saving...', { nodes, edges });
+		for (let n of nodes) {
+			temp[n.id] = {
+				id: n.id,
+				inputParameters: {},
+				type: n.data.id,
+				pos: n.position
+			};
+
+			if ($node_data[n.id]) {
+				for (let d of Object.keys($node_data[n.id])) {
+					temp[n.id].inputParameters[d] = {
+						type: 'value',
+						value: $node_data[n.id][d]
+					};
+				}
+			}
+
+			for (let e of edges) {
+				if (e.target === n.id) {
+					temp[n.id].inputParameters[e.targetHandle] = {
+						type: 'node',
+						value: {
+							node: e.source,
+							handle: e.sourceHandle
+						}
+					};
+				}
+			}
+		}
+
+		console.log('Temp:', temp);
+		$workflow = temp;
+	}
+	function loadFromStore() {
+		console.log('Loading...', $workflow);
+		for (let n of Object.keys($workflow)) {
+			const node = $workflow[n];
+
+			$nodes.push({
+				id: `${node.id}`,
+				type: 'api_node',
+				data: {
+					nodeID: `${node.id}`,
+					id: node.type,
+					label: availableNodes[node.type].label,
+					inputs: availableNodes[node.type].inputs,
+					outputs: availableNodes[node.type].outputs,
+					current: writable<boolean>(false),
+					useProgress: availableNodes[node.type].use_progress,
+					progressCurrent: writable<number>(0),
+					progressMax: writable<number>(1),
+					values: writable({})
+				},
+				position: node.pos,
+				dragHandle: '.dragHandle'
+			});
+
+			for (let p of Object.keys(node.inputParameters)) {
+				const param = node.inputParameters[p];
+
+				if (param.type === 'node' && param.value != undefined) {
+					$edges.push({
+						source: `${param.value.node}`,
+						sourceHandle: `${param.value.handle}`,
+						target: `${node.id}`,
+						targetHandle: `${p}`,
+						id: `xy-edge__${param.value.node}${param.value.handle}-${node.id}${p}`
+					});
+				}
+			}
+		}
+
+		$nodes = $nodes;
+		$edges = $edges;
+	}
+
+	function getNodeFromID(id: string) {
+		for (let n of $nodes) {
+			if (n.id === id) return n;
+		}
+	}
 
 	const isValidConnection: IsValidConnection = (connection) => {
 		try {
 			if (!$nodes) return true;
 
-			const tgt = $nodes[(connection.target as unknown as number) - 1];
-			const src = $nodes[(connection.source as unknown as number) - 1];
+			if (connection.source == connection.target) return false;
+
+			const tgt = getNodeFromID(connection.target);
+			const src = getNodeFromID(connection.source);
 
 			const to = tgt.data.inputs[(connection.targetHandle as unknown as number) - 1];
 			const from =
@@ -107,8 +191,6 @@
 	};
 
 	function handleProgress(data: { node: string; current: number; max: number }) {
-		console.log(`Node Data:`, data);
-
 		$nodes.forEach((n) => {
 			if (n.id == data.node) {
 				n.data.current.set(true);
@@ -119,7 +201,6 @@
 		});
 	}
 	function handleActivation(data: { node: string }) {
-		console.log(`Node Data:`, data);
 		$nodes.forEach((n) => {
 			if (n.id == data.node) {
 				n.data.current.set(true);
@@ -128,7 +209,6 @@
 		});
 	}
 	function handleDeactivation(data: { node: string }) {
-		console.log(`Node Data:`, data);
 		$nodes.forEach((n) => {
 			if (n.id == data.node) {
 				n.data.current.set(false);
@@ -148,7 +228,7 @@
 						Accept: 'application/json',
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify($workflow)
+					body: JSON.stringify($workflow_old)
 				});
 			}}>Lol</button
 		>
@@ -171,12 +251,12 @@
 			<Command.Empty>No results found.</Command.Empty>
 
 			<Command.Group heading="Nodes">
-				{#each availableNodes as node, i}
+				{#each Object.keys(availableNodes) as nodeType}
 					<Command.Item
 						onSelect={() => {
-							addNode(i);
+							addNode(nodeType);
 							selectorOpen = false;
-						}}>{node.label}</Command.Item
+						}}>{availableNodes[nodeType].label}</Command.Item
 					>
 				{/each}
 			</Command.Group>
@@ -189,7 +269,7 @@
 		class=""
 		{nodes}
 		{edges}
-		{snapGrid}
+		snapGrid={[5, 5]}
 		{nodeTypes}
 		{isValidConnection}
 		fitView
@@ -199,7 +279,7 @@
 		<Background
 			patternColor="hsl(var(--foreground))"
 			bgColor="hsl(var(--background-2))"
-			variant={BackgroundVariant.Cross}
+			variant={BackgroundVariant.Dots}
 		/>
 	</SvelteFlow>
 </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { type NodeConnection, getTypeColor, getTypeName, type NodeField } from './index';
+	import { type NodeConnection, getTypeColor, getTypeName } from './index';
 
-	import { workflow } from '$lib/stores';
+	import { workflow_old, workflow, node_data } from '$lib/stores';
 
 	import { Handle, Position, type NodeProps } from '@xyflow/svelte';
 	import type { Writable } from 'svelte/store';
@@ -15,25 +15,13 @@
 
 	export let data: $$Props['data'];
 
-	const {
-		nodeID,
-		label,
-		current,
-		fields,
-		inputs,
-		outputs,
-		useProgress,
-		progressCurrent,
-		progressMax,
-		values
-	} = data;
+	const { label, current, inputs, outputs, useProgress, progressCurrent, progressMax } = data;
 
 	let boundValues: { [key: string]: any } = {};
 
-	for (let i = 0; i < fields.length; ++i) {
-		boundValues[`${i}`] = fields[i].default;
-		$workflow.parameters[`${nodeID}-${i}`] = boundValues[`${i}`];
-		$workflow.parameters = $workflow.parameters;
+	$node_data[data.nodeID] = {};
+	for (let i = 0; i < inputs.length; ++i) {
+		boundValues[`${i + 1}`] = inputs[i].default;
 	}
 </script>
 
@@ -46,84 +34,88 @@
 		{label}
 	</h2>
 
-	<div class="pl-2 pr-2 pb-2">
-		<div class="grid grid-cols-2">
-			<div class="grid grid-cols-1 grid-flow-row">
-				{#each inputs as d, i}
-					<div class="flex items-center">
-						<Tooltip.Root>
-							<Tooltip.Trigger
-								><Handle
-									id={i + 1 + ''}
-									type="target"
-									position={Position.Left}
-									style="top: calc(38px + (1.5rem * {i})); transform: translateX(-4px); background-color: {getTypeColor(
-										d.type
-									)}; width: 0.5rem; height: 0.5rem"
-								/>
-								<span class="text-sm">{d.name ? d.name : getTypeName(d.type)}</span>
-							</Tooltip.Trigger>
-							<Tooltip.Content class="bg-secondary">{d.type}</Tooltip.Content>
-						</Tooltip.Root>
-					</div>
-				{/each}
-			</div>
-			<div class="grid grid-cols-1 grid-flow-row mt-[4px]">
-				{#each outputs as d, i}
-					<div class="flex items-center float-right h-min">
-						<Tooltip.Root>
-							<Tooltip.Trigger class="w-full"
-								><Handle
-									id={i + 1 + inputs.length + ''}
-									type="source"
-									position={Position.Right}
-									style="top: calc(38px + (1.25rem * {i})); transform: translateX(4px); background-color: {getTypeColor(
-										d.type
-									)}; width: 0.5rem; height: 0.5rem"
-								/>
-								<span class="text-sm float-right">{d.name ? d.name : getTypeName(d.type)}</span>
-							</Tooltip.Trigger>
-							<Tooltip.Content class="bg-secondary">{d.type}</Tooltip.Content>
-						</Tooltip.Root>
-					</div>
-				{/each}
-			</div>
-		</div>
-		<div class="mt-2">
-			{#each fields as d, i}
-				<div class="flex items-center">
-					{#if d.type === 'text_area'}
-						<Textarea
-							class="w-96 h-32 font-mono"
-							bind:value={boundValues[`${i}`]}
-							on:change={(e) => {
-								console.log('On Change!');
-								$workflow.parameters[`${nodeID}-${i}`] = boundValues[`${i}`];
-								$workflow.parameters = $workflow.parameters;
-							}}
-						/>
-					{:else if d.type === 'number'}
-						<Input
-							bind:value={boundValues[`${i}`]}
-							on:change={() => {
-								$workflow.parameters[`${nodeID}-${i}`] = boundValues[`${i}`];
-								$workflow.parameters = $workflow.parameters;
-							}}
-							num
-						/>
-					{/if}
-				</div>
-			{/each}
-		</div>
-
+	<div class="">
 		{#if useProgress}
-			<div class="pl-1 pr-1">
+			<div class="p-1">
 				<Progress
 					value={($progressCurrent / $progressMax) * 100}
-					class="w-full mt-1"
+					class="w-full"
 					innerClass="bg-primary"
 				/>
 			</div>
 		{/if}
+		<div class="pl-2 pr-2 pb-2 grid grid-cols-[auto_auto] gap-4 grid-flow-row">
+			<div class="grid w-full">
+				{#each inputs as d, i}
+					<div class="flex items-center">
+						<Tooltip.Root>
+							<Tooltip.Trigger class="w-full relative">
+								<Handle
+									id={i + 1 + ''}
+									type="target"
+									position={Position.Left}
+									style="top: -10px; left: -12px; position: absolute; width: 0.5rem; height: 0.5rem; transform: translateY(18px); background-color: {getTypeColor(
+										d.type
+									)};"
+								/>
+
+								{#if d.type === 'string'}
+									{#if d.input_properties['text_area']}
+										<Textarea
+											bind:value={boundValues[`${i + 1}`]}
+											on:change={() => {
+												$node_data[data.nodeID][`${i + 1}`] = boundValues[`${i + 1}`];
+												console.log($node_data);
+												$node_data = $node_data;
+											}}
+											placeholder={d.name}
+											class="font-mono h-4 text-xs pt-1 pb-1 mt-1 pl-1 pr-1 w-64"
+										/>
+									{:else}
+										<Input
+											placeholder={d.name}
+											value={d.default}
+											class="h-4 text-xs mt-1 pl-1 pr-1 "
+										/>
+									{/if}
+								{:else if d.type === 'int'}
+									<Input
+										placeholder={d.name}
+										value={d.default}
+										class="h-4 text-xs mt-1 pl-1 pr-1"
+										num
+									/>
+								{:else}
+									<span class="float-left text-sm">{d.name ? d.name : getTypeName(d.type)}</span>
+								{/if}
+							</Tooltip.Trigger>
+							<Tooltip.Content class="bg-secondary">{d.type}</Tooltip.Content>
+						</Tooltip.Root>
+					</div>
+				{/each}
+			</div>
+
+			<div class="grid w-full">
+				{#each outputs as d, i}
+					<div class="flex items-center float-right h-min">
+						<Tooltip.Root>
+							<Tooltip.Trigger class="w-full relative">
+								<Handle
+									id={i + 1 + inputs.length + ''}
+									type="source"
+									position={Position.Right}
+									style="top: -10px; right: -10px; position: absolute; width: 0.5rem; height: 0.5rem; transform: translateY(18px); background-color: {getTypeColor(
+										d.type
+									)};"
+								/>
+								<span class="mr-1 text-sm float-right">{d.name ? d.name : getTypeName(d.type)}</span
+								>
+							</Tooltip.Trigger>
+							<Tooltip.Content class="bg-secondary">{d.type}</Tooltip.Content>
+						</Tooltip.Root>
+					</div>
+				{/each}
+			</div>
+		</div>
 	</div>
 </div>

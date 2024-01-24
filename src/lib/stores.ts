@@ -116,10 +116,41 @@ interface NodePos {
 	x: number
 	y: number
 }
-interface Workflow {
+
+interface WorkflowConnectionTarget {
+	node: string
+	handle: string
+}
+
+interface WorkflowParameter_Value {
+	type: 'value'
+	value: any
+}
+
+/**
+ * Represents how a node connection is serialized
+ * Value is null if handle is not connected to any nodes
+ */
+interface WorkflowParameter_Node {
+	type: 'node'
+	value?: WorkflowConnectionTarget
+}
+
+type WorkflowParameter = WorkflowParameter_Value | WorkflowParameter_Node
+
+export interface WorkflowNode {
+	id: string
+	type: string
+	pos: { x: number, y: number }
+	inputParameters: { [key: string]: WorkflowParameter }
+}
+
+interface Workflow_Old {
 	nodes: any[]
 	edges: any[],
 	parameters: { [key: string]: any }
 }
 
-export const workflow = writable<Workflow>({ nodes: [], edges: [], parameters: {} })
+export const workflow_old = writable<Workflow_Old>({ nodes: [], edges: [], parameters: {} })
+export const workflow = writable<{ [key: string]: WorkflowNode }>({})
+export const node_data = writable<{ [key: string]: { [key: string]: any } }>({})
