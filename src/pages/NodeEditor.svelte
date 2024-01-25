@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { workflow_old, workflow, node_data, type WorkflowNode } from '$lib/stores';
+	import { workflow, node_data, type WorkflowNode } from '$lib/stores';
 	import { v4 as uuidv4 } from 'uuid';
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
@@ -241,7 +241,7 @@
 						Accept: 'application/json',
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify($workflow_old)
+					body: JSON.stringify({ nodes: $workflow })
 				});
 			}}>Lol</button
 		>

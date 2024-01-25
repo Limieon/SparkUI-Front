@@ -146,12 +146,5 @@ export interface WorkflowNode {
 	inputParameters: { [key: string]: WorkflowParameter }
 }
 
-interface Workflow_Old {
-	nodes: any[]
-	edges: any[],
-	parameters: { [key: string]: any }
-}
-
-export const workflow_old = writable<Workflow_Old>({ nodes: [], edges: [], parameters: {} })
 export const workflow = writable<{ [key: string]: WorkflowNode }>({})
 export const node_data = writable<{ [key: string]: { [key: string]: any } }>({})

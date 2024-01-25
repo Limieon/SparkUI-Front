@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type NodeConnection, getTypeColor, getTypeName } from './index';
 
-	import { workflow_old, workflow, node_data } from '$lib/stores';
+	import { workflow, node_data } from '$lib/stores';
 
 	import { Handle, Position, type NodeProps } from '@xyflow/svelte';
 	import type { Writable } from 'svelte/store';
