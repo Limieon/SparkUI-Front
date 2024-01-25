@@ -47,7 +47,7 @@
 
 	let boundValues: { [key: string]: any } = {};
 
-	$node_data[nodeID] = {};
+	if ($node_data[nodeID] == undefined) $node_data[nodeID] = {};
 	for (let i = 0; i < inputs.length; ++i) {
 		let value: any = undefined;
 		if (
@@ -111,15 +111,25 @@
 										/>
 									{:else}
 										<Input
+											bind:value={boundValues[`${i + 1}`]}
+											on:change={() => {
+												$node_data[data.nodeID][`${i + 1}`] = boundValues[`${i + 1}`];
+												console.log($node_data);
+												$node_data = $node_data;
+											}}
 											placeholder={d.name}
-											value={d.default}
 											class="h-4 text-xs mt-1 pl-1 pr-1 "
 										/>
 									{/if}
 								{:else if d.type === 'int'}
 									<Input
+										bind:value={boundValues[`${i + 1}`]}
+										on:change={() => {
+											$node_data[data.nodeID][`${i + 1}`] = boundValues[`${i + 1}`];
+											console.log($node_data);
+											$node_data = $node_data;
+										}}
 										placeholder={d.name}
-										value={d.default}
 										class="h-4 text-xs mt-1 pl-1 pr-1"
 										num
 									/>

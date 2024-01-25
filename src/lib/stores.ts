@@ -125,6 +125,7 @@ interface WorkflowConnectionTarget {
 interface WorkflowParameter_Value {
 	type: 'value'
 	value: any
+	handle: string
 }
 
 /**

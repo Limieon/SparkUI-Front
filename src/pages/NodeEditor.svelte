@@ -49,6 +49,9 @@
 		edges.subscribe(() => {
 			saveIntoStore($nodes, $edges);
 		});
+		node_data.subscribe(() => {
+			saveIntoStore($nodes, $edges);
+		});
 	});
 
 	function addNode(nodeType: string) {
@@ -95,7 +98,8 @@
 				for (let d of Object.keys($node_data[n.id])) {
 					temp[n.id].inputParameters[d] = {
 						type: 'value',
-						value: $node_data[n.id][d]
+						value: $node_data[n.id][d],
+						handle: d
 					};
 				}
 			}
@@ -116,8 +120,12 @@
 		$workflow = temp;
 	}
 	function loadFromStore() {
+		console.log('Loading...');
+		$node_data = {};
 		for (let n of Object.keys($workflow)) {
 			const node = $workflow[n];
+
+			$node_data[node.id] = {};
 
 			$nodes.push({
 				id: `${node.id}`,
@@ -150,11 +158,21 @@
 						id: `xy-edge__${param.value.node}${param.value.handle}-${node.id}${p}`
 					});
 				}
+
+				if (param.type === 'value' && param.value != undefined) {
+					console.log('Before:', $node_data);
+					console.log({ param, nodeID: node.id });
+					$node_data[node.id][param.handle] = param.value;
+					console.log('After:', $node_data);
+				}
 			}
 		}
 
 		$nodes = $nodes;
 		$edges = $edges;
+		$node_data = $node_data;
+
+		console.log('Final:', $node_data);
 	}
 
 	function getNodeFromID(id: string) {
@@ -216,6 +234,7 @@
 	<div>
 		<button
 			on:click={async () => {
+				console.log($workflow);
 				await fetch(`http://${SPARKUI_BACK_HOST}/v1/queue/prompt`, {
 					method: 'POST',
 					headers: {
