@@ -5,7 +5,7 @@
 
 	import { Button } from '$lib/components/ui/button';
 
-	import { ModelSelector } from '$lib/stores';
+	import { ModelSelector, node_data } from '$lib/stores';
 
 	type $$Props = NodeProps;
 	export let id: $$Props['id'];
@@ -37,6 +37,8 @@
 	export let positionAbsoluteY: $$Props['positionAbsoluteY'];
 	positionAbsoluteY;
 
+	const { nodeID } = data;
+
 	const outputs: NodeOutput[] = [
 		{
 			name: 'checkpoint',
@@ -51,9 +53,6 @@
 			type: 'vae'
 		}
 	];
-
-	let modelSelectorOpen = false;
-	let selectedCheckpoint = '';
 </script>
 
 <Spark_NodeTemplate
@@ -73,17 +72,19 @@
 	{positionAbsoluteY}
 	{outputs}
 >
+	<!--Button needs a fixed size, so the node won't resize when changing models-->
 	<Button
 		variant="outline"
 		id="model_selector"
-		class="w-full"
+		class="w-64"
 		on:click={() => {
 			$ModelSelector.open({
-				selected: selectedCheckpoint,
+				selected: $node_data[nodeID]['1'] ? $node_data[nodeID]['1'] : '',
 				onSelect: (model) => {
-					selectedCheckpoint = model;
+					$node_data[nodeID]['1'] = model;
+					$node_data = $node_data;
 				}
 			});
-		}}>{selectedCheckpoint}</Button
+		}}>{$node_data[nodeID]['1']}</Button
 	>
 </Spark_NodeTemplate>
