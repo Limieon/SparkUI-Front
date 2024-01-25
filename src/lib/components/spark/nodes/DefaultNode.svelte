@@ -15,13 +15,22 @@
 
 	export let data: $$Props['data'];
 
-	const { label, current, inputs, outputs, useProgress, progressCurrent, progressMax } = data;
+	const { nodeID, label, current, inputs, outputs, useProgress, progressCurrent, progressMax } =
+		data;
 
 	let boundValues: { [key: string]: any } = {};
 
-	$node_data[data.nodeID] = {};
+	$node_data[nodeID] = {};
 	for (let i = 0; i < inputs.length; ++i) {
-		boundValues[`${i + 1}`] = inputs[i].default;
+		let value: any = undefined;
+		if (
+			$workflow[nodeID] != undefined &&
+			$workflow[nodeID].inputParameters[`${i + 1}`] != undefined &&
+			$workflow[nodeID].inputParameters[`${i + 1}`].type == 'value'
+		) {
+			value = $workflow[nodeID].inputParameters[`${i + 1}`].value;
+		}
+		boundValues[`${i + 1}`] = value ? value : inputs[i].default;
 	}
 </script>
 
