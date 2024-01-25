@@ -38,18 +38,12 @@
 			await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints`)
 		).json();
 
-		for (var c of checkpoints) {
-			const variations = await (
-				await fetch(`http://${SPARKUI_BACK_HOST}/v1/stable_diffusion/checkpoints/${c}`)
-			).json();
-
-			for (var v of variations.variations) {
-				models.push({
-					handle: v.handle,
-					name: v.name,
-					preview_url: v.preview_url
-				});
-			}
+		for (var c of checkpoints.items) {
+			models.push({
+				name: c.name,
+				handle: c.handle,
+				preview_url: '' // Not implemented
+			});
 		}
 
 		models = [...models];
