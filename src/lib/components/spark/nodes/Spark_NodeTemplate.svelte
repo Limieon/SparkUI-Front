@@ -1,10 +1,15 @@
 <script lang="ts">
-	import { type NodeConnection, getTypeColor, getTypeName } from './index';
+	import {
+		type NodeConnection,
+		getTypeColor,
+		getTypeName,
+		type NodeInput,
+		type NodeOutput
+	} from './index';
 
 	import { workflow, node_data } from '$lib/stores';
 
 	import { Handle, Position, type NodeProps } from '@xyflow/svelte';
-	import type { Writable } from 'svelte/store';
 
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Textarea } from '$lib/components/ui/textarea';
@@ -42,8 +47,10 @@
 	export let positionAbsoluteY: $$Props['positionAbsoluteY'];
 	positionAbsoluteY;
 
-	const { inputs, outputs, nodeID, label, current, useProgress, progressCurrent, progressMax } =
-		data;
+	export let inputs: NodeInput[] = [];
+	export let outputs: NodeOutput[] = [];
+
+	const { nodeID, label, current, useProgress, progressCurrent, progressMax } = data;
 
 	let boundValues: { [key: string]: any } = {};
 
@@ -59,6 +66,8 @@
 		}
 		boundValues[`${i + 1}`] = value ? value : inputs[i].default;
 	}
+
+	let selectedModel = '';
 </script>
 
 <div class="bg-background rounded-xl w-fit">
@@ -164,6 +173,10 @@
 					</div>
 				{/each}
 			</div>
+		</div>
+
+		<div class="p-2 -mt-2">
+			<slot />
 		</div>
 	</div>
 </div>

@@ -7,7 +7,7 @@
 
 	import Socket from '$spark/Socket.svelte';
 
-	import { DefaultNode, type NodeMeta } from '$spark/nodes';
+	import { Spark_DefaultNode, Spark_LoadModel, type NodeMeta } from '$spark/nodes';
 
 	import { writable } from 'svelte/store';
 	import {
@@ -28,7 +28,8 @@
 	export let selectorOpen = false;
 
 	const nodeTypes = {
-		api_node: DefaultNode
+		Spark_DefaultNode: Spark_DefaultNode,
+		Spark_LoadModel: Spark_LoadModel
 	};
 
 	let nodes = writable<any[]>([]);
@@ -63,7 +64,7 @@
 		const id = uuidv4();
 		temp.push({
 			id: id,
-			type: 'api_node',
+			type: node.svelte_comp,
 			data: {
 				nodeID: id,
 				id: node.id,
@@ -81,6 +82,8 @@
 		});
 
 		$nodes = [...temp];
+
+		console.log($nodes);
 	}
 
 	function saveIntoStore(nodes: any[], edges: any[]) {
@@ -89,6 +92,7 @@
 		for (let n of nodes) {
 			temp[n.id] = {
 				id: n.id,
+				svelte_comp: n.type,
 				inputParameters: {},
 				type: n.data.id,
 				pos: n.position
@@ -129,7 +133,7 @@
 
 			$nodes.push({
 				id: `${node.id}`,
-				type: 'api_node',
+				type: node.svelte_comp,
 				data: {
 					nodeID: `${node.id}`,
 					id: node.type,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { txt2imageData as genData, txt2imageData } from '$lib/stores';
+	import { txt2imageData as genData, txt2imageData, ModelSelector } from '$lib/stores';
 	import { browser } from '$app/environment';
 
 	import { Button } from '$lib/components/ui/button';
@@ -10,7 +10,7 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 
 	import Combobox from '$spark/Combobox.svelte';
-	import { ModelSelector, LoRASelector } from '$lib/components/spark/selector';
+	import { LoRASelector } from '$lib/components/spark/selector';
 
 	import { CommandPalette } from '$spark/commandPalette';
 	import { ImageBrowser } from '$spark/imageBrowser';
@@ -44,7 +44,8 @@
 		Expand as IconUpscale,
 		Download as IconDownload,
 		Forward as IconSend,
-		ArrowUp as IconDirectoryUp
+		ArrowUp as IconDirectoryUp,
+		CopyCheck
 	} from 'lucide-svelte';
 
 	import { TooltipButton } from '$spark/button';
@@ -103,6 +104,7 @@
 	}
 
 	function generate() {
+		console.log('Checkpoint:', $genData.checkpoint);
 		console.log('Loras:', loras);
 		console.log('Image Size:', `${imageWidth} x ${imageHeight}`);
 	}
@@ -182,7 +184,12 @@
 									id="model_selector"
 									class="w-full"
 									on:click={() => {
-										modelSelectorOpen = true;
+										$ModelSelector.open({
+											selected: $genData.checkpoint,
+											onSelect: (model) => {
+												$genData.checkpoint = model;
+											}
+										});
 									}}>{$genData.checkpoint}</Button
 								>
 							</div>
@@ -299,7 +306,6 @@
 			</Accordion.Root>
 
 			<!-- Fullscreen Popups -->
-			<ModelSelector bind:open={modelSelectorOpen} bind:selected={$genData.checkpoint} />
 			<LoRASelector
 				bind:open={loraSelectorOpen}
 				onChange={(name) => {

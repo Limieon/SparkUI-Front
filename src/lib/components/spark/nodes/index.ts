@@ -1,10 +1,12 @@
-import DefaultNode from './DefaultNode.svelte'
+import Spark_DefaultNode from './Spark_DefaultNode.svelte'
+import Spark_LoadModel from './Spark_LoadModel.svelte'
 
 export interface NodeOutput {
     type: string
     name: string
 }
 export interface NodeInput extends NodeOutput {
+    default?: any
     input_properties: { [key: string]: any }
 }
 
@@ -16,6 +18,7 @@ export interface NodeConnection {
 export interface NodeMeta {
     id: string
     label: string
+    svelte_comp: string
     description: string
     use_progress: boolean
     inputs: NodeInput[]
@@ -48,5 +51,5 @@ export function getTypeName(type: string) {
 }
 
 
-export { DefaultNode }
+export { Spark_DefaultNode, Spark_LoadModel }
 

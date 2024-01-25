@@ -3,14 +3,14 @@
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
+	import { currentModelSelector as data } from '$lib/stores';
+
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import type { Checkpoint } from '$lib/types/Checkpoint';
 
 	import Combobox from '$spark/Combobox.svelte';
 	import { Popup } from '$spark/popup';
-
-	export let open: boolean = true;
 
 	let searchPrompt: string = '';
 
@@ -56,11 +56,18 @@
 	}
 	onMount(fetchCheckpoints);
 
+	function close() {
+		$data.open = false;
+	}
+	function select(model: string) {
+		close();
+		if ($data.onSelect) $data.onSelect(model);
+	}
+
 	let models: Checkpoint[] = [];
-	export let selected: string = '';
 </script>
 
-<Popup title="Checkpoint Selector" bind:open>
+<Popup title="Checkpoint Selector" bind:open={$data.open}>
 	<!-- Filters (other filters may come) -->
 	<div class="grid grid-cols-[70%_auto] h-16 gap-2">
 		<div>
@@ -84,8 +91,7 @@
 				<button
 					class="group hover:cursor-pointer h-96 border-none"
 					on:click={() => {
-						selected = model.name;
-						open = false;
+						select(model.name);
 					}}
 				>
 					<div

@@ -17,7 +17,7 @@
 {#if open}
 	<!-- Blur the background -->
 	<div
-		class="absolute top-0 bottom-0 left-0 right-0 backdrop-blur z-30"
+		class="absolute top-0 bottom-0 left-0 right-0 backdrop-blur z-40"
 		role="none"
 		on:click={() => {
 			open = false;
@@ -40,7 +40,7 @@
 {/if}
 
 <div
-	class="absolute z-40 rounded-xl border transition-all duration-200 {className} {open
+	class="absolute z-50 rounded-xl border transition-all duration-200 {className} {open
 		? 'scale-100 opacity-100'
 		: 'scale-0 opacity-0'}"
 >

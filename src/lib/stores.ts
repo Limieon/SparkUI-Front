@@ -142,9 +142,37 @@ type WorkflowParameter = WorkflowParameter_Value | WorkflowParameter_Node
 export interface WorkflowNode {
 	id: string
 	type: string
+	svelte_comp: string
 	pos: { x: number, y: number }
 	inputParameters: { [key: string]: WorkflowParameter }
 }
 
 export const workflow = writable<{ [key: string]: WorkflowNode }>({})
 export const node_data = writable<{ [key: string]: { [key: string]: any } }>({})
+
+interface ModelSelectorData {
+	open: boolean
+	selected: string
+	onSelect?: (model: string) => void
+}
+export const currentModelSelector = writable<ModelSelectorData>({
+	open: false,
+	selected: '',
+	onSelect: undefined
+})
+export const ModelSelector = writable({
+	open: (data: {
+		selected?: string
+		onSelect?: (model: string) => void;
+	}) => {
+		currentModelSelector.set({
+			open: true,
+			selected: data.selected ? data.selected : '',
+			onSelect: data.onSelect
+		})
+	},
+
+	close: () => {
+		currentModelSelector.update(_ => { _.open = false; return _ })
+	}
+});
