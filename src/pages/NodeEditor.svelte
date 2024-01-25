@@ -12,12 +12,9 @@
 	import { writable } from 'svelte/store';
 	import {
 		SvelteFlow,
-		SvelteFlowProvider,
-		Controls,
 		Background,
 		BackgroundVariant,
 		MiniMap,
-		NodeToolbar,
 		type IsValidConnection
 	} from '@xyflow/svelte';
 
@@ -86,7 +83,6 @@
 	function saveIntoStore(nodes: any[], edges: any[]) {
 		let temp: { [key: string]: WorkflowNode } = {};
 
-		console.log('Saving...', { nodes, edges });
 		for (let n of nodes) {
 			temp[n.id] = {
 				id: n.id,
@@ -117,11 +113,9 @@
 			}
 		}
 
-		console.log('Temp:', temp);
 		$workflow = temp;
 	}
 	function loadFromStore() {
-		console.log('Loading...', $workflow);
 		for (let n of Object.keys($workflow)) {
 			const node = $workflow[n];
 
@@ -272,6 +266,7 @@
 		snapGrid={[5, 5]}
 		{nodeTypes}
 		{isValidConnection}
+		deleteKey="Delete"
 		fitView
 		on:nodeclick={(event) => console.log('on node click', event.detail.node)}
 	>
