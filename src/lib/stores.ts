@@ -176,3 +176,5 @@ export const ModelSelector = writable({
 		currentModelSelector.update(_ => { _.open = false; return _ })
 	}
 });
+
+export const socket = writable<WebSocket>()

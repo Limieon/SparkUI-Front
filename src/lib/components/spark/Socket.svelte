@@ -4,17 +4,25 @@
 
 	import { PUBLIC_SPARKUI_BACK_HOST as SPARKUI_BACK_HOST } from '$env/static/public';
 
+	import { socket } from '$lib/stores';
+
 	const dispatcher = createEventDispatcher();
-	let ws;
 
 	// Initialize WebSocket connection
 	function startWebSocket() {
-		ws = new WebSocket(`ws://${SPARKUI_BACK_HOST}/v1/ws`);
+		if ($socket == undefined || $socket.readyState == WebSocket.CLOSED) {
+			console.log('Socket lost connection! Reconnecting...');
+			$socket = new WebSocket(`ws://${SPARKUI_BACK_HOST}/v1/ws`);
+		}
 
-		ws.onmessage = (e) => {
+		$socket.onmessage = (e) => {
 			const message = JSON.parse(e.data);
 			console.log(message);
 			dispatcher(message.type, message.data);
+		};
+
+		$socket.onclose = (e) => {
+			console.log('Socket closed!');
 		};
 	}
 
