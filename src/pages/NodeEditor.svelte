@@ -7,7 +7,7 @@
 
 	import Socket from '$spark/Socket.svelte';
 
-	import { Spark_DefaultNode, Spark_LoadModel, type NodeMeta } from '$spark/nodes';
+	import { Spark_DefaultNode, Spark_LoadModel, Spark_ImageNode, type NodeMeta } from '$spark/nodes';
 
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
@@ -52,7 +52,8 @@
 
 	const nodeTypes = {
 		Spark_DefaultNode: Spark_DefaultNode,
-		Spark_LoadModel: Spark_LoadModel
+		Spark_LoadModel: Spark_LoadModel,
+		Spark_ImageNode: Spark_ImageNode
 	};
 
 	let nodes = writable<any[]>([]);

@@ -1,5 +1,6 @@
 import Spark_DefaultNode from './Spark_DefaultNode.svelte'
 import Spark_LoadModel from './Spark_LoadModel.svelte'
+import Spark_ImageNode from './Spark_ImageNode.svelte'
 
 export interface NodeOutput {
     type: string
@@ -51,5 +52,5 @@ export function getTypeName(type: string) {
 }
 
 
-export { Spark_DefaultNode, Spark_LoadModel }
+export { Spark_DefaultNode, Spark_LoadModel, Spark_ImageNode }
 
