@@ -9,6 +9,26 @@
 
 	import { Spark_DefaultNode, Spark_LoadModel, type NodeMeta } from '$spark/nodes';
 
+	import { Label } from '$lib/components/ui/label';
+	import { Input } from '$lib/components/ui/input';
+	import { Switch } from '$lib/components/ui/switch';
+	import * as Accordion from '$lib/components/ui/accordion';
+
+	import Combobox from '$spark/Combobox.svelte';
+	import { LoRASelector } from '$lib/components/spark/selector';
+
+	import { CommandPalette } from '$spark/commandPalette';
+	import { ImageBrowser } from '$spark/imageBrowser';
+
+	import {
+		ChevronLeft,
+		ChevronRight,
+		FolderDown as SaveIcon,
+		FolderUp as OpenIcon,
+		PlusIcon,
+		ZapIcon
+	} from 'lucide-svelte';
+
 	import { writable } from 'svelte/store';
 	import {
 		SvelteFlow,
@@ -18,14 +38,17 @@
 		type IsValidConnection
 	} from '@xyflow/svelte';
 
-	// 👇 this is important! You need to import the styles for Svelte Flow to work
 	import '@xyflow/svelte/dist/style.css';
 	import { PanelTopClose } from 'lucide-svelte';
 
 	import * as Command from '$lib/components/ui/command';
-	import { hotkey } from '@svelteuidev/composables';
+	import { Button } from '$lib/components/ui/button';
 
-	export let selectorOpen = false;
+	import { hotkey } from '@svelteuidev/composables';
+	import TooltipButton from '$lib/components/spark/button/TooltipButton.svelte';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
+
+	export let addNode_open = false;
 
 	const nodeTypes = {
 		Spark_DefaultNode: Spark_DefaultNode,
@@ -200,6 +223,8 @@
 					(connection.sourceHandle as unknown as number) - src.data.inputs.length - 1
 				];
 
+			console.log({ from, to });
+
 			return from.type === to.type;
 		} catch (e) {
 			return false;
@@ -232,37 +257,24 @@
 			}
 		});
 	}
+
+	let sidebarOpen = true;
+	let sidebarTab = 0;
 </script>
 
 <div>
-	<div>
-		<button
-			on:click={async () => {
-				console.log($workflow);
-				await fetch(`http://${SPARKUI_BACK_HOST}/v1/queue/prompt`, {
-					method: 'POST',
-					headers: {
-						Accept: 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ nodes: $workflow })
-				});
-			}}>Lol</button
-		>
-	</div>
-
 	<div
 		use:hotkey={[
 			[
 				'mod+space',
 				() => {
-					selectorOpen = !selectorOpen;
+					addNode_open = !addNode_open;
 				}
 			]
 		]}
 	/>
 
-	<Command.Dialog bind:open={selectorOpen}>
+	<Command.Dialog bind:open={addNode_open}>
 		<Command.Input placeholder="Select a Node to add..." />
 		<Command.List>
 			<Command.Empty>No results found.</Command.Empty>
@@ -272,7 +284,7 @@
 					<Command.Item
 						onSelect={() => {
 							addNode(nodeType);
-							selectorOpen = false;
+							addNode_open = false;
 						}}>{availableNodes[nodeType].label}</Command.Item
 					>
 				{/each}
@@ -281,25 +293,70 @@
 	</Command.Dialog>
 </div>
 
-<div style:height="calc(100vh - 100px)">
-	<SvelteFlow
-		class=""
-		{nodes}
-		{edges}
-		snapGrid={[5, 5]}
-		{nodeTypes}
-		{isValidConnection}
-		deleteKey="Delete"
-		fitView
-		on:nodeclick={(event) => console.log('on node click', event.detail.node)}
-	>
-		<MiniMap nodeColor="hsl(var(--primary))" position="top-right" />
-		<Background
-			patternColor="hsl(var(--foreground))"
-			bgColor="hsl(var(--background-2))"
-			variant={BackgroundVariant.Dots}
-		/>
-	</SvelteFlow>
+<div style:height="calc(100vh - 85px)">
+	<div class="grid grid-cols-[auto_35rem] w-full h-full grid-flow-col">
+		<div class="w-full h-full">
+			<div class="absolute z-50 w-fit">
+				<TooltipButton
+					class="mr-1"
+					tooltip="Add Node (Ctrl + Space)"
+					on:click={() => {
+						addNode_open = true;
+					}}><PlusIcon /></TooltipButton
+				>
+				<TooltipButton
+					class="mr-1"
+					tooltip="Save Workflow"
+					on:click={() => {
+						console.log($workflow);
+					}}><SaveIcon /></TooltipButton
+				>
+				<TooltipButton class="mr-1" tooltip="Load Workflow" on:click={() => {}}
+					><OpenIcon /></TooltipButton
+				>
+				<br />
+				<TooltipButton
+					class="mr-1 w-full mt-2 bg-accent hover:bg-secondary"
+					tooltip="Use Workflow"
+					on:click={() => {}}><ZapIcon class="mr-2" /> Generate</TooltipButton
+				>
+			</div>
+			<SvelteFlow
+				{nodes}
+				{edges}
+				snapGrid={[5, 5]}
+				{nodeTypes}
+				{isValidConnection}
+				deleteKey="Delete"
+				fitView
+				on:nodeclick={(event) => console.log('on node click', event.detail.node)}
+			>
+				<MiniMap nodeColor="hsl(var(--primary))" position="top-right" />
+				<Background
+					patternColor="hsl(var(--foreground))"
+					bgColor="hsl(var(--background-2))"
+					variant={BackgroundVariant.Dots}
+				/>
+			</SvelteFlow>
+		</div>
+		<div class="w-full h-full border-r-2 border-r-white pr-2">
+			<div class="grid grid-cols-2 gap-2">
+				<Button
+					variant={sidebarTab == 0 ? 'default' : 'outline'}
+					on:click={() => {
+						sidebarTab = 0;
+					}}>Images</Button
+				>
+				<Button
+					variant={sidebarTab == 1 ? 'default' : 'outline'}
+					on:click={() => {
+						sidebarTab = 1;
+					}}>Workflow</Button
+				>
+			</div>
+			<Separator class="w-full mt-4 bg-white" />
+		</div>
+	</div>
 </div>
 
 <Socket on:node_progress={(e) => handleProgress(e.detail)} />

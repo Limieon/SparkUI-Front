@@ -1,0 +1,103 @@
+{
+    "eac60884-abc8-4329-95b8-91b1b64ed8f5": {
+        "id": "eac60884-abc8-4329-95b8-91b1b64ed8f5",
+        "svelte_comp": "Spark_DefaultNode",
+        "inputParameters": {
+            "1": {
+                "type": "node",
+                "value": {
+                    "node": "3dc0fc6a-514f-438c-bf84-4f2998d90f39",
+                    "handle": "1"
+                }
+            },
+            "2": {
+                "type": "node",
+                "value": {
+                    "node": "3dc0fc6a-514f-438c-bf84-4f2998d90f39",
+                    "handle": "2"
+                }
+            },
+            "3": {
+                "type": "node",
+                "value": {
+                    "node": "aa992508-05ce-4713-a56b-b1d0389108fc",
+                    "handle": "3"
+                }
+            },
+            "4": {
+                "type": "node",
+                "value": {
+                    "node": "d279ba0c-f95b-402d-803f-926623903605",
+                    "handle": "3"
+                }
+            }
+        },
+        "type": "spark_sampler",
+        "pos": {
+            "x": 10,
+            "y": -15
+        }
+    },
+    "aa992508-05ce-4713-a56b-b1d0389108fc": {
+        "id": "aa992508-05ce-4713-a56b-b1d0389108fc",
+        "svelte_comp": "Spark_DefaultNode",
+        "inputParameters": {
+            "1": {
+                "type": "node",
+                "value": {
+                    "node": "3dc0fc6a-514f-438c-bf84-4f2998d90f39",
+                    "handle": "3"
+                }
+            },
+            "2": {
+                "type": "value",
+                "value": "A positive Prompt",
+                "handle": "2"
+            }
+        },
+        "type": "spark_clip_encoder",
+        "pos": {
+            "x": -400,
+            "y": 100
+        }
+    },
+    "3dc0fc6a-514f-438c-bf84-4f2998d90f39": {
+        "id": "3dc0fc6a-514f-438c-bf84-4f2998d90f39",
+        "svelte_comp": "Spark_LoadModel",
+        "inputParameters": {
+            "1": {
+                "type": "value",
+                "value": "DreamShaper - V8",
+                "handle": "1"
+            }
+        },
+        "type": "spark_load_model",
+        "pos": {
+            "x": -745,
+            "y": -110
+        }
+    },
+    "d279ba0c-f95b-402d-803f-926623903605": {
+        "id": "d279ba0c-f95b-402d-803f-926623903605",
+        "svelte_comp": "Spark_DefaultNode",
+        "inputParameters": {
+            "1": {
+                "type": "node",
+                "value": {
+                    "node": "3dc0fc6a-514f-438c-bf84-4f2998d90f39",
+                    "handle": "3"
+                }
+            },
+            "2": {
+                "type": "value",
+                "value": "A negative Prompt",
+                "handle": "2"
+            }
+        },
+        "type": "spark_clip_encoder",
+        "pos": {
+            "x": -400,
+            "y": 230
+        }
+    }
+}

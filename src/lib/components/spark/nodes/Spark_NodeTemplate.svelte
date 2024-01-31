@@ -47,10 +47,8 @@
 	export let positionAbsoluteY: $$Props['positionAbsoluteY'];
 	positionAbsoluteY;
 
-	export let inputs: NodeInput[] = [];
-	export let outputs: NodeOutput[] = [];
-
-	const { nodeID, label, current, useProgress, progressCurrent, progressMax } = data;
+	const { inputs, outputs, nodeID, label, current, useProgress, progressCurrent, progressMax } =
+		data;
 
 	let boundValues: { [key: string]: any } = {};
 

@@ -8,6 +8,7 @@
 	import { ModelSelector, node_data } from '$lib/stores';
 
 	type $$Props = NodeProps;
+
 	export let id: $$Props['id'];
 	id;
 	export let data: $$Props['data'];
@@ -38,21 +39,6 @@
 	positionAbsoluteY;
 
 	const { nodeID } = data;
-
-	const outputs: NodeOutput[] = [
-		{
-			name: 'checkpoint',
-			type: 'checkpoint'
-		},
-		{
-			name: 'clip',
-			type: 'clip'
-		},
-		{
-			name: 'vae',
-			type: 'vae'
-		}
-	];
 </script>
 
 <Spark_NodeTemplate
@@ -70,7 +56,6 @@
 	{sourcePosition}
 	{positionAbsoluteX}
 	{positionAbsoluteY}
-	{outputs}
 >
 	<!--Button needs a fixed size, so the node won't resize when changing models-->
 	<Button
