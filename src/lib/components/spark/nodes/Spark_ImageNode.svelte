@@ -4,8 +4,10 @@
 	import type { NodeOutput } from '.';
 
 	import { Button } from '$lib/components/ui/button';
+	import { TooltipButton } from '$spark/button';
 
 	import { ModelSelector, node_data } from '$lib/stores';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	type $$Props = NodeProps;
 
@@ -38,7 +40,7 @@
 	export let positionAbsoluteY: $$Props['positionAbsoluteY'];
 	positionAbsoluteY;
 
-	const { nodeID } = data;
+	const { fields, nodeID } = data;
 </script>
 
 <Spark_NodeTemplate
@@ -57,8 +59,20 @@
 	{positionAbsoluteX}
 	{positionAbsoluteY}
 >
-	<div
-		class="w-64 h-64 rounded-lg"
-		style="background-image: url('https://picsum.photos/1024/1024'); background-size: contain; background-repeat: no-repeat; background-position: bottom;"
-	></div>
+	<Separator class="mb-2" />
+	<div class="w-64 h-64 flex items-center">
+		<img
+			alt="Leck mir die Eier"
+			class="max-w-64 max-h-64 rounded-sm m-[0_auto]"
+			src={$fields.image}
+		/>
+	</div>
+	<Separator class="mt-2 mb-2" />
+	<TooltipButton
+		class="w-fit pl-2 pr-2"
+		tooltip="Save image to gallery"
+		on:click={() => {
+			console.log('Saving...');
+		}}>Save Image</TooltipButton
+	>
 </Spark_NodeTemplate>

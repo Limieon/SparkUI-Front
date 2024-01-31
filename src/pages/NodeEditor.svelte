@@ -99,7 +99,8 @@
 				useProgress: node.use_progress,
 				progressCurrent: writable<number>(0),
 				progressMax: writable<number>(1),
-				values: valStore
+				values: valStore,
+				fields: writable({})
 			},
 			position: NODE_ORIGIN,
 			dragHandle: '.dragHandle'
@@ -168,7 +169,8 @@
 					useProgress: availableNodes[node.type].use_progress,
 					progressCurrent: writable<number>(0),
 					progressMax: writable<number>(1),
-					values: writable({})
+					values: writable({}),
+					fields: writable({})
 				},
 				position: node.pos,
 				dragHandle: '.dragHandle'
@@ -258,6 +260,21 @@
 			}
 		});
 	}
+	function handleNodeDataUpdate(data: { node: string; field: string; value: any }) {
+		const { node, field, value } = data;
+
+		$nodes.forEach((n) => {
+			if (n.id == node) {
+				const temp = { ...n.data.$fields };
+				temp[field] = value;
+
+				n.data.fields.set(temp);
+
+				n.data.$fields = { ...n.data.$fields };
+				$nodes = $nodes;
+			}
+		});
+	}
 
 	let sidebarOpen = true;
 	let sidebarTab = 0;
@@ -319,7 +336,17 @@
 				<TooltipButton
 					class="mr-1 w-full mt-2 bg-accent hover:bg-secondary"
 					tooltip="Use Workflow"
-					on:click={() => {}}><ZapIcon class="mr-2" /> Generate</TooltipButton
+					on:click={async () => {
+						console.log('Workflow:', $workflow);
+						await fetch(`http://${SPARKUI_BACK_HOST}/v1/queue/prompt`, {
+							method: 'POST',
+							body: JSON.stringify({ nodes: $workflow }),
+							headers: {
+								Accept: 'application/json',
+								'Content-Type': 'application/json'
+							}
+						});
+					}}><ZapIcon class="mr-2" /> Generate</TooltipButton
 				>
 			</div>
 			<SvelteFlow
@@ -363,3 +390,4 @@
 <Socket on:node_progress={(e) => handleProgress(e.detail)} />
 <Socket on:node_activation={(e) => handleActivation(e.detail)} />
 <Socket on:node_deactivation={(e) => handleDeactivation(e.detail)} />
+<Socket on:node_data_update={(e) => handleNodeDataUpdate(e.detail)} />
