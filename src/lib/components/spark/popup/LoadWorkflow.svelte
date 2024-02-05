@@ -87,7 +87,7 @@
 			<Textarea
 				placeholder="Workflow Description"
 				bind:value={description}
-				class="h-[15rem] mb-2"
+				class="h-[15rem] mb-2 resize-none"
 			/>
 			<div class="block w-full h-8">
 				{#each tags as tag}
