@@ -9,6 +9,8 @@
 
 	import { Spark_DefaultNode, Spark_LoadModel, Spark_ImageNode, type NodeMeta } from '$spark/nodes';
 
+	import { LoadWorkflow, SaveWorkflow } from '$spark/popup';
+
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import { Switch } from '$lib/components/ui/switch';
@@ -346,7 +348,7 @@
 								'Content-Type': 'application/json'
 							}
 						});
-					}}><ZapIcon class="mr-2" /> Generate</TooltipButton
+					}}><ZapIcon class="mr-2" /> Execute</TooltipButton
 				>
 			</div>
 			<SvelteFlow
@@ -386,6 +388,8 @@
 		</div>
 	</div>
 </div>
+
+<LoadWorkflow open={true} />
 
 <Socket on:node_progress={(e) => handleProgress(e.detail)} />
 <Socket on:node_activation={(e) => handleActivation(e.detail)} />
