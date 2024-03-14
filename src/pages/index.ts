@@ -6,7 +6,8 @@ import Settings from './Settings.svelte'
 import OutputImages from './OutputImages.svelte'
 import Queue from './Queue.svelte'
 import Downloads from './Downloads.svelte'
+import NodeEditor from './NodeEditor.svelte'
 
-type pages = 'txt2img' | 'img2img' | 'modelBrowser' | 'installedModels' | 'outputImages' | 'queue' | 'downloads'
+type pages = 'txt2img' | 'img2img' | 'modelBrowser' | 'installedModels' | 'outputImages' | 'queue' | 'downloads' | 'nodeEditor'
 
-export { Img2Img, Txt2Img, ModelBrowser, InstalledModels, Settings, OutputImages, Queue, Downloads, type pages as Pages }
+export { Img2Img, Txt2Img, ModelBrowser, InstalledModels, Settings, OutputImages, Queue, Downloads, NodeEditor, type pages as Pages }

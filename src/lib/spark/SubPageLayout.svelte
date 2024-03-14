@@ -4,6 +4,6 @@
 
 <svelte:head></svelte:head>
 
-<div class="bg-background2">
+<div class="h-full w-full bg-background2">
 	<slot />
 </div>

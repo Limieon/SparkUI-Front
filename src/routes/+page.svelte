@@ -12,6 +12,7 @@
 		OutputImages,
 		Downloads,
 		Queue,
+		NodeEditor,
 		type Pages
 	} from '$pages';
 
@@ -26,8 +27,9 @@
 	import IconImages from 'lucide-svelte/icons/images';
 	import IconListEnd from 'lucide-svelte/icons/list-end';
 	import IconDownloads from 'lucide-svelte/icons/download';
+	import IconWorkflow from 'lucide-svelte/icons/workflow';
 
-	let page: Pages = 'txt2img';
+	let page: Pages = 'nodeEditor';
 	let settingsOpen = false;
 </script>
 
@@ -55,6 +57,18 @@
 			class="mb-2 h-[48px] w-[48px]"
 		>
 			<IconImage size={32} />
+		</TooltipButton>
+
+		<TooltipButton
+			variant={page === 'nodeEditor' ? 'default' : 'outline'}
+			size="icon"
+			tooltip="Node Editor"
+			on:click={() => {
+				page = 'nodeEditor';
+			}}
+			class="mb-2 h-[48px] w-[48px]"
+		>
+			<IconWorkflow size={32} />
 		</TooltipButton>
 
 		<TooltipButton
@@ -139,6 +153,8 @@
 		<Txt2Img />
 	{:else if page === 'img2img'}
 		<Img2Img />
+	{:else if page === 'nodeEditor'}
+		<NodeEditor />
 	{:else if page === 'modelBrowser'}
 		<ModelBrowser />
 	{:else if page === 'installedModels'}
