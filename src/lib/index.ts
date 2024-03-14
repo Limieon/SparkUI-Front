@@ -1,1 +1,3 @@
-// place files you want to import through the `$lib` alias in this folder.
+import { v4 as uuidv4 } from 'uuid';
+
+export const clientID = uuidv4();
