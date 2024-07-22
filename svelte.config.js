@@ -13,7 +13,9 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-			'$ui/*': './src/lib/components/ui/*'
+			'$ui/*': './src/lib/components/ui/*',
+			'$spark/*': './src/lib/spark/ui/*',
+			$pages: './src/pages'
 		}
 	}
 };
