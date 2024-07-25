@@ -12,26 +12,11 @@
 	const dispatch = createEventDispatcher();
 
 	function handleOverlayClick(event: MouseEvent) {
-		if (event.target === event.currentTarget) close();
-	}
-
-	function close() {
-		open = false;
-	}
-
-	function handleApply() {
-		dispatch('apply');
-		close();
-	}
-
-	function handleOK() {
-		dispatch('ok');
-		close();
+		if (event.target === event.currentTarget) handleClose();
 	}
 
 	function handleClose() {
 		dispatch('close');
-		close();
 	}
 </script>
 
@@ -64,9 +49,7 @@
 			</div>
 
 			<div class="sticky bottom-0 z-10 flex justify-end space-x-2 bg-background p-2">
-				<Button variant="ghost" class="w-24" on:click={handleApply}>Apply</Button>
-				<Button variant="ghost" class="w-24" on:click={handleOK}>OK</Button>
-				<Button variant="ghost" class="w-24" on:click={handleClose}>Close</Button>
+				<slot name="footer" />
 			</div>
 		</div>
 	</div>
