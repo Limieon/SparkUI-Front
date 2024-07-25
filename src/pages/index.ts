@@ -15,9 +15,9 @@ import IconBook from 'lucide-svelte/icons/book';
 import IconImages from 'lucide-svelte/icons/images';
 import IconListEnd from 'lucide-svelte/icons/list-end';
 import IconDownloads from 'lucide-svelte/icons/download';
-import IconNodeEditor from 'lucide-svelte/icons/workflow'
+import IconNodeEditor from 'lucide-svelte/icons/workflow';
 
-type Pages = 'txt2img' | 'img2img' | 'modelBrowser' | 'installedModels' | 'outputImages' | 'queue' | 'downloads' | 'nodeEditor'
+type Pages = 'txt2img' | 'img2img' | 'modelBrowser' | 'installedModels' | 'outputImages' | 'queue' | 'downloads' | 'nodeEditor' | 'settings'
 type Page = {
     page: Pages,
     icon: any,

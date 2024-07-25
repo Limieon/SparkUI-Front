@@ -9,11 +9,11 @@
 		Img2Img,
 		InstalledModels,
 		ModelBrowser,
-		Settings,
 		OutputImages,
 		Downloads,
 		Queue,
 		NodeEditor,
+		Settings,
 		type Pages,
 		pages
 	} from '$pages';
@@ -48,6 +48,7 @@
 
 		<div class="tooltip tooltip-right absolute bottom-0 left-2" data-tip="Settings...">
 			<Button
+				variant={page === 'settings' ? 'default' : 'outline'}
 				class="mb-2 h-[48px] w-[48px] p-2"
 				on:click={() => {
 					settingsOpen = true;
