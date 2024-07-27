@@ -18,11 +18,9 @@
 		pages
 	} from '$pages';
 
-	import ThemeSwitcher from '$spark/ThemeSwitcher.svelte';
-
 	import IconSettings from 'lucide-svelte/icons/settings';
 
-	let page: Pages = 'modelBrowser';
+	let page: Pages = 'txt2img';
 	let settingsOpen = false;
 </script>
 
@@ -42,13 +40,9 @@
 			</div>
 		{/each}
 
-		<!--
-			<Separator class="mb-4 mt-2 w-[48px]" />
-		-->
-
 		<div class="tooltip tooltip-right absolute bottom-0 left-2" data-tip="Settings...">
 			<Button
-				variant={page === 'settings' ? 'default' : 'outline'}
+				variant={settingsOpen ? 'default' : 'outline'}
 				class="mb-2 h-[48px] w-[48px] p-2"
 				on:click={() => {
 					settingsOpen = true;
