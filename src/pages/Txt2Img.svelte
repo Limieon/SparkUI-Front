@@ -25,6 +25,7 @@
 	import IconSwap from 'lucide-svelte/icons/arrow-up-down';
 	import IconAdd from 'lucide-svelte/icons/plus';
 	import IconDelete from 'lucide-svelte/icons/trash';
+	import IconCopy from 'lucide-svelte/icons/copy';
 
 	import { random } from '$lib/math';
 	import { getEmblaContext } from '$ui/carousel/context';
@@ -49,6 +50,7 @@
 		checkpointID: string;
 		refinerID?: string;
 		loras: { [key: string]: number };
+		embeddings: { [key: string]: number };
 	}
 
 	let generationData: GenerationData = {
@@ -71,6 +73,10 @@
 			anime_style: 8.5,
 			more_details: 9
 		},
+		embeddings: {
+			better_hands: 2.5,
+			better_negative: 7.5
+		},
 		refinerID: undefined
 	};
 
@@ -86,6 +92,13 @@
 		if (id in generationData.loras) delete generationData.loras[id];
 		generationData.loras = { ...generationData.loras };
 	}
+	function removeEmbedding(id: string) {
+		if (id in generationData.embeddings) delete generationData.embeddings[id];
+		generationData.embeddings = { ...generationData.embeddings };
+	}
+
+	function copyTriggerWordsLora(id: string) {}
+	function copyTriggerWordsEmbedding(id: string) {}
 
 	function sendGenerationRequest() {
 		console.log(generationData);
@@ -284,13 +297,63 @@
 						</div>
 					</div>
 
-					<Tabs.Root value="loras" class="w-full">
+					<Tabs.Root value="embeddings" class="w-full">
 						<Tabs.List class="w-full">
 							<Tabs.Trigger class="flex-grow" value="embeddings">Embeddings</Tabs.Trigger>
 							<Tabs.Trigger class="flex-grow" value="loras">LoRAs</Tabs.Trigger>
 							<Tabs.Trigger class="flex-grow" value="controlnet">ControlNet</Tabs.Trigger>
 						</Tabs.List>
-						<Tabs.Content class="rounded-lg border-2 p-2" value="embeddings"></Tabs.Content>
+						<Tabs.Content class="space-y-2 rounded-lg border-2 p-2" value="embeddings">
+							<div class="flex items-center justify-end">
+								<p class="text-lg">
+									Active Embeddings: {Object.keys(generationData.embeddings).length}
+								</p>
+								<Button class="ml-auto w-fit">
+									<IconAdd class="mr-2 h-4 w-4" />
+									Add Embedding
+								</Button>
+							</div>
+							{#if Object.keys(generationData.embeddings).length > 0}
+								<Separator orientation="horizontal" />
+								<div class="flex w-full flex-col space-y-2 rounded-lg bg-background p-2">
+									{#each Object.keys(generationData.embeddings) as embedding, i}
+										<div class="flex w-full items-center space-x-2">
+											<img
+												alt="{embedding} icon"
+												src="https://picsum.photos/64"
+												class="h-[64px] w-[64px] rounded-lg"
+											/>
+											<p class="flex-grow text-xl">{embedding}</p>
+											<Input
+												class="ml-auto w-24 text-center"
+												type="number"
+												bind:value={generationData.embeddings[embedding]}
+												min={0}
+												max={10}
+												on:input={() => {
+													generationData.embeddings[embedding] =
+														+generationData.embeddings[embedding];
+												}}
+											/>
+											<Button size="icon" on:click={() => copyTriggerWordsEmbedding(embedding)}>
+												<IconCopy />
+											</Button>
+											<Button
+												variant="destructive"
+												size="icon"
+												on:click={() => removeEmbedding(embedding)}
+											>
+												<IconDelete />
+											</Button>
+										</div>
+
+										{#if i < Object.keys(generationData.embeddings).length - 1}
+											<Separator orientation="horizontal" />
+										{/if}
+									{/each}
+								</div>
+							{/if}
+						</Tabs.Content>
 						<Tabs.Content class="space-y-2 rounded-lg border-2 p-2" value="loras">
 							<div class="flex items-center justify-end">
 								<p class="text-lg">Active LoRAs: {Object.keys(generationData.loras).length}</p>
@@ -304,7 +367,12 @@
 								<div class="flex w-full flex-col space-y-2 rounded-lg bg-background p-2">
 									{#each Object.keys(generationData.loras) as lora, i}
 										<div class="flex w-full items-center space-x-2">
-											<p class="flex-grow text-lg">{lora}</p>
+											<img
+												alt="{lora} icon"
+												src="https://picsum.photos/64"
+												class="h-[64px] w-[64px] rounded-lg"
+											/>
+											<p class="flex-grow text-xl">{lora}</p>
 											<Input
 												class="ml-auto w-24 text-center"
 												type="number"
@@ -315,9 +383,12 @@
 													generationData.loras[lora] = +generationData.loras[lora];
 												}}
 											/>
-											<Button variant="destructive" size="icon" on:click={() => removeLora(lora)}
-												><IconDelete /></Button
-											>
+											<Button size="icon" on:click={() => copyTriggerWordsLora(lora)}>
+												<IconCopy />
+											</Button>
+											<Button variant="destructive" size="icon" on:click={() => removeLora(lora)}>
+												<IconDelete />
+											</Button>
 										</div>
 
 										{#if i < Object.keys(generationData.loras).length - 1}
