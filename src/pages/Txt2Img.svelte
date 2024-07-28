@@ -15,6 +15,8 @@
 	import { AspectRatio } from '$ui/aspect-ratio';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import * as Tabs from '$ui/tabs';
+	import { Badge } from '$ui/badge';
+	import { Checkbox } from '$ui/checkbox';
 
 	import { SubPageLayout as Layout } from '$spark/layouts';
 
@@ -29,6 +31,11 @@
 
 	import { random } from '$lib/math';
 	import { getEmblaContext } from '$ui/carousel/context';
+
+	import { Popup } from '$spark/popup';
+	import * as Selector from '$spark/selectors';
+	import Header from '$spark/selectors/Header.svelte';
+	import ItemContainer from '$spark/selectors/Items.svelte';
 
 	const MAX_SEED = Math.pow(2, 32) - 1;
 	const MIN_SEED = 0;
@@ -103,6 +110,53 @@
 	function sendGenerationRequest() {
 		console.log(generationData);
 	}
+
+	function handleCheckpointSelect(id: string) {
+		console.log('Selected:', id);
+		generationData.checkpointID = id;
+		checkpointSelectorOpen = false;
+	}
+	function handleLoraSelect(id: string) {
+		console.log('Added:', id);
+		if (generationData.loras[id] == undefined) generationData.loras[id] = 0.5;
+		loraSelectorOpen = false;
+	}
+
+	let checkpointSelectorOpen = false;
+	const selectorCheckpoints: SelectionEntry[] = [
+		{
+			name: 'DreamShaper V8',
+			id: 'dreamshaper/v8',
+			image: 'https://picsum.photos/256',
+			leftBadges: ['V8'],
+			rightBadges: ['SD1.5']
+		},
+		{
+			name: 'Juggernaut XL',
+			id: 'juggernaut/v5',
+			image: 'https://picsum.photos/256',
+			leftBadges: ['V9'],
+			rightBadges: ['SDXL']
+		}
+	];
+
+	let loraSelectorOpen = false;
+	const selectorLoras: SelectionEntry[] = [
+		{
+			name: 'Neon (VALORANT)',
+			id: 'valorant/neon',
+			image: 'https://picsum.photos/256',
+			leftBadges: ['Neon'],
+			rightBadges: ['SD1.5']
+		},
+		{
+			name: 'Genshin Impact - Ganyu',
+			id: 'genshinimpact/ganyu',
+			image: 'https://picsum.photos/256',
+			leftBadges: ['Ganyu'],
+			rightBadges: ['SD1.5']
+		}
+	];
 </script>
 
 <Layout title="Text 2 Image">
@@ -261,7 +315,12 @@
 					<div class="flex flex-row items-center space-x-2">
 						<div class="flex w-full flex-col space-y-1">
 							<Label>Model:</Label>
-							<Button class="h-10 w-full py-4 text-xl">DreamShaper V8</Button>
+							<Button
+								class="h-10 w-full py-4 text-xl"
+								on:click={() => {
+									checkpointSelectorOpen = true;
+								}}>DreamShaper V8</Button
+							>
 						</div>
 					</div>
 					<div class="flex space-x-2">
@@ -357,7 +416,12 @@
 						<Tabs.Content class="space-y-2 rounded-lg border-2 p-2" value="loras">
 							<div class="flex items-center justify-end">
 								<p class="text-lg">Active LoRAs: {Object.keys(generationData.loras).length}</p>
-								<Button class="ml-auto w-fit">
+								<Button
+									class="ml-auto w-fit"
+									on:click={() => {
+										loraSelectorOpen = true;
+									}}
+								>
 									<IconAdd class="mr-2 h-4 w-4" />
 									Add LoRA
 								</Button>
@@ -410,4 +474,39 @@
 			<div class="overflow-y-scroll bg-red-500" style="height: calc(100vh - 6rem);"></div>
 		</div>
 	</div>
+
+	<Selector.Container title="Checkpoint Selector" bind:open={checkpointSelectorOpen}>
+		<Selector.Header>
+			<div class="flex w-full flex-col">
+				<div class="flex w-full space-x-2">
+					<Input type="text" value="" placeholder="Search..." class="w-full flex-grow" />
+					<div class="min-w-[180px] flex-shrink-0">
+						<Select.Root multiple={true}>
+							<Select.Trigger
+								class="inline-flex min-w-0 items-center rounded border border-gray-300 px-2 py-1"
+							>
+								<Select.Value placeholder="Version" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="SD1.5}">SD1.5</Select.Item>
+								<Select.Item value="SDXL">SDXL</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+					<Button class="px-4 py-2">Search</Button>
+				</div>
+			</div>
+		</Selector.Header>
+		<Selector.Items>
+			{#each { length: 200 } as _}
+				<Selector.Checkpoint
+					name="DreamShaperXL"
+					id="dramshaperxl/v1"
+					image="https://picsum.photos/256"
+					leftBadges={[{ text: 'V1', color: 'green' }]}
+					rightBadges={[{ text: 'SDXL', color: 'red' }]}
+				/>
+			{/each}
+		</Selector.Items>
+	</Selector.Container>
 </Layout>
