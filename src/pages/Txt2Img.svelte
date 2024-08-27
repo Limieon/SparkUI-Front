@@ -480,6 +480,23 @@
 			<div class="flex w-full flex-col">
 				<div class="flex w-full space-x-2">
 					<Input type="text" value="" placeholder="Search..." class="w-full flex-grow" />
+
+					<div class="min-w-[180px] flex-shrink-0">
+						<Select.Root multiple={true}>
+							<Select.Trigger
+								class="inline-flex min-w-0 items-center rounded border border-gray-300 px-2 py-1"
+							>
+								<Select.Value placeholder="Tags" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="Anime">Anime</Select.Item>
+								<Select.Item value="Realistic">Realistic</Select.Item>
+								<Select.Item value="Sci-Fi">Sci-Fi</Select.Item>
+								<Select.Item value="Architecture">Architecture</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+
 					<div class="min-w-[180px] flex-shrink-0">
 						<Select.Root multiple={true}>
 							<Select.Trigger
@@ -488,7 +505,7 @@
 								<Select.Value placeholder="Version" />
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="SD1.5}">SD1.5</Select.Item>
+								<Select.Item value="SD1.5">SD1.5</Select.Item>
 								<Select.Item value="SDXL">SDXL</Select.Item>
 							</Select.Content>
 						</Select.Root>
